@@ -17,7 +17,7 @@ public class Distance extends CommandBase {
   private static PID pidDistance;
 
   private double distance;
-
+  private double maxLimit;
   private double tolerance = 0.05; // 5 cm
 
   double kP = 1,
@@ -52,6 +52,17 @@ public class Distance extends CommandBase {
   public Distance(Powertrain powertrain, double distanceInMeters) {
     this.powertrain = powertrain;
     this.distance = distanceInMeters;
+    this.maxLimit = 0.8;
+
+    pidDistance = new PID(kP, kI, kD, distanceInMeters, bias, false);
+
+    addRequirements(powertrain);
+  }
+
+  public Distance(Powertrain powertrain, double distanceInMeters, double maxLimit) {
+    this.powertrain = powertrain;
+    this.distance = distanceInMeters;
+    this.maxLimit = maxLimit;
 
     pidDistance = new PID(kP, kI, kD, distanceInMeters, bias, false);
 
@@ -72,8 +83,21 @@ public class Distance extends CommandBase {
     double turn = (0 - powertrain.navAngle()) * 0.05;
 
     SmartDashboard.putNumber("PID", pidDistance.valuePID());
-    powertrain.arcadeDrive(pidDistance.valuePID(), turn);
+    SmartDashboard.putNumber("PIDFilter", filter(pidDistance.valuePID(), maxLimit));
 
+    powertrain.arcadeDrive(filter(pidDistance.valuePID(), maxLimit), turn);
+
+  }
+
+  private double filter(double value, double maxLimit){
+    if (value > maxLimit) 
+      return maxLimit;
+
+    else if ( value < -maxLimit )
+      return -maxLimit;
+
+    else 
+      return value;
   }
 
   @Override
