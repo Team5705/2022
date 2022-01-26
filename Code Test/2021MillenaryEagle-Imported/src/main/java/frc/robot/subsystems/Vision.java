@@ -81,7 +81,7 @@ public class Vision extends SubsystemBase {
       return false;
   }
 
-  public static void ledsOff() {
+  public void ledsOff() {
     table.getEntry("ledMode").setNumber(1);
   }
 

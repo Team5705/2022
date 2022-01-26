@@ -10,8 +10,6 @@ package frc.robot.subsystems;
 //import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,7 +24,7 @@ public class IntakeBalls extends SubsystemBase {
   private Spark motorBandaA = new Spark(Intake.m2); //Banda A (Bufer)
   private Spark motorBandaB = new Spark(Intake.m3); //Banda B
 
-  private Solenoid pistonA = new Solenoid(PneumaticsModuleType.CTREPCM, Intake.solenoids[0]);
+  //private Solenoid pistonA = new Solenoid(PneumaticsModuleType.CTREPCM, Intake.solenoids[0]);
 
   private DigitalInput sensor1 = new DigitalInput(Intake.sensors[0]), //Sensor Bufer
                        sensor2 = new DigitalInput(Intake.sensors[1]),
@@ -189,18 +187,18 @@ public class IntakeBalls extends SubsystemBase {
   /**
    * Extiende el intake.
    */
-  public void toExtendIntake(){
+  /*public void toExtendIntake(){
     pistonA.set(true);
     intakeDeployed = true;
-  }
+  }*/
 
   /**
    * Guarda el intake.
    */
-  public void saveIntake(){
+  /*public void saveIntake(){
     pistonA.set(false);
     intakeDeployed = false;
-  }
+  }*/
 
   @Override
   public void periodic() {

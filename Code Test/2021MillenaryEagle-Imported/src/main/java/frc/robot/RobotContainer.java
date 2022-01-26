@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -61,29 +60,21 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
-
+    
     powertrain.setDefaultCommand(drive);
     climber.setDefaultCommand(climberr);
-
+    
     autonomous.addOption("Trench", "trench");
     autonomous.addOption("Mid", "mid");
     autonomous.addOption("Simple", "simple");
     autonomous.addOption("Emergency", "emergency");
     autonomous.addOption("Test", "test");
     SmartDashboard.putData("autoMode", autonomous);
-
-
-
-    trajectoryPaths.add(0, "");
-    trajectoryPaths.add(1, "");
-
-    trajectoryPaths.add(2, "");
-    trajectoryPaths.add(3, "");
-    trajectoryPaths.add(4, "");
-    trajectoryPaths.add(5, "");
-
-    trajectoryPaths.add(6, "paths/output/test.wpilib.json");
+    
+    trajectoryPaths.add(0, "/paths/output/a.wpilib.json");
+    trajectoryPaths.add(1, "paths/output/test.wpilib.json");
+    
+    configureButtonBindings();
   }
 
   /**
@@ -109,6 +100,7 @@ public class RobotContainer {
             return command;
     
         } catch (IOException e) {
+            //e.printStackTrace();
             System.out.println("Unable to open trajectory: " + path);
             new PrintCommand("Unable to open trajectory: " + path);
 
@@ -124,7 +116,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //Buttons
-    new JoystickButton(driverController, 1).whileHeld(new Shootv2(shooter, false));
+    //new JoystickButton(driverController, 1).whenActive(ramseteC("paths/output/a.wpilib.json"));
     new JoystickButton(driverController, 2).whenPressed(new TurnPIDB(powertrain, 50));
     new JoystickButton(driverController, 3).whenPressed(new TurnPIDB(powertrain, 110));
     //new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
@@ -147,7 +139,7 @@ public class RobotContainer {
     if(autonomous.getSelected() == "trench"){ 
       
       return new SequentialCommandGroup(new Shoot(shooter, intake, powertrain, vision).withTimeout(3.6), 
-                                        ramseteC(trajectoryPaths.get(0)),
+                                      //  ramseteC(trajectoryPaths.get(0)),
                                         new PrintCommand("3"), 
                                         new PrintCommand("4")
                                         );
@@ -160,11 +152,12 @@ public class RobotContainer {
     
     else if(autonomous.getSelected() == "test"){
       //return ramseteC(trajectoryPaths.get(6)); //6 is test
-      return new SequentialCommandGroup(new ParallelCommandGroup(new Distance(powertrain, 3), new TakeWithSensor(intake).withTimeout(2)));
+      //return new SequentialCommandGroup(new ParallelCommandGroup(new Distance(powertrain, 3), new TakeWithSensor(intake).withTimeout(2)));
                                      /*   new WaitCommand(0.25),
                                         new TurnPIDB(powertrain, 90),
                                         new WaitCommand(0.25),
                                         new ParallelCommandGroup(new Distance(powertrain, 3), new TakeWithSensor(intake).withTimeout(2)));*/
+                                        return ramseteC("a.path");
       
     }
     else

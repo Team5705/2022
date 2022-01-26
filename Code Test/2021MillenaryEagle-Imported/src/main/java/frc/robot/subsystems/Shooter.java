@@ -10,8 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.Shoot;
@@ -20,7 +18,7 @@ public class Shooter extends SubsystemBase {
   private WPI_VictorSPX shoot = new WPI_VictorSPX(Shoot.mShooter);
   private WPI_VictorSPX shoot2 = new WPI_VictorSPX(Shoot.mShooter2);
 
-  private Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  //private Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   private double velocityShoot = 1.00;
   private double velocityNow = 0;
@@ -38,7 +36,7 @@ public class Shooter extends SubsystemBase {
   public void go() {
     // Apaga el compresor (esté o no conectado) cuando se active el disparador y así utilizar toda la
     // batería
-    compressor.disable();
+    //compressor.disable();
     
     if(velocityNow < velocityShoot){
       velocityNow += up;

@@ -83,6 +83,7 @@ public class Tracking extends CommandBase {
     if (finished != true){
       vision.blinkLeds();
       Timer.delay(1);
+      vision.ledsOff();
     }
 
     new PrintCommand("FinishedVision");
