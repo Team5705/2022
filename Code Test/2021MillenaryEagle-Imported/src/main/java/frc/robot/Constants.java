@@ -77,7 +77,7 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackwidthMeters);
 
-        public static final double kMaxSpeedMetersPerSecond = 1.5; // Velocidad maxima del robot en metros por segundo
+        public static final double kMaxSpeedMetersPerSecond = 1.2; // Velocidad maxima del robot en metros por segundo
         public static final double kMaxAccelerationMetersPerSecondSquared = 0.2; // Aceleracion maxima del robot en
                                                                                  // metros por segundo
 

@@ -45,10 +45,9 @@ public class Powertrain extends SubsystemBase {
   private final AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
-  //private Pose2d position = new Pose2d(3.157, -2.361, new Rotation2d(180));
-  private Pose2d position = new Pose2d(2, 7, new Rotation2d(0));
+  private Pose2d initialPosition = new Pose2d(2, 7, new Rotation2d(0));
   
-  private DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(getHeading(), position);
+  private final DifferentialDriveOdometry odometry;
 
   private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(pathWeaver.ksVolts, 
                                                                           pathWeaver.kvVoltSecondsPerMeter, 
@@ -66,6 +65,8 @@ public class Powertrain extends SubsystemBase {
 
     resetEncoders();
     zeroHeading();
+
+    odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), initialPosition);
 
     new PrintCommand("Powertrain iniciado");
   }
@@ -87,12 +88,10 @@ public class Powertrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void setVolts(double leftVolts, double rightVolts) {
+    leftMaster.setVoltage(leftVolts);
+    rightMaster.setVoltage(rightVolts);
     drive.feed();
-    leftMaster.set(leftVolts/12);
-    rightMaster.set(rightVolts/12);
-    /*
-    leftMaster.set(ControlMode.PercentOutput, leftVolts / 12); 
-    rightMaster.set(ControlMode.PercentOutput, rightVolts / 12);*/
+
   }
 
   private double last_world_linear_accel_x;
@@ -183,8 +182,9 @@ public class Powertrain extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  public Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(Math.IEEEremainder(navAngle(), 360) * (pathWeaver.kGyroReversed ? -1.0 : 1.0));
+  public double getHeading() {
+    return ahrs.getRotation2d().getDegrees();
+    //return Rotation2d.fromDegrees(Math.IEEEremainder(navAngle(), 360) * (pathWeaver.kGyroReversed ? -1.0 : 1.0));
   }
 
   /**
@@ -194,7 +194,7 @@ public class Powertrain extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    odometry.resetPosition(pose, getHeading());
+    odometry.resetPosition(pose, ahrs.getRotation2d());
   }
 
   /**
@@ -229,10 +229,6 @@ public class Powertrain extends SubsystemBase {
 
   public DifferentialDriveKinematics getDifferentialDriveKinematics() {
       return kinematics;
-  }
-
-  public Pose2d getPosition() {
-      return position;
   }
 
   public double aangle() {
@@ -274,8 +270,7 @@ public class Powertrain extends SubsystemBase {
 }
 
   public void updateOdometry() {
-     position = odometry.update(getHeading(), ticksToMeters(leftMaster.getSelectedSensorPosition(0)), 
-                                              ticksToMeters(rightMaster.getSelectedSensorPosition(0)));
+     odometry.update(ahrs.getRotation2d(), getDistanceLeft(), getDistanceRight());
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
@@ -294,7 +289,7 @@ public class Powertrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updateOdometry();
+    odometry.update(ahrs.getRotation2d(), getDistanceLeft(), getDistanceRight());
 
     SmartDashboard.putNumber("Angle Normalized", angleNormalized());
     SmartDashboard.putNumber("NavAngle", navAngle());

@@ -42,8 +42,8 @@ public class Shooter extends SubsystemBase {
       velocityNow += up;
     }
 
-    shoot.set(ControlMode.PercentOutput, velocityNow);
-    shoot2.set(ControlMode.PercentOutput, velocityNow); // 0.9 es el valor óptimo sin utilizar el valor máximo y sin ser poco
+    shoot.setVoltage(12);
+    shoot2.setVoltage(12); // 0.9 es el valor óptimo sin utilizar el valor máximo y sin ser poco
 
     RobotContainer.leds.sendData(2);
 
