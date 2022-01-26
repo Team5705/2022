@@ -67,6 +67,8 @@ public class RobotContainer {
   SendableChooser<String> autonomous = new SendableChooser<String>();
   
   ArrayList<String> trajectoryPaths = new ArrayList<String>();
+  
+  String trajectoryJSON = "paths/a.wpilib.json";
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,16 +89,18 @@ public class RobotContainer {
     trajectoryPaths.add(0, "paths/output/a.wpilib.json");
     trajectoryPaths.add(1, "paths/YourPath.wpilib.json"); //EJemplo
     
-    configureButtonBindings();
-
+    
     try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryPaths.get(0));
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-
+      SmartDashboard.putBoolean("Path", true);
+      
     } catch (IOException ex) {
-        DriverStation.reportError("Unable to open trajectory: " + trajectoryPaths, ex.getStackTrace());
-        
-      } 
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+      
+    } 
+
+    configureButtonBindings();
   }
 
   /**
@@ -128,6 +132,7 @@ public class RobotContainer {
                 powertrain.zeroHeading();
 
   }*/
+
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by instantiating a {@link GenericHID} or one of its subclasses
@@ -137,7 +142,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //Buttons
-    //new JoystickButton(driverController, 1).whenActive(ramseteC("paths/output/a.wpilib.json"));
     new JoystickButton(driverController, 2).whenPressed(new TurnPIDB(powertrain, 50));
     new JoystickButton(driverController, 3).whenPressed(new TurnPIDB(powertrain, 110));
     //new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
@@ -191,7 +195,7 @@ public class RobotContainer {
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            trajectory, //Trayectoria cargada desde pathweaver
             powertrain::getPose,
             new RamseteController(pathWeaver.kRamseteB, pathWeaver.kRamseteZeta),
             new SimpleMotorFeedforward(
