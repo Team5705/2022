@@ -62,19 +62,28 @@ public class RobotContainer {
 
   public static XboxController driverController = new XboxController(OIConstant.controllerPort);
 
-  Trajectory trajectory;
-
+  
   SendableChooser<String> autonomous = new SendableChooser<String>();
   
   ArrayList<String> trajectoryPaths = new ArrayList<String>();
   
-  String trajectoryJSON = "paths/a.wpilib.json";
+  String trajectoryJSON = "Paths/Prueba1.wpilib.json";
+  Trajectory trajectory = new Trajectory();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // Configure the button bindings
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      System.out.println("Si quiso :D");
+      
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+      
+    }
     
     powertrain.setDefaultCommand(drive);
     climber.setDefaultCommand(climberr);
@@ -88,17 +97,6 @@ public class RobotContainer {
     
     trajectoryPaths.add(0, "paths/output/a.wpilib.json");
     trajectoryPaths.add(1, "paths/YourPath.wpilib.json"); //EJemplo
-    
-    
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      SmartDashboard.putBoolean("Path", true);
-      
-    } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-      
-    } 
 
     configureButtonBindings();
   }
