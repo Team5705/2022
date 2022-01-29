@@ -37,9 +37,9 @@ import frc.robot.subsystems.Powertrain;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-
+  //Subsystems
   private final Powertrain powertrain = new Powertrain();
-  
+  //Commands
   private final Drive drive = new Drive(powertrain);
 
   String trajectoryJSON = "trace1.wpilib.json";
@@ -52,7 +52,7 @@ public class RobotContainer {
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      System.out.println("Si quiso :D");
+      System.out.println(trajectoryJSON + "successfully read."); //Avisamos que el path fue leído con éxito
       
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
@@ -80,7 +80,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
-    /*var autoVoltageConstraint =
+    var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
             new SimpleMotorFeedforward(
                 pathWeaver.ksVolts,
@@ -132,8 +132,7 @@ public class RobotContainer {
     powertrain.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> powertrain.setVolts(0, 0));*/
-    return null;
+    return ramseteCommand.andThen(() -> powertrain.setVolts(0, 0));
   }
   
 }
