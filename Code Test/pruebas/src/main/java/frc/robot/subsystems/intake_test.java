@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.ColorSensorV3;
@@ -11,6 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,33 +20,29 @@ public class intake_test extends SubsystemBase {
   private Spark intake = new Spark(Intake.m1);
   private Spark conveyor = new Spark(Intake.m2);
 
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private final ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
+  private final ColorSensorV3 colorSensor = new ColorSensorV3(Intake.colorSensorPort);
   private Color detectedColor = null;
-
   private double red = 0;
   private double green = 0;
   private double blue = 0;
   private String colorString = null;
 
-  private Solenoid solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+  private Solenoid solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Intake.solenoidPort);
 
   private DigitalInput sensor1 = new DigitalInput(Intake.sensors[0]);
   private DigitalInput sensor2 = new DigitalInput(Intake.sensors[1]); 
   private DigitalInput sensor3 = new DigitalInput(Intake.sensors[2]);
 
-  // aqui va la tableishon de verdadeishon
-  private double intake_velocity = 0.9,
-                 conveyor_velocity = 0.9;
+  private double intake_velocity = Intake.intakeVelocity,
+                 conveyor_velocity = Intake.conveyorVelocity;
 
-  private boolean s1; //= !sensor1.get()
-  private boolean s2; //= !sensor2.get()
-  private boolean s3; //= !sensor3.get()
+  private boolean s1 = false;
+  private boolean s2 = false;
+  private boolean s3 = false;
 
-  private Alliance myAlliance;
+  private Alliance myAlliance = null;
 
-  private boolean ready = false;
-
+  public static boolean readyShooter = false;
   private boolean intakeDeployed = false; // estado del intake 
 
 
@@ -61,11 +54,10 @@ public class intake_test extends SubsystemBase {
     solenoid.set(false);
 
     myAlliance = DriverStation.getAlliance();
-
   }
 
   public boolean ready(){
-    return ready;
+    return readyShooter;
   }
 
   public boolean intakeDeployed(){
@@ -82,44 +74,49 @@ public class intake_test extends SubsystemBase {
   public void neutral(){
     intake.set(0);
     conveyor.set(0);
-    
   }
 
+  /**
+   * Funcion que ejecuta la rutina para tomar las cargas. Con ayuda del sensor de color de REV version 3 detecta el color de la pelota y
+   * decide si debe expulsarla o no. Acomoda las pelotas según vayan entrando con ayuda de 3 sensores IR y de ya no poder tomar más cargas
+   * deshabilita y contrae el intake para ya no tomar más.
+   */
   public void takeBallsWithSensors(){
-    if( !(myAlliance == detectColor()) ){
+    if( !(myAlliance == detectBallColor()) ){
       conveyor.set(0);
       intake.set(-intake_velocity);
+      Timer.delay(0.2); //delay para dalre tiempo al intake de sacar la pelota.
     } else {
-      if (s1 && !s2 && s3  ||  !s1 && s2 && s3) {
-        conveyor.set(0);
-        intake.set(0);
+        if (s1 && !s2 && s3  ||  !s1 && s2 && s3) {
+          conveyor.set(0);
+          intake.set(0);
 
-        solenoid.set(false);
-        ready = true;
-      
-      } else if(s1 && s2 && !s3) {
-        conveyor.set(conveyor_velocity);
-        intake.set(0);
-
-        solenoid.set(false);
-        ready = true;
-
-      } else if((!s1 && !s2 && s3)  ||  (!s1 && s2 && !s3)) {
-        conveyor.set(0);
-        intake.set(intake_velocity);
-
-        solenoid.set(true);
-        ready = false;
-
-      } else {
-        conveyor.set(conveyor_velocity);
-        intake.set(intake_velocity);
-
-        solenoid.set(true);
-        ready = false;
+          solenoid.set(false);
+          readyShooter = true;
         
+        } else if(s1 && s2 && !s3) {
+          conveyor.set(conveyor_velocity);
+          intake.set(0);
+
+          solenoid.set(false);
+          readyShooter = true;
+
+          } else if((!s1 && !s2 && s3)  ||  (!s1 && s2 && !s3)) {
+              conveyor.set(0);
+              intake.set(intake_velocity);
+
+              solenoid.set(true);
+              readyShooter = false;
+
+            } else {
+                conveyor.set(conveyor_velocity);
+                intake.set(intake_velocity);
+
+                solenoid.set(true);
+                readyShooter = false;
+                
+              }
       }
-    }
   }
 
   public void solenoideOn(){
@@ -132,9 +129,7 @@ public class intake_test extends SubsystemBase {
     intakeDeployed = false;
   }
 
-  public Alliance detectColor(){
-    SmartDashboard.putString("Color", colorString);
-
+  public Alliance detectBallColor(){
     if ((red > 0.30 && red < 0.42)  &&  (green > 0.35 && green < 0.45)  &&  (blue > 0.15 && blue < 0.23)) {
       colorString = "Red";
       return Alliance.Red;
@@ -143,7 +138,7 @@ public class intake_test extends SubsystemBase {
        return Alliance.Blue;
      } else {
        colorString = "None";
-       return Alliance.Invalid;
+       return myAlliance; //Se declara igual para no afectar la lógica de la funcion detectBallColor()
      }
   }
 
@@ -157,14 +152,11 @@ public class intake_test extends SubsystemBase {
     red = detectedColor.red;
     green = detectedColor.green;
     blue = detectedColor.blue;
-    detectColor();
-
-
+    detectBallColor();
+    
+    SmartDashboard.putString("Color", colorString);
     SmartDashboard.putBoolean("1", s1);
     SmartDashboard.putBoolean("2", s2);
     SmartDashboard.putBoolean("3", s3);
   }
-    // This method will be called once per scheduler run
-  
- 
 }

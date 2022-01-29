@@ -4,8 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 
 
@@ -33,15 +33,19 @@ public static final class OIconstant {
 } 
 
 public static final class Intake {
+    public static final double intakeVelocity = 0.9,
+                               conveyorVelocity = 0.9;
+
     public static final int m1 = 2; //intake 
     public static final int m2 = 0; //conveyorRollers1
-    public static final int m3 = 1; //conveyorRollers1
-    public static final int m4 = 1; //conveyorRollers1
 
-    public static final int[] sensors = new int[] {0,
-                                                    1,
-                                                    2,
-                                                    3};
+    public static final int solenoidPort = 0;
+
+    public static final int[] sensors = new int[] {0,  //s1
+                                                   1,  //s2
+                                                   2}; //s3
+
+    public static final I2C.Port colorSensorPort = I2C.Port.kOnboard;
 
     
 }
