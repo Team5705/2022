@@ -4,7 +4,6 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
@@ -79,7 +78,7 @@ public class intake_test extends SubsystemBase {
   /**
    * Funcion que ejecuta la rutina para tomar las cargas. Con ayuda del sensor de color de REV version 3 detecta el color de la pelota y
    * decide si debe expulsarla o no. Acomoda las pelotas según vayan entrando con ayuda de 3 sensores IR y de ya no poder tomar más cargas
-   * deshabilita y contrae el intake para ya no tomar más.
+   * guarda e inhabilita el intake para ya no tomar más.
    */
   public void takeBallsWithSensors(){
     if( !(myAlliance == detectBallColor()) ){
