@@ -5,9 +5,15 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Intake;
+import frc.robot.Constants.shoot;
+import frc.robot.subsystems.pruebas;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,16 +22,28 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.q
  */
 public class Robot extends TimedRobot {
-
+  private static final int torreta = 2; 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private CANSparkMax mshoot;
+  private CANSparkMax mshoot2;
 
+
+
+
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
+    mshoot = new CANSparkMax(2, MotorType.kBrushed);
+    mshoot2 = new CANSparkMax(3, MotorType.kBrushed); 
+    
+
+    mshoot.restoreFactoryDefaults();
+    mshoot2.restoreFactoryDefaults();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -71,6 +89,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+
+    
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -82,7 +102,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    mshoot.set(1);
+    mshoot2.set(1);
+
+  }
 
   @Override
   public void testInit() {
