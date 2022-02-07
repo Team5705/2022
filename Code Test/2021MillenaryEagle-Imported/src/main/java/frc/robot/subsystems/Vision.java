@@ -30,13 +30,13 @@ public class Vision extends SubsystemBase {
 
   // Vision Tape Height
 
-  private final double visionTapeHeightFt = 8 + 2.25/12; // 8 feet, 2.25 inches
+  private final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
 
   // Camera height and angle
 
-  private final double cameraHeightInches = 33.5; //33.5 in aprox
+  private final double cameraHeightInches = 91; // cm
 
-  private final double cameraMountingAngle = 28; // 35 deg aprox.
+  private final double cameraMountingAngle = 29; // degrees
 
   private final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
 
@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     ledsOff();
-		cam0.setResolution(240, 360);
+		cam0.setResolution(120, 160);
 
   }
 
@@ -117,6 +117,7 @@ public class Vision extends SubsystemBase {
 
     // a2 to radians
     double radiansToTarget = Math.toRadians(ty.getDouble(0.0));
+    //152cm con a2 = -0;.16
 
     // result of a1 + a2
     double angleInRadians = mountingRadians + radiansToTarget;
