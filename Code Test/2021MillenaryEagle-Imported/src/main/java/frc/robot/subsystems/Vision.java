@@ -34,7 +34,7 @@ public class Vision extends SubsystemBase {
 
   // Camera height and angle
 
-  private final double cameraHeightInches = 91; // cm
+  private final double cameraHeightInches = 0.91; // m
 
   private final double cameraMountingAngle = 29; // degrees
 
