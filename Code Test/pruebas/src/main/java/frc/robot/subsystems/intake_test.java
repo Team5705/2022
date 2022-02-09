@@ -43,6 +43,7 @@ public class intake_test extends SubsystemBase {
 
   public static boolean readyShooter = false;
   private boolean intakeDeployed = false; // estado del intake 
+  private boolean savedIntake = false;
 
 
   /** Creates a new intake_test. */
@@ -61,6 +62,12 @@ public class intake_test extends SubsystemBase {
 
   public boolean intakeDeployed(){
     return intakeDeployed;
+
+  
+  }
+
+  public boolean savedIntake(){
+    return savedIntake;
   }
 
   public void take(){

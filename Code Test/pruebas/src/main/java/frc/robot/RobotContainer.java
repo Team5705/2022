@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DRIVE;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.intake_test;
 import frc.robot.subsystems.pruebas;
 import frc.robot.subsystems.pt;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -30,6 +32,7 @@ public class RobotContainer {
   private final pruebas prueba = new pruebas();
   private final DRIVE comandito = new DRIVE(chasis);
   public static XboxController drive = new XboxController(0);
+  private final intake_test intake = new intake_test();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,6 +55,9 @@ public class RobotContainer {
 
     new JoystickButton(drive, 1).whileHeld(new RunCommand(() -> prueba.moverTorreta(drive.getRawAxis(3)), prueba));
     new JoystickButton(drive, 1).whenReleased((new RunCommand(() -> prueba.moverTorreta(0.0), prueba)));
+
+    new JoystickButton(drive, 2).whenPressed(new RunCommand(() -> intake.intakeDeployed(), intake));
+    new JoystickButton(drive, 3).whenPressed(new RunCommand(() -> intake.savedIntake(), intake));
 
    // new JoystickButton(drive, 2).whenPressed(new Turn(chasis, 110));
    // new JoystickButton(drive, 1).whenPressed(new Turn(chasis, 30));
