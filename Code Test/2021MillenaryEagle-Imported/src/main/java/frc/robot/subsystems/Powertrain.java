@@ -34,9 +34,9 @@ import frc.robot.Constants.pathWeaver;
 
 public class Powertrain extends SubsystemBase {
   private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
-                             rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]),
-                             rightFollow = new WPI_TalonSRX(DriveConstant.portsMotors[3]);;
-  private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]);
+                             rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]);
+  private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
+                              rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]);
                               
 
   private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);

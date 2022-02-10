@@ -34,6 +34,7 @@ import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -140,14 +141,14 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //Buttons
-    new JoystickButton(driverController, 2).whenPressed(new TurnPIDB(powertrain, 50));
-    new JoystickButton(driverController, 3).whenPressed(new TurnPIDB(powertrain, 110));
+    //new JoystickButton(driverController, 2).whenPressed(new TurnPIDB(powertrain, 50));
+    //new JoystickButton(driverController, 3).whenPressed(new TurnPIDB(powertrain, 110));
     //new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
     //new JoystickButton(driverController, 3).whenPressed(new InstantCommand(intake::saveIntake, intake));
     //new JoystickButton(driverController, 4).whenPressed(new Shoot(shooter, intake, powertrain, vision));
-    new JoystickButton(driverController, 4).whileHeld(new Tracking(powertrain, vision));
-    new JoystickButton(driverController, 5).whileHeld(new TakeAll(intake));
-    new JoystickButton(driverController, 6).toggleWhenPressed(new TakeWithSensor(intake));
+    //new JoystickButton(driverController, 4).whileHeld(new Tracking(powertrain, vision));
+    //new JoystickButton(driverController, 5).whileHeld(new TakeAll(intake));
+    //new JoystickButton(driverController, 6).toggleWhenPressed(new TakeWithSensor(intake));
     //new JoystickButton(driverController, 6).toggleWhenPressed(new TakeWithSensor(intake));
 
     //new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::resetGyro)); // Boton Select

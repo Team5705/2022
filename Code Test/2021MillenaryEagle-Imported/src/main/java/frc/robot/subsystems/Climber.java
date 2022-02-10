@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  private final WPI_VictorSPX m1 = new WPI_VictorSPX(43);
-  private final WPI_VictorSPX m2 = new WPI_VictorSPX(9);
+  private final WPI_VictorSPX m1 = new WPI_VictorSPX(44);//43
+  private final WPI_VictorSPX m2 = new WPI_VictorSPX(10);//9
   private final WPI_VictorSPX up = new WPI_VictorSPX(5);
 
   private final DifferentialDrive scale = new DifferentialDrive(m1, m2);

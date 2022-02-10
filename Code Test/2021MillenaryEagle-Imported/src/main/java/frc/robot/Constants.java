@@ -26,7 +26,7 @@ public final class Constants {
         public static final int[] portsMotors = new int[] { 4,    // leftMaster(SRX) 
                                                             32,   // leftFollow(SPX)
                                                             3,    // rightMaster(SRX)  
-                                                            23 }; // rightFollow(SRX)
+                                                            43 }; // rightFollow(SRX)
 
         public static final Port Gyro = Port.kOnboardCS0;
     }

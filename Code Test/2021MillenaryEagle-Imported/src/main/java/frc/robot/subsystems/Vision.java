@@ -30,11 +30,11 @@ public class Vision extends SubsystemBase {
 
   // Vision Tape Height
 
-  private final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
+  private final double visionTapeHeightFt = 262;// cm   //8 + 2.25/12; // 8 feet, 2.25 inches
 
   // Camera height and angle
 
-  private final double cameraHeightInches = 0.91; // m
+  private final double cameraHeightInches = 91; // cm
 
   private final double cameraMountingAngle = 29; // degrees
 
