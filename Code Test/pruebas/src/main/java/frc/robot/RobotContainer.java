@@ -59,9 +59,6 @@ public class RobotContainer {
     new JoystickButton(drive, 2).whenPressed(new RunCommand(() -> intake.intakeDeployed(), intake));
     new JoystickButton(drive, 3).whenPressed(new RunCommand(() -> intake.savedIntake(), intake));
 
-    new JoystickButton(drive, 2).whenPressed(new InstantCommand(intake::intakeDeployed, intake));
-    new JoystickButton(drive, 3).whenPressed(new InstantCommand(intake::savedIntake, intake));
-
    // new JoystickButton(drive, 2).whenPressed(new Turn(chasis, 110));
    // new JoystickButton(drive, 1).whenPressed(new Turn(chasis, 30));
     
