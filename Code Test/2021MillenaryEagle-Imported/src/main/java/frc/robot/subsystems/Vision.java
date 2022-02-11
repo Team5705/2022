@@ -34,7 +34,7 @@ public class Vision extends SubsystemBase {
 
   // Camera height and angle
 
-  private final double cameraHeightInches = 91; // cm
+  private final double cameraHeightInches = 87; // cm
 
   private final double cameraMountingAngle = 29; // degrees
 
@@ -127,7 +127,10 @@ public class Vision extends SubsystemBase {
 
     double distance = differenceOfHeights/tangentOfAngle;
 
-    return distance;
+    if(availableTarget())
+      return distance;
+    else
+      return -1;
   }
 
   @Override
