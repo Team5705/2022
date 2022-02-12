@@ -11,9 +11,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.Intake;
-import frc.robot.Constants.shoot;
-import frc.robot.subsystems.pruebas;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,7 +19,6 @@ import frc.robot.subsystems.pruebas;
  * project.q
  */
 public class Robot extends TimedRobot {
-  private static final int torreta = 2; 
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
   private CANSparkMax mshoot;

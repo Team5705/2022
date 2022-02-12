@@ -4,25 +4,22 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
-
 //import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DriveConstant;
 
 public class pt extends SubsystemBase {
-  Spark m_frontleft = new Spark(0);
-  Spark m_rearleft = new Spark(1);
-  MotorControllerGroup m_left = new MotorControllerGroup(m_frontleft, m_rearleft);
+  Spark m_frontleft = new Spark(DriveConstant.portsMotors[0]);
+  Spark m_rearleft = new Spark(DriveConstant.portsMotors[1]);
+  
+  Spark m_frontright = new Spark (DriveConstant.portsMotors[2]);
+  Spark m_rearRight = new Spark(DriveConstant.portsMotors[3]);
 
-  Spark m_frontright = new Spark (2);
-  Spark m_rearRight = new Spark(3);
+  MotorControllerGroup m_left = new MotorControllerGroup(m_frontleft, m_rearleft);
   MotorControllerGroup m_right = new MotorControllerGroup(m_frontright, m_rearRight);
 
   DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
