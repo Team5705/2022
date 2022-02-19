@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj.SPI.Port;
 public final class Constants {
     public static final class DriveConstant {
         public static final int[] portsMotors = new int[] { 4,    // leftMaster(SRX) 
-                                                            32,   // leftFollow(SPX)
+                                                            5,   // leftFollow(SPX)
                                                             3,    // rightMaster(SRX)  
-                                                            23 }; // rightFollow(SRX)
+                                                            9 }; // rightFollow(SPX)
 
         public static final Port Gyro = Port.kOnboardCS0;
     }
@@ -56,15 +56,15 @@ public final class Constants {
         // The Robot Characterization Toolsuite provides a convenient tool for obtaining
         // these
         // values for your robot.
-        public static final double ksVolts = 1.01;
-        public static final double kvVoltSecondsPerMeter = 3.01;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.632;
+        public static final double ksVolts = 0.71101;
+        public static final double kvVoltSecondsPerMeter = 3.0014;
+        public static final double kaVoltSecondsSquaredPerMeter = 1.3221;
 
         public static final double WHEEL_RADIUS = .0762;
         public static final double TICKS_TO_METERS_RATIO = (2 * Math.PI * WHEEL_RADIUS) / 4096;
 
         // Example value only - as above, this must be tuned for your drive!
-        public static final double kPDriveVel = 0.003;
+        public static final double kPDriveVel = 4.7261;
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(23.25); // Distancia horizontal entre las
                                                                                     // ruedas en metros
