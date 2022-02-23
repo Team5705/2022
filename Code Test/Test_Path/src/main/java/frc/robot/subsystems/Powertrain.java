@@ -6,16 +6,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -41,19 +39,14 @@ public class Powertrain extends SubsystemBase {
   private final Gyro gyro = new ADXRS450_Gyro(DriveConstant.Gyro);
   private final AHRS ahrs = new AHRS(Port.kMXP);
 
-  private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
-  private Pose2d initialPosition = new Pose2d(0, 8.2, ahrs.getRotation2d());
-  
+  private Pose2d initialPosition = new Pose2d(pathWeaver.xInitialPosition, // x
+                                              pathWeaver.yInitialPosition, // y
+                                              Rotation2d.fromDegrees(pathWeaver.initialHeading)); // Heading in degrees
   private final DifferentialDriveOdometry odometry;
 
-  private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(pathWeaver.ksVolts, 
-                                                                          pathWeaver.kvVoltSecondsPerMeter, 
-                                                                          pathWeaver.kaVoltSecondsSquaredPerMeter);
-
-  private PIDController leftPIDController = new PIDController(pathWeaver.kPDriveVel, 0, 0);
-  private PIDController rightPIDController = new PIDController(pathWeaver.kPDriveVel, 0, 0);
-
-  //private Pose2d pose;
+  private double last_world_linear_accel_x;
+  private double last_world_linear_accel_y;
+  final static double kCollisionThreshold_DeltaG = 0.5f;
 
   public Powertrain() {
     gyro.calibrate();
@@ -69,7 +62,7 @@ public class Powertrain extends SubsystemBase {
   }
 
   /**
-   * Hola que hace
+   * Hace funcionar el chasis con valores de -1.0 a 1.0
    *
    * @param xSp  Velocidad en X
    * @param turn Velocidad en Y
@@ -91,31 +84,7 @@ public class Powertrain extends SubsystemBase {
 
   }
 
-  private double last_world_linear_accel_x;
-  private double last_world_linear_accel_y;
-
-  final static double kCollisionThreshold_DeltaG = 0.5f;
-
-  public boolean collision(){
-    boolean collisionDetected = false;
-          
-    double curr_world_linear_accel_x = ahrs.getWorldLinearAccelX();
-    double currentJerkX = curr_world_linear_accel_x - last_world_linear_accel_x;
-
-    last_world_linear_accel_x = curr_world_linear_accel_x;
-
-    double curr_world_linear_accel_y = ahrs.getWorldLinearAccelY();
-    double currentJerkY = curr_world_linear_accel_y - last_world_linear_accel_y;
-    
-    last_world_linear_accel_y = curr_world_linear_accel_y;
-    
-    if ( ( Math.abs(currentJerkX) > kCollisionThreshold_DeltaG ) ||
-         ( Math.abs(currentJerkY) > kCollisionThreshold_DeltaG) ) {
-        collisionDetected = true;
-    }
-    SmartDashboard.putBoolean("CollisionDetected", collisionDetected);
-    return collisionDetected;
-  }
+  
 
   public double positionLeft() {
     return leftMaster.getSelectedSensorPosition(0);
@@ -126,43 +95,45 @@ public class Powertrain extends SubsystemBase {
   }
 
   /**
-   * 7u7
+   * 7u7<p>
+   * Distancia del lado izquierdo del chasis
    * 
    * @return La distancia en metros
    */
   public double getDistanceLeft() {
-    double value = Units.inchesToMeters(((double) -positionLeft() / 4096) * (Math.PI * 6.00)); // Invertidow
+    double value = Units.inchesToMeters( ((double) positionLeft() / 4096) * (Math.PI * 6.00)); // Invertidow
     return value; // en sentido horario del robot marca negativo
   }
 
   /**
-   * UwU
+   * UwU<p>
+   * Distancia del lado derecho del chasis
    * 
    * @return La distancia en metros
    */
   public double getDistanceRight() {
-    double value = Units.inchesToMeters( ((double) positionRight() / 4096) * (Math.PI * 6.00) );
+    double value = (positionRight() / 4096) * (Math.PI * Units.inchesToMeters(6.00));
     return value;
   }
 
   /**
-   * n_n
+   * n_n<p>
+   * Obtiene la velocidad del lado izquierdo
    * 
    * @return La velocidad en metros por segundo
    */
   public double getRateLeft() {
-    return (((double) -leftMaster.getSelectedSensorVelocity(0) * 10) / 4096) * (Units.inchesToMeters(6) * Math.PI);
-    //return -leftMaster.getSelectedSensorVelocity(0);
+    return (((double) leftMaster.getSelectedSensorVelocity(0) * 10) / 4096) * (Units.inchesToMeters(6) * Math.PI);
   }
 
   /**
-   * :3
+   * :3<p>
+   * Obtiene la velocidad del lado derecho
    * 
    * @return La velocidad en metros por segundo
    */
   public double getRateRight() {
-    return (((double) rightMaster.getSelectedSensorVelocity(0) * 10) / 4096) * (Units.inchesToMeters(6) * Math.PI);
-    //return rightMaster.getSelectedSensorVelocity(0);
+    return (rightMaster.getSelectedSensorVelocity(0) / 4096) * (Units.inchesToMeters(6) * Math.PI) * 10;
   }
 
   /**
@@ -170,7 +141,8 @@ public class Powertrain extends SubsystemBase {
    *
    * @return The current wheel speeds.
    */
-  public DifferentialDriveWheelSpeeds getWheelSpeedss() {
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    //La velocidad tiene que estar en metros por segundo
     return new DifferentialDriveWheelSpeeds(getRateLeft(), getRateRight());
   }
 
@@ -203,36 +175,6 @@ public class Powertrain extends SubsystemBase {
   }
 
   /**
-     * Sets the max output of the drive. Useful for scaling the drive to drive more
-     * slowly.
-     *
-     * @param maxOutput the maximum output to which the drive will be constrained
-     */
-    public void setMaxOutput(double maxOutput) {
-      drive.setMaxOutput(maxOutput);
-  }
-
-  public SimpleMotorFeedforward getFeedFoward() {
-    return feedforward;
-  }
-
-  public PIDController getLeftPIDController() {
-      return leftPIDController;
-  }
-
-  public PIDController getRightPIDController() {
-      return rightPIDController;
-  }
-
-  public DifferentialDriveKinematics getDifferentialDriveKinematics() {
-      return kinematics;
-  }
-
-  public double aangle() {
-    return gyro.getAngle();
-  }
-
-  /**
    * T_T
    * 
    * @return Devuelve el angulo del robot normalizado en un rango de 0 a 359
@@ -261,15 +203,7 @@ public class Powertrain extends SubsystemBase {
   public void resetGyro() {
     ahrs.reset();
   }
-
-  public static double ticksToMeters(double ticks) {
-    return ticks * pathWeaver.TICKS_TO_METERS_RATIO;
-}
-
-  public void updateOdometry() {
-     odometry.update(ahrs.getRotation2d(), getDistanceLeft(), getDistanceRight());
-  }
-
+  
   /**
    * Returns the currently-estimated pose of the robot.
    *
@@ -277,6 +211,20 @@ public class Powertrain extends SubsystemBase {
    */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
+  }
+
+  public void neutralModeBrake(){
+      leftMaster.setNeutralMode(NeutralMode.Brake);
+      leftFollow.setNeutralMode(NeutralMode.Brake);
+      rightMaster.setNeutralMode(NeutralMode.Brake);
+      rightFollow.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void neutralModeCoast(){
+    leftMaster.setNeutralMode(NeutralMode.Coast);
+    leftFollow.setNeutralMode(NeutralMode.Coast);
+    rightMaster.setNeutralMode(NeutralMode.Coast);
+    rightFollow.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override
@@ -292,40 +240,68 @@ public class Powertrain extends SubsystemBase {
     SmartDashboard.putNumber("rateL", getRateLeft());
     SmartDashboard.putNumber("rateR", getRateRight());
     SmartDashboard.putBoolean("navX-MXP_Calibrated", !ahrs.isCalibrating());
-
-    /* Dashboard.sendDouble("gyro", angleNormalized());
-    Dashboard.sendDouble("rateL", getRateLeft());
-    Dashboard.sendDouble("rateR", getRateRight());
-    Dashboard.sendBoolean("navReady", !ahrs.isCalibrating()); */
   }
 
   private void configTalon_Victor() {
+    //Configuraciones por defecto, reseteo de los controladores
     leftMaster.configFactoryDefault();
     rightMaster.configFactoryDefault();
     leftFollow.configFactoryDefault();
     rightFollow.configFactoryDefault();
+    //Control de curva de acekeracion
+    leftMaster.configOpenloopRamp(0.5);
+    leftFollow.configOpenloopRamp(0.5);
+    rightMaster.configOpenloopRamp(0.5);
+    rightFollow.configOpenloopRamp(0.5);
 
-    leftFollow.follow(leftMaster);
-    rightFollow.follow(rightMaster);
-
-    leftMaster.setInverted(false);
-    rightMaster.setInverted(true);
-
-    leftFollow.setInverted(InvertType.FollowMaster);
-    rightFollow.setInverted(InvertType.FollowMaster);
-
+    //Primero llamar a los encoders antes del setInverted!
     try {
       leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       leftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 1);
 
       rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       rightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 1);
+
+      leftMaster.setSensorPhase(false);//CHECAR
+      rightMaster.setSensorPhase(false);//CHECAR
+
+      System.out.println("Encoders good!");
     } catch (Exception e) {
       new PrintCommand("Encoders unavailables!");
-      System.out.println();
+      System.out.println("Encoders unavailables!");
     }
 
+    leftFollow.follow(leftMaster);
+    rightFollow.follow(rightMaster);
 
+    leftMaster.setInverted(false);
+    rightMaster.setInverted(true);
+    
+    leftFollow.setInverted(InvertType.FollowMaster);
+    rightFollow.setInverted(InvertType.FollowMaster);
+    
+    neutralModeBrake();
+  }
+
+  public boolean collision(){
+    boolean collisionDetected = false;
+          
+    double curr_world_linear_accel_x = ahrs.getWorldLinearAccelX();
+    double currentJerkX = curr_world_linear_accel_x - last_world_linear_accel_x;
+
+    last_world_linear_accel_x = curr_world_linear_accel_x;
+
+    double curr_world_linear_accel_y = ahrs.getWorldLinearAccelY();
+    double currentJerkY = curr_world_linear_accel_y - last_world_linear_accel_y;
+    
+    last_world_linear_accel_y = curr_world_linear_accel_y;
+    
+    if ( ( Math.abs(currentJerkX) > kCollisionThreshold_DeltaG ) ||
+         ( Math.abs(currentJerkY) > kCollisionThreshold_DeltaG) ) {
+        collisionDetected = true;
+    }
+    SmartDashboard.putBoolean("CollisionDetected", collisionDetected);
+    return collisionDetected;
   }
 
 

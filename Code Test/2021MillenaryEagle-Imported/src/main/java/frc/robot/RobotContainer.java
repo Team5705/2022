@@ -143,8 +143,8 @@ public class RobotContainer {
     //Buttons
     //new JoystickButton(driverController, 2).whenPressed(new TurnPIDB(powertrain, 50));
     //new JoystickButton(driverController, 3).whenPressed(new TurnPIDB(powertrain, 110));
-    //new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
-    //new JoystickButton(driverController, 3).whenPressed(new InstantCommand(intake::saveIntake, intake));
+    new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
+    new JoystickButton(driverController, 3).whenPressed(new InstantCommand(intake::saveIntake, intake));
     //new JoystickButton(driverController, 4).whenPressed(new Shoot(shooter, intake, powertrain, vision));
     //new JoystickButton(driverController, 4).whileHeld(new Tracking(powertrain, vision));
     //new JoystickButton(driverController, 5).whileHeld(new TakeAll(intake));

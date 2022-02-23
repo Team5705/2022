@@ -24,7 +24,11 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstant;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
@@ -52,7 +56,9 @@ public class RobotContainer {
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      System.out.println("\n\n"+trajectoryJSON + " successfully read :D\n\n"); //Avisamos que el path fue leído con éxito
+      System.out.println("*************************************************************************");
+      System.out.println(trajectoryJSON + " successfully read :D"); //Avisamos que el path fue leído con éxito
+      System.out.println("*************************************************************************");
       
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
@@ -71,7 +77,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
+    new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -100,7 +109,7 @@ public class RobotContainer {
             .addConstraint(autoVoltageConstraint);
 
     // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
+    Trajectory exampleTrajectory =  
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
@@ -121,7 +130,7 @@ public class RobotContainer {
                 pathWeaver.kvVoltSecondsPerMeter,
                 pathWeaver.kaVoltSecondsSquaredPerMeter),
             pathWeaver.kDriveKinematics,
-            powertrain::getWheelSpeedss,
+            powertrain::getWheelSpeeds,
             new PIDController(pathWeaver.kPDriveVel, 0, 0),
             new PIDController(pathWeaver.kPDriveVel, 0, 0),
             // RamseteCommand passes volts to the callback
@@ -132,7 +141,7 @@ public class RobotContainer {
     powertrain.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> powertrain.setVolts(0, 0));
+    return new SequentialCommandGroup(ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)), new PrintCommand("Path finished! :D"));
   }
   
 }
