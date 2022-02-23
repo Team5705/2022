@@ -56,15 +56,15 @@ public final class Constants {
         // The Robot Characterization Toolsuite provides a convenient tool for obtaining
         // these
         // values for your robot.
-        public static final double ksVolts = 0.71101;
-        public static final double kvVoltSecondsPerMeter = 3.0014;
-        public static final double kaVoltSecondsSquaredPerMeter = 1.3221;
+        public static final double ksVolts = 0.66905;
+        public static final double kvVoltSecondsPerMeter = 2.9555;
+        public static final double kaVoltSecondsSquaredPerMeter = 2.15361;
 
-        public static final double WHEEL_RADIUS = .0762;
+        public static final double WHEEL_RADIUS = .0762; // meters
         public static final double TICKS_TO_METERS_RATIO = (2 * Math.PI * WHEEL_RADIUS) / 4096;
 
         // Example value only - as above, this must be tuned for your drive!
-        public static final double kPDriveVel = 4.7261;
+        public static final double kPDriveVel = 2.5029;
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(23.25); // Distancia horizontal entre las
                                                                                     // ruedas en metros
@@ -72,7 +72,7 @@ public final class Constants {
         public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
                 kTrackwidthMeters);
 
-        public static final double kMaxSpeedMetersPerSecond = 1.2; // Velocidad maxima del robot en metros por segundo
+        public static final double kMaxSpeedMetersPerSecond = 1.0; // Velocidad maxima del robot en metros por segundo
         public static final double kMaxAccelerationMetersPerSecondSquared = 0.5; // Aceleracion maxima del robot en
                                                                                  // metros por segundo
 
@@ -80,7 +80,7 @@ public final class Constants {
         // seconds
         // Debería de funcionar bien en cualquier robot, de ser necesario la
         // modificacion entrar a la documentacion de WPI
-        public static final double kRamseteB = 2.0;
+        public static final double kRamseteB = 1;
         public static final double kRamseteZeta = 0.7;
 
         public static final boolean kGyroReversed = true;

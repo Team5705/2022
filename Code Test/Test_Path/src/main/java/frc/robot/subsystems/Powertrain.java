@@ -42,7 +42,7 @@ public class Powertrain extends SubsystemBase {
   private final AHRS ahrs = new AHRS(Port.kMXP);
 
   private DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
-  private Pose2d initialPosition = new Pose2d(0, 0, new Rotation2d(0));
+  private Pose2d initialPosition = new Pose2d(0, 8.2, ahrs.getRotation2d());
   
   private final DifferentialDriveOdometry odometry;
 
