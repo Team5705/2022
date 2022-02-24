@@ -5,5 +5,5 @@
   "maxAcceleration": 0.5,
   "trackWidth": 0.59055,
   "gameName": "Rapid React",
-  "outputDir": "PathWeaver/output"
+  "outputDir": "PathWeaver"
 }

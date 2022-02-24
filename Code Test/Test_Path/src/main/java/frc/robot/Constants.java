@@ -61,14 +61,14 @@ public final class Constants {
 
         public static final double kPDriveVel = 2.5029;
 
-        public static final double kTrackwidthMeters = Units.inchesToMeters(23.25); // Distancia horizontal entre las ruedas en metros
+        public static final double kTrackwidthMeters = Units.inchesToMeters(23.75); // Distancia horizontal entre las ruedas en metros
                                                                                  
         public static final DifferentialDriveKinematics kDriveKinematics = 
             new DifferentialDriveKinematics(kTrackwidthMeters);
 
         //Only for custom path, wpi.json not
-        public static final double kMaxSpeedMetersPerSecond = 3; // Velocidad maxima del robot en metros por segundo
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3; // Aceleracion maxima del robot en metros por segundo
+        public static final double kMaxSpeedMetersPerSecond = 2; // Velocidad maxima del robot en metros por segundo
+        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5; // Aceleracion maxima del robot en metros por segundo
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and
         // seconds

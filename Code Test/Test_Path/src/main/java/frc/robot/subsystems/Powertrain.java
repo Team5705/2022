@@ -17,10 +17,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,7 +34,6 @@ public class Powertrain extends SubsystemBase {
 
   private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
 
-  private final Gyro gyro = new ADXRS450_Gyro(DriveConstant.Gyro);
   private final AHRS ahrs = new AHRS(Port.kMXP);
 
   private Pose2d initialPosition = new Pose2d(pathWeaver.xInitialPosition, // x
@@ -49,7 +46,6 @@ public class Powertrain extends SubsystemBase {
   final static double kCollisionThreshold_DeltaG = 0.5f;
 
   public Powertrain() {
-    gyro.calibrate();
 
     configTalon_Victor();
 
@@ -249,10 +245,10 @@ public class Powertrain extends SubsystemBase {
     leftFollow.configFactoryDefault();
     rightFollow.configFactoryDefault();
     //Control de curva de acekeracion
-    leftMaster.configOpenloopRamp(0.5);
-    leftFollow.configOpenloopRamp(0.5);
-    rightMaster.configOpenloopRamp(0.5);
-    rightFollow.configOpenloopRamp(0.5);
+    leftMaster.configOpenloopRamp(0.1);
+    leftFollow.configOpenloopRamp(0.1);
+    rightMaster.configOpenloopRamp(0.1);
+    rightFollow.configOpenloopRamp(0.1);
 
     //Primero llamar a los encoders antes del setInverted!
     try {
@@ -262,8 +258,8 @@ public class Powertrain extends SubsystemBase {
       rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       rightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 1);
 
-      leftMaster.setSensorPhase(false);//CHECAR
-      rightMaster.setSensorPhase(false);//CHECAR
+      leftMaster.setSensorPhase(true);
+      rightMaster.setSensorPhase(true);
 
       System.out.println("Encoders good!");
     } catch (Exception e) {
