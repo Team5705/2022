@@ -46,8 +46,8 @@ public class RobotContainer {
   //Commands
   private final Drive drive = new Drive(powertrain);
 
-  String trajectoryJSON = "b.wpilib.json";
-  Trajectory trajectory = null;
+  String trajectoryJSON = "paths/b.wpilib.json";
+  Trajectory trajectory = new Trajectory();
 
   public static XboxController driverController = new XboxController(OIConstant.controllerPort);
 
@@ -55,6 +55,16 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    readPaths();
+    
+    // Configure the button bindings
+    configureButtonBindings();
+    
+    powertrain.setDefaultCommand(drive);
+    
+  }
+
+  public void readPaths(){
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -64,12 +74,6 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open path: " + trajectoryJSON, ex.getStackTrace());
       
     }
-    
-    // Configure the button bindings
-    configureButtonBindings();
-    
-    powertrain.setDefaultCommand(drive);
-    
   }
   
   /**
@@ -145,16 +149,5 @@ public class RobotContainer {
             return new SequentialCommandGroup(ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)), new PrintCommand("Path finished! :D"));
           }
           
-          public void readPaths(){
-            try {
-              Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-              trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-              System.out.println(trajectoryJSON + "successfully read :D");
-              
-            } catch (IOException ex) {
-              DriverStation.reportError("Unable to open path: " + trajectoryJSON, ex.getStackTrace());
-              
-            }
-          }
         }
         
