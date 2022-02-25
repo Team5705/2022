@@ -245,10 +245,11 @@ public class Powertrain extends SubsystemBase {
     leftFollow.configFactoryDefault();
     rightFollow.configFactoryDefault();
     //Control de curva de acekeracion
-    leftMaster.configOpenloopRamp(0.1);
-    leftFollow.configOpenloopRamp(0.1);
-    rightMaster.configOpenloopRamp(0.1);
-    rightFollow.configOpenloopRamp(0.1);
+    double kRamp = 0.15;//0.15;
+    leftMaster.configOpenloopRamp(kRamp);
+    leftFollow.configOpenloopRamp(kRamp);
+    rightMaster.configOpenloopRamp(kRamp);
+    rightFollow.configOpenloopRamp(kRamp);
 
     //Primero llamar a los encoders antes del setInverted!
     try {

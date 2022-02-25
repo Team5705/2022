@@ -51,15 +51,15 @@ public final class Constants {
         }
         
     public static final class pathWeaver {
-        public static final double xInitialPosition = 0; // x
-        public static final double yInitialPosition = 0; // y
+        public static final double xInitialPosition = 0; // x IMPORTANT | Meters
+        public static final double yInitialPosition = 0; // y IMPORTANT | Meters
         public static final double initialHeading = 0; //degrees
 
-        public static final double ksVolts = 0.66905;
-        public static final double kvVoltSecondsPerMeter = 2.9555;
-        public static final double kaVoltSecondsSquaredPerMeter = 2.15361;
+        public static final double ksVolts = 0.93394;
+        public static final double kvVoltSecondsPerMeter = 2.992;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.8227;
 
-        public static final double kPDriveVel = 2.5029;
+        public static final double kPDriveVel = 3.8797;
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(23.75); // Distancia horizontal entre las ruedas en metros
                                                                                  
