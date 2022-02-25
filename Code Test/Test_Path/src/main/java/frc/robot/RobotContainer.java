@@ -17,13 +17,9 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstant;
 import frc.robot.Constants.pathWeaver;
@@ -102,11 +98,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(trajectory1.getInitialPose()), powertrain),
+    /* return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(trajectory1.getInitialPose()), powertrain),
                                       runPath(trajectory1).andThen(() -> powertrain.setVolts(0, 0)), 
                                       
                                       new InstantCommand(() -> powertrain.resetOdometry(trajectory2.getInitialPose()), powertrain),
-                                      runPath(trajectory2).andThen(() -> powertrain.setVolts(0, 0)));
+                                      runPath(trajectory2).andThen(() -> powertrain.setVolts(0, 0))); */
+
+    return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2));
   }
 
 
@@ -131,10 +129,11 @@ public class RobotContainer {
       powertrain);
 
     // Reset odometry to the starting pose of the trajectory.
-    //powertrain.resetOdometry(myTrajectory.getInitialPose());
+    /*powertrain.resetOdometry(myTrajectory.getInitialPose());*/
     
     // Run path following command, then stop at the end.
-    return ramseteCommand;
+    return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain), 
+                                      ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)));
   }
   
 }
