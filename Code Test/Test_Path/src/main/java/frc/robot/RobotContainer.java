@@ -21,10 +21,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstant;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
+import frc.robot.commands.EjectBalls;
+import frc.robot.commands.Shootv2;
+import frc.robot.commands.TakeAll;
+import frc.robot.commands.TakeWithSensor;
+import frc.robot.subsystems.IntakeBalls;
+import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Powertrain;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,6 +43,9 @@ import frc.robot.subsystems.Powertrain;
 public class RobotContainer {
   //Subsystems
   private final Powertrain powertrain = new Powertrain();
+  private final Shooter shooter = new Shooter();
+  private final IntakeBalls intake = new IntakeBalls();
+  public static Leds leds = new Leds();
   //Commands
   private final Drive drive = new Drive(powertrain);
 
@@ -88,8 +99,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(driverController, 1).whileHeld(new Shootv2(shooter));
+
+    new JoystickButton(driverController, 2).whenPressed(new InstantCommand(intake::toExtendIntake, intake));
+    new JoystickButton(driverController, 3).whenPressed(new InstantCommand(intake::saveIntake, intake));
+    new JoystickButton(driverController, 5).whileHeld(new TakeAll(intake));
+    new JoystickButton(driverController, 6).toggleWhenPressed(new TakeWithSensor(intake));
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
+
+    //POV
+    new POVButton(driverController, 270).whileHeld(new EjectBalls(intake));
   }
   
   /**
