@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -20,10 +21,10 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     shoot.configFactoryDefault();
-    shoot.configOpenloopRamp(0.4);
+    shoot.configOpenloopRamp(0.2);
 
     shoot2.configFactoryDefault();
-    shoot2.configOpenloopRamp(0.4);
+    shoot2.configOpenloopRamp(0.2);
 
   }
 
@@ -32,8 +33,8 @@ public class Shooter extends SubsystemBase {
     // batería
     compressor.disable();
 
-    shoot.setVoltage(12);
-    shoot2.setVoltage(12); // 0.9 es el valor óptimo sin utilizar el valor máximo y sin ser poco
+    shoot.set(ControlMode.PercentOutput, 1);
+    shoot2.set(ControlMode.PercentOutput, 1); // 0.9 es el valor óptimo sin utilizar el valor máximo y sin ser poco
 
     RobotContainer.leds.sendData(2);
 

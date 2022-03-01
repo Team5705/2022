@@ -157,9 +157,9 @@ public class IntakeBalls extends SubsystemBase {
    * Expulsa las power cells hacia el disparador.
    */
   public void ejectBallstoShooter(){
-    double ejectSpeed = 0.6;//0.8
+    double ejectSpeed = 1;//0.8
 
-    intake.set(ejectSpeed);
+    intake.set(0.6);
     motorBandaA.set(ejectSpeed);
     motorBandaB.set(ejectSpeed);
   }

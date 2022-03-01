@@ -118,13 +118,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-     return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(trajectory1.getInitialPose()), powertrain),
+     /* return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(trajectory1.getInitialPose()), powertrain),
                                       runPath(trajectory1).andThen(() -> powertrain.setVolts(0, 0)), 
                                       
                                       new InstantCommand(() -> powertrain.resetOdometry(trajectory2.getInitialPose()), powertrain),
-                                      runPath(trajectory2).andThen(() -> powertrain.setVolts(0, 0)));
+                                      runPath(trajectory2).andThen(() -> powertrain.setVolts(0, 0))); */
 
-    //return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)); //Falta probar
+    return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)); //Falta probar
   }
 
 
@@ -152,9 +152,9 @@ public class RobotContainer {
     /*powertrain.resetOdometry(myTrajectory.getInitialPose());*/
     
     // Run path following command, then stop at the end.
-    //return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain), 
-    //                                  ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)));
-    return ramseteCommand;
+    return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain), 
+                                      ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)));
+    //return ramseteCommand;
   }
   
 }
