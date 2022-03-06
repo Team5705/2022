@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -26,8 +25,8 @@ import frc.robot.Constants.DriveConstant;
 import frc.robot.Constants.pathWeaver;
 
 public class Powertrain extends SubsystemBase {
-  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
-                             rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]);
+  private final WPI_VictorSPX leftMaster = new WPI_VictorSPX(DriveConstant.portsMotors[0]),
+                             rightMaster = new WPI_VictorSPX(DriveConstant.portsMotors[2]);
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
                               rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]);
                               
@@ -300,10 +299,5 @@ public class Powertrain extends SubsystemBase {
     SmartDashboard.putBoolean("CollisionDetected", collisionDetected);
     return collisionDetected;
   }
-
-
- 
-
-
 }
 
