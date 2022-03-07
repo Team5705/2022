@@ -19,13 +19,16 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstant;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
+import frc.robot.commands.ShootON;
 import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Powertrain;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,15 +39,15 @@ import frc.robot.subsystems.Powertrain;
 public class RobotContainer {
   //Subsystems
   private final Powertrain powertrain = new Powertrain();
+  private final Shooter shooter = new Shooter();
   public static Leds leds = new Leds();
   //Commands
   private final Drive drive = new Drive(powertrain);
 
-  Trajectory [] trajectories = new Trajectory[] {trjaectory1,
-}};
+  //Trajectory [] trajectories = new Trajectory[] {trajectory1};
 
   String trajectoryJSON1 = "paths/output/a.wpilib.json";
-  Trajectory trjaectory1 = new Trajectory();
+  Trajectory trajectory1 = new Trajectory();
 
   String trajectoryJSON2 = "paths/output/d2.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
@@ -60,7 +63,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     
-    powertrain.setDefaultCommand(drive);
+    //powertrain.setDefaultCommand(drive);
     
   }
 
@@ -93,8 +96,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
-    new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
+      //new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> shooter.shoot(driverController.getRawAxis(3)), shooter).
+      //andThen(new InstantCommand(shooter::neutral, shooter)));
+
+      new JoystickButton(driverController, 1).whileHeld(new ShootON(shooter));
+    //new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
+    //new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 
     //POV
   }
