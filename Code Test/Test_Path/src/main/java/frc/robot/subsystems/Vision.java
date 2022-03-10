@@ -26,15 +26,11 @@ public class Vision extends SubsystemBase {
   private boolean availableCamera = false;
 
   // Vision Tape Height
-
   private final double visionTapeHeightFt = 262;// cm   //8 + 2.25/12; // 8 feet, 2.25 inches
 
   // Camera height and angle
-
   private final double cameraHeightInches = 87; // cm
-
   private final double cameraMountingAngle = 29; // degrees
-
   private final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
 
   // result of h2 - h1

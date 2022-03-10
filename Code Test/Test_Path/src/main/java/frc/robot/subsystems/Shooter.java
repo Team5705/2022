@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +12,7 @@ import frc.robot.Constants.Shoot;
 
 public class Shooter extends SubsystemBase {
   private final WPI_VictorSPX m1 = new WPI_VictorSPX(Shoot.mShooter);
+
   /** Creates a new Shooter. */
   public Shooter() {
     m1.configFactoryDefault();
@@ -23,7 +25,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void neutral(){
-    m1.setVoltage(0);
+    m1.set(VictorSPXControlMode.PercentOutput, 0);
   }
 
   @Override
