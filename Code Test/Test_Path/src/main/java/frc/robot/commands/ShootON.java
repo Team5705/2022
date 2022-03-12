@@ -23,7 +23,8 @@ public class ShootON extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shoot(RobotContainer.driverController.getRawAxis(3));
+    double speed = RobotContainer.driverController.getRawAxis(3);
+    shooter.shootMove(speed);
   }
 
   // Called once the command ends or is interrupted.

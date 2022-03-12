@@ -46,8 +46,8 @@ public final class Constants {
         
         
         public static final class Shoot {
-            public static final int mShooter = 43;  //Motor A
-            public static final int mShooter2 = 8; //Motor B
+            public static final int mShooter = 55;  //Motor A
+            public static final int mShooter2 = 56; //Motor B
         }
         
     public static final class pathWeaver {

@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstant;
@@ -63,7 +62,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     
-    //powertrain.setDefaultCommand(drive);
+    powertrain.setDefaultCommand(drive);
     
   }
 

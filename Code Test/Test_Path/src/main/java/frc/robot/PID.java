@@ -92,7 +92,6 @@ public class PID {
      * @param kP            Valor Proporcional
      * @param kI            Valor Integral
      * @param kD            Valor Derivativo
-     * @param desiredValue  Valor deseado o punto de ajuste
      * @param valueInverted Error invertido
      */
     public PID(double kP, double kI, double kD, boolean valueInverted) {
@@ -103,6 +102,14 @@ public class PID {
 
     }
 
+    /**
+     * Establecer elv alor deseado cuantas veces sea necesario. Llamar antes de ejecutar el algoritmo runPID.
+     * @param value
+     */
+    public void setDesiredValue(double value){
+        desiredValue = value;
+    }
+    
     /**
      * Inicia el procesamiento del PID siempre y cuando se mande a llamar. Mande a
      * llamar antes de obtener el valor.
@@ -129,6 +136,7 @@ public class PID {
         else PID = PID + bias;*/
 
     }
+
 
     public void runPIDErr(double error) {
         double biass = bias;
