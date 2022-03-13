@@ -15,7 +15,7 @@ import frc.robot.subsystems.Vision;
 public class Tracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.04, 0, 8, 0, 0.27, false);
+  private static PID pidX = new PID(0.02, 0, 8, 0, 0.27, false);
   private boolean finished = false;
   private double distance = 0;
   private final double range = 0.1;
@@ -65,11 +65,11 @@ public class Tracking extends CommandBase {
 
     if(distance < minimumDistance){
       //Distancia muy cercana!
-      xS = -0.5;
+      xS = 0.5;
     }
     else if(distance > maximumDistance){
         //Distancia muy lejana!
-        xS = 0.5;
+        xS = -0.5;
     }
     else{
         //Distancia no filtrada!

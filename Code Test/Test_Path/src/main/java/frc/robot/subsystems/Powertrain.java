@@ -8,11 +8,14 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -25,13 +28,15 @@ import frc.robot.Constants.DriveConstant;
 import frc.robot.Constants.pathWeaver;
 
 public class Powertrain extends SubsystemBase {
-  private final WPI_VictorSPX leftMaster = new WPI_VictorSPX(DriveConstant.portsMotors[0]),
-                             rightMaster = new WPI_VictorSPX(DriveConstant.portsMotors[2]);
+  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
+                              rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]);
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
                               rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]);
                               
 
   private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
+  
+  private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
 
   private final AHRS ahrs = new AHRS(Port.kMXP);
 
@@ -53,6 +58,7 @@ public class Powertrain extends SubsystemBase {
 
     odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), initialPosition);
 
+
     new PrintCommand("Powertrain iniciado");
   }
 
@@ -64,6 +70,17 @@ public class Powertrain extends SubsystemBase {
    */
   public void arcadeDrive(double xSp, double turn) {
     drive.arcadeDrive(xSp, turn);
+  }
+
+  public double [] arcadeDriveMetersPerSeconds(double linear, double angular){
+    var wheelSpeeds = new DifferentialDriveWheelSpeeds(3.5*linear, 3.5*angular);
+
+    ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
+
+    double linearVelocity = chassisSpeeds.vxMetersPerSecond;
+    double angularVelocity = chassisSpeeds.omegaRadiansPerSecond;
+
+    return new double [] {linearVelocity, angularVelocity};
   }
 
   /**

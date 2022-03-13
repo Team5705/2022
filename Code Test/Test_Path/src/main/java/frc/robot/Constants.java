@@ -18,10 +18,10 @@ import edu.wpi.first.wpilibj.SPI.Port;
  */
 public final class Constants {
     public static final class DriveConstant {
-        public static final int[] portsMotors = new int[] { 4,    // leftMaster(SRX) 
-                                                            5,   // leftFollow(SPX)
-                                                            3,    // rightMaster(SRX)  
-                                                            9 }; // rightFollow(SPX)
+        public static final int[] portsMotors = new int[] { 3,    // leftMaster(SRX) 
+                                                            4,   // leftFollow(SPX)
+                                                            5,    // rightMaster(SRX)  
+                                                            6 }; // rightFollow(SPX)
 
         public static final Port Gyro = Port.kOnboardCS0;
 

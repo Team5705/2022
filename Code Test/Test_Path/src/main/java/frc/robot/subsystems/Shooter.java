@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushed);
 
   private final WPI_CANCoder encoder = new WPI_CANCoder(52);
-  CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
+  private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
@@ -53,6 +53,15 @@ public class Shooter extends SubsystemBase {
     rightServo.setSpeed(1.0);
   }
 
+  public void neutralHood(){
+    leftServo.setSpeed(0.0);
+    rightServo.setSpeed(0.0);
+  }
+
+  /**
+   * 
+   * @param speed De -1.0 a 1.0
+   */
   public void moveHood(double speed){
     leftServo.setSpeed(speed);
     rightServo.setSpeed(-speed);
@@ -107,6 +116,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
-    SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
+    //SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
   }
 }

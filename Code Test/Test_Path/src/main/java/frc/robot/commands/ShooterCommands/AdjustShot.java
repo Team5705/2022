@@ -37,7 +37,7 @@ public class AdjustShot extends CommandBase {
     //Comprobar las distancias mínimas y máximas, de ser verdadero avanzar o retroceder -> Igual que arriba, corroborar antes. Así al ejecutar
     //este comando tendremos valores verdaderos.
 
-    parableShot.setDistance(Vision.getDistance());//Limelight distance report
+    parableShot.setDistance(Vision.getDistance() + 0);//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)
@@ -58,17 +58,20 @@ public class AdjustShot extends CommandBase {
   public void execute() {
     //set degrees on the servos for adjust
     //set value in the shooter motors for adjust
-    pidHood.runPID(shooter.getHoodAngle());
-    pidShoot.runPID(shooter.getShootVelocityMeterPerSeconds());
+    //pidHood.runPID(shooter.getHoodAngle());
+    //pidShoot.runPID(shooter.getShootVelocityMeterPerSeconds());
 
-    double speedHood = pidHood.valuePID();
-    double speedShooter = pidShoot.valuePID();
+    //double speedHood = pidHood.valuePID();
+    //double speedShooter = pidShoot.valuePID();
 
     //shooter.moveHood(speedHood);
     //shooter.shootMove(speedShooter);
 
-    SmartDashboard.putNumber("PIDHood", speedHood);
-    SmartDashboard.putNumber("PIDShooter", speedShooter);
+    //SmartDashboard.putNumber("PIDHood", speedHood);
+    //SmartDashboard.putNumber("PIDShooter", speedShooter);
+
+    SmartDashboard.putNumber("Angle", angle);
+    SmartDashboard.putNumber("Velocity", velocity);
 
   }
 
@@ -83,6 +86,6 @@ public class AdjustShot extends CommandBase {
   @Override
   public boolean isFinished() {
     //Grados de la capucha iguales al calculado
-    return (shooter.getHoodAngle() >= angle) && (shooter.getShootVelocityMeterPerSeconds() >= velocity); 
+    return true;//(shooter.getHoodAngle() >= angle) && (shooter.getShootVelocityMeterPerSeconds() >= velocity);
   }
 }

@@ -29,8 +29,8 @@ public class Vision extends SubsystemBase {
   private static final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
 
   // Camera height and angle
-  private static final double cameraHeightInches = 0.87; // m
-  private static final double cameraMountingAngle = 29; // degrees
+  private static final double cameraHeightInches = 0.76; // m
+  private static final double cameraMountingAngle = 24; // degrees
   private static final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
 
   // result of h2 - h1

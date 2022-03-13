@@ -41,7 +41,7 @@ public class AdjustShotLoop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    parableShot.setDistance(Vision.getDistance());//Limelight distance report
+    parableShot.setDistance(Vision.getDistance() + 0);//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)
@@ -82,7 +82,6 @@ public class AdjustShotLoop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //Grados de la capucha iguales al calculado
     return false;
   }
 }
