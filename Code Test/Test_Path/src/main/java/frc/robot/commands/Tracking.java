@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.subsystems.Powertrain;
@@ -23,6 +24,8 @@ public class Tracking extends CommandBase {
   private final double minimumDistance = 2.70; //meters
   private final double maximumDistance = 4.60; //meterss
 
+  private final double upperHUBVisionTargetDiameter = Units.inchesToMeters(53.38) / 2; //.25 tolerance
+
   /**
    * Ejecuta el seguimiento al centro del objetivo sin un fin establecido.
    * 
@@ -32,7 +35,7 @@ public class Tracking extends CommandBase {
   public Tracking(Powertrain powertrain, Vision vision) {
     this.powertrain = powertrain;
     this.vision = vision;
-    addRequirements(this.powertrain, this.vision);
+    addRequirements(powertrain);
   }
 
   /**
@@ -40,7 +43,7 @@ public class Tracking extends CommandBase {
    * del rango establecido para luego pasar al siguiente comando.
    * 
    * @param powertrain Subsistema motriz
-   * @param vision subsistema de vision
+   * @param vision Subsistema de vision
    * @param finished Indica si queremos que el comando termine o no, de ser falso nunca terminará hasta que sea interrumpido,
    *                 de ser verdadero terminará cuando el robot esté alineado con el objetivo. Dejar en verdadero.
    */
@@ -49,7 +52,7 @@ public class Tracking extends CommandBase {
     this.vision = vision;
     this.finished = finished;
 
-    addRequirements(this.powertrain, this.vision);
+    addRequirements(powertrain);
   }
 
   @Override
@@ -60,7 +63,8 @@ public class Tracking extends CommandBase {
 
   @Override
   public void execute() {
-    distance = Vision.getDistance();
+    //Ajustar la distancia para el tiro en el ultimo valor           | Aqui
+    distance = vision.getDistance() + upperHUBVisionTargetDiameter + 0;
     double xS;
 
     if(distance < minimumDistance){
@@ -68,17 +72,17 @@ public class Tracking extends CommandBase {
       xS = 0.5;
     }
     else if(distance > maximumDistance){
-        //Distancia muy lejana!
-        xS = -0.5;
+      //Distancia muy lejana!
+      xS = -0.5;
     }
     else{
-        //Distancia no filtrada!
-        xS = 0;
+      //Distancia no filtrada!
+      xS = 0;
     }
 
     pidX.runPIDErr(vision.getX());
 
-    if (Vision.availableTarget()) {
+    if (vision.availableTarget()) {
 
       double turn = pidX.valuePID();
 

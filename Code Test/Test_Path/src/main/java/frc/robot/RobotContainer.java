@@ -103,10 +103,10 @@ public class RobotContainer {
     //new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> shooter.shoot(driverController.getRawAxis(3)), shooter).
     //andThen(new InstantCommand(shooter::neutral, shooter)));
     new JoystickButton(driverController, 1).whileHeld(new Tracking(powertrain, vision));
-    new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter));
+    new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter, vision));
     
-    //new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
-    //new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
+    new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
+    new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 
     //POV
   }

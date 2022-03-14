@@ -13,6 +13,7 @@ import frc.robot.subsystems.Vision;
 
 public class AdjustShotLoop extends CommandBase {
   private final Shooter shooter;
+  private final Vision vision;
 
   private static ParableShot parableShot = new ParableShot();
   private static PID pidHood = new PID(0, 0, 0, false); //AJUSTAR!
@@ -22,8 +23,9 @@ public class AdjustShotLoop extends CommandBase {
                  velocity;
   
   /** Creates a new ShotWithAngulator. */
-  public AdjustShotLoop(Shooter shooter) {
+  public AdjustShotLoop(Shooter shooter, Vision  vision) {
     this.shooter = shooter;
+    this.vision = vision;
     addRequirements(shooter);
   }
 
@@ -41,7 +43,7 @@ public class AdjustShotLoop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    parableShot.setDistance(Vision.getDistance() + 0);//Limelight distance report
+    parableShot.setDistance(vision.getDistance() + 0);//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)

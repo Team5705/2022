@@ -13,6 +13,7 @@ import frc.robot.subsystems.Vision;
 
 public class AdjustShot extends CommandBase {
   private final Shooter shooter;
+  private final Vision vision;
 
   private static ParableShot parableShot = new ParableShot();
   private static PID pidHood = new PID(0, 0, 0, false); //AJUSTAR!
@@ -22,8 +23,9 @@ public class AdjustShot extends CommandBase {
                  velocity;
   
   /** Creates a new ShotWithAngulator. */
-  public AdjustShot(Shooter shooter) {
+  public AdjustShot(Shooter shooter, Vision vision) {
     this.shooter = shooter;
+    this.vision = vision;
     addRequirements(shooter);
   }
 
@@ -37,7 +39,7 @@ public class AdjustShot extends CommandBase {
     //Comprobar las distancias mínimas y máximas, de ser verdadero avanzar o retroceder -> Igual que arriba, corroborar antes. Así al ejecutar
     //este comando tendremos valores verdaderos.
 
-    parableShot.setDistance(Vision.getDistance() + 0);//Limelight distance report
+    parableShot.setDistance(vision.getDistance() + 0);//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)

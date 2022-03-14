@@ -13,28 +13,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
-  private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   private NetworkTable table2 = NetworkTableInstance.getDefault().getTable("CameraPublisher").getSubTable("limelight");
   private NetworkTableEntry tx = table.getEntry("tx");
-  private static NetworkTableEntry ty = table.getEntry("ty");
+  private NetworkTableEntry ty = table.getEntry("ty");
   private NetworkTableEntry ta = table.getEntry("ta");
-  private static NetworkTableEntry tv = table.getEntry("tv");
+  private NetworkTableEntry tv = table.getEntry("tv");
   private NetworkTableEntry available = table2.getEntry("description");
 
-  public static UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
+  public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
 
   //private boolean availableCamera = false;
 
   // Vision Tape Height
-  private static final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
+  private final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
 
   // Camera height and angle
-  private static final double cameraHeightInches = 0.76; // m
-  private static final double cameraMountingAngle = 24; // degrees
-  private static final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
+  private final double cameraHeightInches = 0.76; // m
+  private final double cameraMountingAngle = 24; // degrees
+  private final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
 
   // result of h2 - h1
-  private static double differenceOfHeights = visionTapeHeightFt - cameraHeightInches;
+  private double differenceOfHeights = visionTapeHeightFt - cameraHeightInches;
 
   public Vision() {
     ledsOff();
@@ -67,7 +67,7 @@ public class Vision extends SubsystemBase {
     return ta.getDouble(0.0);
   }
 
-  public static boolean availableTarget() {
+  public boolean availableTarget() {
     if (tv.getDouble(0.0) > 0)
       return true;
     else
@@ -90,7 +90,7 @@ public class Vision extends SubsystemBase {
     table.getEntry("ledMode").setNumber(6);
   }
 
-  public static void ledsDefault() {
+  public void ledsDefault() {
     table.getEntry("ledMode").setNumber(0);
   }
 
@@ -110,7 +110,7 @@ public class Vision extends SubsystemBase {
    * Devuelve la distancia en el eje horizontal.
    * @return La distancia en metros
    */
-  public static double getDistance(){
+  public double getDistance(){
 
     // a2 to radians
     double radiansToTarget = Math.toRadians(ty.getDouble(0.0));
