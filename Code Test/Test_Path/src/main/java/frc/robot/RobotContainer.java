@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -57,6 +60,10 @@ public class RobotContainer {
 
   public static XboxController driverController = new XboxController(OIConstant.controllerPort);
 
+  SendableChooser<String> autonomous = new SendableChooser<String>();
+
+  ArrayList<String> trajectoryPaths = new ArrayList<String>();
+
   
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,6 +75,13 @@ public class RobotContainer {
     configureButtonBindings();
     
     powertrain.setDefaultCommand(drive);
+
+    autonomous.addOption("Trench", "trench");
+    autonomous.addOption("Mid", "mid");
+    autonomous.addOption("Simple", "simple");
+    autonomous.addOption("Emergency", "emergency");
+    autonomous.addOption("Test", "test");
+    SmartDashboard.putData("autoMode", autonomous);
     
   }
 
