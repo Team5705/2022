@@ -31,24 +31,25 @@ public final class Constants {
         public static final int controllerPort = 0;
     }
     
-    public static final class Intake {
-        public static final int m1 = 2; // Intake
-        
-        public static final int m2 = 1; // Banda A
-        public static final int m3 = 0; // Banda B
+    public static final class IntakeConstant {
+        public static final int m1 = 10; // Intake
         
         public static final int[] solenoids = new int[] { 3 };
-        public static final int[] sensors = new int[] { 0,   // A  Buffer --> Banda A
+        public static final int[] sensors = new int[] { 0,   //
             3,   // B  Banda B
             1,   // C  Banda B
             2 }; // D  Banda B
-        }
+    }
+
+    public static final class ConveyorConstant {
+        public static final int m1 = 40;
+    }
         
         
-        public static final class Shoot {
-            public static final int mShooter = 55;  //Motor A
-            public static final int mShooter2 = 56; //Motor B
-        }
+    public static final class Shoot {
+        public static final int mShooter = 38;  //Motor A | Izquierdo
+        public static final int mShooter2 = 39; //Motor B | Derecho
+    }
         
     public static final class pathWeaver {
         public static final double xInitialPosition = 0; // x IMPORTANT | Meters

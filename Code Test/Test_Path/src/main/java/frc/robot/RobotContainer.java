@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstant;
@@ -30,6 +31,8 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.ShootON;
 import frc.robot.commands.Tracking;
 import frc.robot.commands.ShooterCommands.AdjustShot;
+import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Leds;
 import frc.robot.subsystems.Powertrain;
 import frc.robot.subsystems.Shooter;
@@ -46,7 +49,10 @@ public class RobotContainer {
   private final Powertrain powertrain = new Powertrain();
   private final Vision vision = new Vision();
   private final Shooter shooter = new Shooter();
+  private final Conveyor conveyor = new Conveyor();
+  private final Intake intake = new Intake();
   //public static Leds leds = new Leds();
+
   //Commands
   private final Drive drive = new Drive(powertrain);
 
@@ -116,9 +122,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> shooter.shoot(driverController.getRawAxis(3)), shooter).
     //andThen(new InstantCommand(shooter::neutral, shooter)));
-    new JoystickButton(driverController, 1).whileHeld(new Tracking(powertrain, vision));
-    new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter, vision));
+
+    //new JoystickButton(driverController, 1).whileHeld(new Tracking(powertrain, vision));
+    //new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter, vision));
     
+    new JoystickButton(driverController, 1).whileHeld(
+      new RunCommand(() -> conveyor.move( driverController.getRawAxis(4) ), conveyor));
+
+    new JoystickButton(driverController, 2).whileHeld(
+      new RunCommand(() -> intake.move( driverController.getRawAxis(4) ), intake));
+
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 

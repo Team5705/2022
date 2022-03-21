@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,14 +28,15 @@ public class Vision extends SubsystemBase {
 
   // Vision Tape Height
   private final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
+  private final double visionTargetDiameter = Units.inchesToMeters(53.38);
 
   // Camera height and angle
-  private final double cameraHeightInches = 0.76; // m
-  private final double cameraMountingAngle = 24; // degrees
+  private final double cameraHeightMeters = 0.765; // m
+  private final double cameraMountingAngle = 25; // degrees
   private final double mountingRadians = Math.toRadians(cameraMountingAngle); // a1, converted to radians
 
   // result of h2 - h1
-  private double differenceOfHeights = visionTapeHeightFt - cameraHeightInches;
+  private double differenceOfHeights = visionTapeHeightFt - cameraHeightMeters;
 
   public Vision() {
     ledsOff();
@@ -125,7 +127,7 @@ public class Vision extends SubsystemBase {
     double distance = differenceOfHeights/tangentOfAngle;
 
     if(availableTarget())
-      return distance;
+      return distance + visionTargetDiameter/2;
     else
       return 0;
   }
