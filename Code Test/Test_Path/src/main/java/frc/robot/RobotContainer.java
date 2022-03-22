@@ -132,6 +132,9 @@ public class RobotContainer {
     new JoystickButton(driverController, 2).whileHeld(
       new RunCommand(() -> intake.move( driverController.getRawAxis(4) ), intake));
 
+    new JoystickButton(driverController, 5).whenPressed(new InstantCommand(intake::extendIntake, intake));
+    new JoystickButton(driverController, 6).whenPressed(new InstantCommand(intake::retractIntake, intake));
+
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 
