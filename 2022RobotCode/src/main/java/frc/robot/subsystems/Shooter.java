@@ -16,10 +16,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Shoot;
 
 public class Shooter extends SubsystemBase {
-  private final CANSparkMax m1 = new CANSparkMax(Shoot.mShooter, MotorType.kBrushed);
+  private final CANSparkMax m1 = new CANSparkMax(Shoot.mShooter, MotorType.kBrushless);
   private final Servo leftServo = new Servo(0);
   private final Servo rightServo = new Servo(1);
-  private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushed);
+  private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushless);
 
   private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
@@ -33,6 +33,8 @@ public class Shooter extends SubsystemBase {
 
     m2.restoreFactoryDefaults();
     m2.setOpenLoopRampRate(0.8);
+    m2.setInverted(true);
+
 
     //Ajustamos los valores respecto a los datos del Smart Robot Servo
     leftServo.setBounds(2.5, 0, 1.5, 0, 0.5);
@@ -116,6 +118,9 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
-    //SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
+    SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
+    SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
+    SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
+    SmartDashboard.putNumber("shootSpeed", m1.get());
   }
 }

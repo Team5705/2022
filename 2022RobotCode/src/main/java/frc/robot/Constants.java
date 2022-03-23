@@ -42,13 +42,14 @@ public final class Constants {
     }
 
     public static final class ConveyorConstant {
-        public static final int m1 = 40;
+        public static final int m1 = 35;
+        public static final int m2 = 36;
     }
         
         
     public static final class Shoot {
-        public static final int mShooter = 38;  //Motor A | Izquierdo
-        public static final int mShooter2 = 39; //Motor B | Derecho
+        public static final int mShooter = 39;  //Motor A | Izquierdo
+        public static final int mShooter2 = 38; //Motor B | Derecho
     }
         
     public static final class pathWeaver {

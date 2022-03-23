@@ -1,0 +1,36 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "Talon SRX[5]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Conveyor": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/Powertrain": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/Talon SRX [10]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [4]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Victor SPX [6]": "Motor Controller",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/LiveWindow/Vision": "Subsystem",
+      "/SmartDashboard/autoMode": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "autoMode": {
+        "open": true
+      },
+      "open": true
+    }
+  }
+}

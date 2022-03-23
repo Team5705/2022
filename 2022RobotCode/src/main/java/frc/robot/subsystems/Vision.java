@@ -22,7 +22,7 @@ public class Vision extends SubsystemBase {
   private NetworkTableEntry tv = table.getEntry("tv");
   private NetworkTableEntry available = table2.getEntry("description");
 
-  public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
+  //public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
 
   //private boolean availableCamera = false;
 
@@ -40,7 +40,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     ledsOff();
-		cam0.setResolution(120, 160);
+		//cam0.setResolution(120, 160);
 
   }
 

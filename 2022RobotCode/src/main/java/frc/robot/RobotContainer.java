@@ -126,11 +126,23 @@ public class RobotContainer {
     //new JoystickButton(driverController, 1).whileHeld(new Tracking(powertrain, vision));
     //new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter, vision));
     
-    new JoystickButton(driverController, 1).whileHeld(
-      new RunCommand(() -> conveyor.move( driverController.getRawAxis(4) ), conveyor));
+    new JoystickButton(driverController, 1)
+      .whileHeld(new RunCommand(() -> conveyor.move( driverController.getRawAxis(4)), conveyor))
+      .whenReleased(new RunCommand(() -> conveyor.neutral()));
 
-    new JoystickButton(driverController, 2).whileHeld(
-      new RunCommand(() -> intake.move( driverController.getRawAxis(4) ), intake));
+    new JoystickButton(driverController, 2)
+      .whileHeld(new RunCommand(() -> intake.move( driverController.getRawAxis(4) ), intake))
+      .whenReleased(new RunCommand(() -> intake.neutral()));
+
+    new JoystickButton(driverController, 3)
+      .whileHeld(new RunCommand(() -> shooter.shootMove( driverController.getRawAxis(4) ), shooter))
+      .whenReleased(new RunCommand(() -> shooter.neutral()));
+
+    new JoystickButton(driverController, 4)
+      .whileHeld(new RunCommand(() -> shooter.moveHood( driverController.getRawAxis(4) ), shooter))
+      .whenReleased(new RunCommand(() -> shooter.neutralHood()));
+
+    
 
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
