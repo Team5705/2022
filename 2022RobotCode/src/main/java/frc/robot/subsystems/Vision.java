@@ -22,13 +22,13 @@ public class Vision extends SubsystemBase {
   private NetworkTableEntry tv = table.getEntry("tv");
   private NetworkTableEntry available = table2.getEntry("description");
 
-  //public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
+  public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
 
   //private boolean availableCamera = false;
 
   // Vision Tape Height
   private final double visionTapeHeightFt = 2.62;// m   //8 + 2.25/12; // 8 feet, 2.25 inches
-  private final double visionTargetDiameter = Units.inchesToMeters(53.38);
+  private final double upperHUBVisionTargetDiameter = Units.inchesToMeters(53.38) / 2; //.25 tolerance
 
   // Camera height and angle
   private final double cameraHeightMeters = 0.765; // m
@@ -40,7 +40,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     ledsOff();
-		//cam0.setResolution(120, 160);
+		cam0.setResolution(120, 160);
 
   }
 
@@ -127,7 +127,7 @@ public class Vision extends SubsystemBase {
     double distance = differenceOfHeights/tangentOfAngle;
 
     if(availableTarget())
-      return distance + visionTargetDiameter/2;
+      return distance + upperHUBVisionTargetDiameter/2;
     else
       return 0;
   }

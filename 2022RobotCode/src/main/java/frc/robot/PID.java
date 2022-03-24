@@ -10,9 +10,9 @@ package frc.robot;
 public class PID {
     private double bias = 0;
 
-    private final double kP;
-    private final double kI;
-    private final double kD;
+    private double kP;
+    private double kI;
+    private double kD;
 
     private boolean valueInverted = false;
     private double desiredValue;
@@ -108,6 +108,21 @@ public class PID {
      */
     public void setDesiredValue(double value){
         desiredValue = value;
+    }
+
+    /**
+     * Asigna los valores de P, I y D
+     * @param kP Proporcional
+     * @param kI Integral
+     * @param kD Derivativo
+     * @param kF Valor mínimo
+     */
+    public void setValues(double kP, double kI, double kD, double kF){
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.bias = kF;
+
     }
     
     /**

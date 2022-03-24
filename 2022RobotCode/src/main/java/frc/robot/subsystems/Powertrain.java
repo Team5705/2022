@@ -8,6 +8,8 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,7 +18,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,7 +31,11 @@ public class Powertrain extends SubsystemBase {
                               rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]);
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
                               rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]);
-                              
+  
+  private final WPI_CANCoder leftEncoder = new WPI_CANCoder(50),
+                             rightEncoder = new WPI_CANCoder(51);
+  private CANCoderConfiguration leftEncoderConfigs = new CANCoderConfiguration();
+  private CANCoderConfiguration rightEncoderConfigs = new CANCoderConfiguration();
 
   private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
   
@@ -50,6 +55,7 @@ public class Powertrain extends SubsystemBase {
   public Powertrain() {
 
     configTalon_Victor();
+    configEncoders();
 
     resetEncoders();
     zeroHeading();
@@ -97,11 +103,11 @@ public class Powertrain extends SubsystemBase {
   
 
   public double positionLeft() {
-    return leftMaster.getSelectedSensorPosition(0);
+    return leftEncoder.getPosition();
   }
 
   public double positionRight() {
-    return rightMaster.getSelectedSensorPosition(0);
+    return rightEncoder.getPosition();
   }
 
   /**
@@ -111,8 +117,8 @@ public class Powertrain extends SubsystemBase {
    * @return La distancia en metros
    */
   public double getDistanceLeft() {
-    double value = Units.inchesToMeters( ((double) positionLeft() / 4096) * (Math.PI * 6.00)); // Invertidow
-    return value; // en sentido horario del robot marca negativo
+    //double value = Units.inchesToMeters( ((double) positionLeft() / 4096) * (Math.PI * 6.00)); // Invertidow
+    return leftEncoder.getPosition(); // en sentido horario del robot marca negativo
   }
 
   /**
@@ -122,8 +128,8 @@ public class Powertrain extends SubsystemBase {
    * @return La distancia en metros
    */
   public double getDistanceRight() {
-    double value = (positionRight() / 4096) * (Math.PI * Units.inchesToMeters(6.00));
-    return value;
+    //double value = (positionRight() / 4096) * (Math.PI * Units.inchesToMeters(6.00));
+    return rightEncoder.getPosition();
   }
 
   /**
@@ -133,7 +139,8 @@ public class Powertrain extends SubsystemBase {
    * @return La velocidad en metros por segundo
    */
   public double getRateLeft() {
-    return (((double) leftMaster.getSelectedSensorVelocity(0) * 10) / 4096) * (Units.inchesToMeters(6) * Math.PI);
+    //return (((double) leftMaster.getSelectedSensorVelocity(0) * 10) / 4096) * (Units.inchesToMeters(6) * Math.PI);
+    return leftEncoder.getVelocity();
   }
 
   /**
@@ -143,7 +150,8 @@ public class Powertrain extends SubsystemBase {
    * @return La velocidad en metros por segundo
    */
   public double getRateRight() {
-    return (rightMaster.getSelectedSensorVelocity(0) / 4096) * (Units.inchesToMeters(6) * Math.PI) * 10;
+    //return (rightMaster.getSelectedSensorVelocity(0) / 4096) * (Units.inchesToMeters(6) * Math.PI) * 10;
+    return rightEncoder.getVelocity();
   }
 
   /**
@@ -205,9 +213,8 @@ public class Powertrain extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    leftMaster.setSelectedSensorPosition(0);
-
-    rightMaster.setSelectedSensorPosition(0);
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
   }
 
   public void resetGyro() {
@@ -275,6 +282,17 @@ public class Powertrain extends SubsystemBase {
     rightFollow.setInverted(InvertType.FollowMaster);
     
     neutralModeBrake();
+  }
+
+  private void configEncoders(){
+    leftEncoderConfigs.sensorDirection = false; //Dirección del valor, ajustar si está invertido
+    //Coeficiente para la salida de los valores, por defecto en grados (0.087890625) e.g. 4096 * 0.087890625 = 360°
+    leftEncoderConfigs.sensorCoefficient = 1.1688933603688586170451827431929e-4; //Valores en metros
+    leftEncoder.configAllSettings(leftEncoderConfigs);
+
+    rightEncoderConfigs.sensorDirection = false;
+    rightEncoderConfigs.sensorCoefficient = 1.1688933603688586170451827431929e-4; 
+    rightEncoder.configAllSettings(rightEncoderConfigs);
   }
 
   public boolean collision(){

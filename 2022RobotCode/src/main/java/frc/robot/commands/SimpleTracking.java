@@ -17,10 +17,11 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Powertrain;
 import frc.robot.subsystems.Vision;
 
-public class Tracking extends CommandBase {
+public class SimpleTracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
   private static PID pidX = new PID(0.02, 0, 8, 0, 0.27, false);
+  private static PID pidY = new PID(0.02, 0, 8, 0, 0.27, false);
   private boolean finished = false;
   private double distance = 0;
   private final double range = 0.1;
@@ -42,7 +43,7 @@ public class Tracking extends CommandBase {
    * @param powertrain Subsistema motriz
    * @param vision Subsistema de vision
    */
-  public Tracking(Powertrain powertrain, Vision vision) {
+  public SimpleTracking(Powertrain powertrain, Vision vision) {
     this.powertrain = powertrain;
     this.vision = vision;
     addRequirements(powertrain);
@@ -57,7 +58,7 @@ public class Tracking extends CommandBase {
    * @param finished Indica si queremos que el comando termine o no, de ser falso nunca terminará hasta que sea interrumpido,
    *                 de ser verdadero terminará cuando el robot esté alineado con el objetivo. Dejar en verdadero.
    */
-  public Tracking(Powertrain powertrain, Vision vision, boolean finished) {
+  public SimpleTracking(Powertrain powertrain, Vision vision, boolean finished) {
     this.powertrain = powertrain;
     this.vision = vision;
     this.finished = finished;
@@ -68,7 +69,7 @@ public class Tracking extends CommandBase {
   @Override
   public void initialize() {
     vision.ledsOn();
-    vision.selectPipeline(0);//Pipeline donde el objetivo es el centro de la imagen
+    vision.selectPipeline(1); //Pipeline calibrada para la distancia correcta
 
    }
 
@@ -76,28 +77,14 @@ public class Tracking extends CommandBase {
   public void execute() {
     update();
     pidX.setValues(kP, kI, kD, kF);
-
-    //Ajustar la distancia para el tiro en el ultimo valor           | Aqui
-    distance = vision.getDistance() + 0;
-    double xS;
-
-    if(distance < minimumDistance){
-      //Distancia muy cercana!
-      xS = 0.5;
-    }
-    else if(distance > maximumDistance){
-      //Distancia muy lejana!
-      xS = -0.5;
-    }
-    else{
-      //Distancia no filtrada!
-      xS = 0;
-    }
+    //pidY.setValues(kP, kI, kD, kF);
 
     pidX.runPIDErr(vision.getX());
+    pidY.runPIDErr(vision.getY());
 
     if (vision.availableTarget()) {
 
+      double xS = pidY.valuePID();
       double turn = pidX.valuePID();
 
       powertrain.arcadeDrive(xS, turn);

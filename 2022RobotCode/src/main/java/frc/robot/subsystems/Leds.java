@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Leds extends SubsystemBase {
@@ -25,16 +26,16 @@ public class Leds extends SubsystemBase {
    *    1 -> Robot Enable  
    *    2 -> Shoot Enable
    *    3 -> Shoot Disable
-   *    4 -> PowerCells Ready
-   *    5 -> Rulette Color Red (GameData)
-   *    6 -> Rulette Color Yellow (GameData)
-   *    7 -> Rulette Color Green (GameData)
-   *    8 -> Rulette Color Blue (GameData)
+   *    4 -> Cargo Ready
    *    9 -> Badass Mode  
    *    10 -> Begin 
    *    11 -> Led OFF
    *******************************************************/
 
+   /**
+    * Envío de datos al nano 1
+    * @param data Dato a enviar
+    */
   public void sendData(int data){
 
     byte[] datas = {(byte) data};
@@ -43,6 +44,10 @@ public class Leds extends SubsystemBase {
 
   }
 
+  /**
+   * Envío de datos al nano 2
+   * @param data Dato a enviar
+   */
   public void sendData2(int data){
 
     byte[] datas = {(byte) data};
@@ -61,6 +66,8 @@ public class Leds extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("nano1 connected?", nano1.addressOnly());
+    SmartDashboard.putBoolean("nano2 connected?", nano2.addressOnly());
   }
 }
 

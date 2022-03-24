@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,18 +23,22 @@ public class Shooter extends SubsystemBase {
   private final Servo rightServo = new Servo(1);
   private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushless);
 
+  private final Compressor compressor = new Compressor(02, PneumaticsModuleType.CTREPCM);
+
   private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
+  private final double rampRate = 0;
+
   /** Creates a new Shooter. */
   public Shooter() {
     m1.restoreFactoryDefaults();
-    m1.setOpenLoopRampRate(0.8); //Declarar en constants
+    m1.setOpenLoopRampRate(rampRate); //Declarar en constants
 
     m2.restoreFactoryDefaults();
-    m2.setOpenLoopRampRate(0.8);
+    m2.setOpenLoopRampRate(rampRate);
     m2.setInverted(true);
 
 
@@ -76,6 +82,7 @@ public class Shooter extends SubsystemBase {
   public void shootMove(double speed){
     m1.set(speed);
     m2.set(speed);
+    compressor.disable();
   }
 
   /**
@@ -84,6 +91,7 @@ public class Shooter extends SubsystemBase {
   public void neutral(){
     m1.set(0);
     m2.set(0);
+    compressor.enableDigital();
   }
 
   /**

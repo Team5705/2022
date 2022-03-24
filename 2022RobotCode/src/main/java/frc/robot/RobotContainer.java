@@ -82,12 +82,13 @@ public class RobotContainer {
     
     powertrain.setDefaultCommand(drive);
 
-    autonomous.addOption("Trench", "trench");
     autonomous.addOption("Mid", "mid");
-    autonomous.addOption("Simple", "simple");
-    autonomous.addOption("Emergency", "emergency");
-    autonomous.addOption("Test", "test");
-    SmartDashboard.putData("autoMode", autonomous);
+    autonomous.addOption("OnlyBack", "onlyback");
+    autonomous.addOption("oneball", "oneball");
+    //autonomous.addOption("Emergency", "emergency");
+    //autonomous.addOption("Test", "test");
+    autonomous.setDefaultOption("NULL", null);
+    SmartDashboard.putData("autoMode?", autonomous);
     
   }
 
@@ -156,14 +157,20 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-     /* return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(trajectory1.getInitialPose()), powertrain),
-                                      runPath(trajectory1).andThen(() -> powertrain.setVolts(0, 0)), 
-                                      
-                                      new InstantCommand(() -> powertrain.resetOdometry(trajectory2.getInitialPose()), powertrain),
-                                      runPath(trajectory2).andThen(() -> powertrain.setVolts(0, 0))); */
+    //return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)
+    //);
 
-    return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)
-                                     );
+    if(autonomous.getSelected() == "mid"){
+      return null;
+    }
+    else if(autonomous.getSelected() == "onlyback"){
+      return null;
+    }
+    else if(autonomous.getSelected() == "oneball"){
+      return null;
+    }
+    else
+      return null;
   }
 
 
