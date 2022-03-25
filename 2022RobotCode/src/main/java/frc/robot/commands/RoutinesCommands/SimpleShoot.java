@@ -22,8 +22,8 @@ public class SimpleShoot extends SequentialCommandGroup {
   private double recoveryTime = 1.0;
   /** Creates a new SimpleShoot. */
   public SimpleShoot(Powertrain powertrain, Vision vision, Shooter shooter, Conveyor conveyor) {
-    addCommands(new SimpleTracking(powertrain, vision).deadlineWith(new AdjustShotVelocity(shooter, vision, 7.38, true)), 
-                new ParallelCommandGroup(new AdjustShotVelocity(shooter, vision, 7.38).withTimeout(4),
+    addCommands(new SimpleTracking(powertrain, vision).deadlineWith(new AdjustShotVelocity(shooter, 7.38, true)), 
+                new ParallelCommandGroup(new AdjustShotVelocity(shooter, 7.38).withTimeout(4),
                                         new SequentialCommandGroup(new WaitCommand(0.5),
                                                                     new Conveyor_input(conveyor).withTimeout(0.3),
                                                                     new WaitCommand(recoveryTime),

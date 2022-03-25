@@ -7,32 +7,26 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
-import frc.robot.ParableShot;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Vision;
 
 public class AdjustShotVelocity extends CommandBase {
   private final Shooter shooter;
-  private final Vision vision;
 
   private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
 
-  private double angle, 
-                 velocity;
+  private double velocity;
 
   private boolean finished = false;
   
   /** Creates a new ShotWithAngulator. */
-  public AdjustShotVelocity(Shooter shooter, Vision vision, double velocity) {
+  public AdjustShotVelocity(Shooter shooter, double velocity) {
     this.shooter = shooter;
-    this.vision = vision;
     this.velocity = velocity;
     addRequirements(shooter);
   }
 
-  public AdjustShotVelocity(Shooter shooter, Vision vision, double velocity, boolean finished) {
+  public AdjustShotVelocity(Shooter shooter, double velocity, boolean finished) {
     this.shooter = shooter;
-    this.vision = vision;
     this.velocity = velocity;
     this.finished = finished;
     addRequirements(shooter);

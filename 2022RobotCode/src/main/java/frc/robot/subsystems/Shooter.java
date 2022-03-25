@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
   private final Compressor compressor = new Compressor(02, PneumaticsModuleType.CTREPCM);
 
-  private final WPI_CANCoder encoder = new WPI_CANCoder(52);
+  private final WPI_CANCoder encoder = null;//new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
 
   private final double wheelDiameter = 6.00; //6 pulgadas
@@ -125,7 +125,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
+    //SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
     SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
     SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
     SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
