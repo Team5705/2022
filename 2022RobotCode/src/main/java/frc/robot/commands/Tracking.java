@@ -34,7 +34,7 @@ public class Tracking extends CommandBase {
   private NetworkTableEntry nkD = table.getEntry("kD");
   private NetworkTableEntry nkF = table.getEntry("kF");
 
-  private double kP = 0.0, kI = 0.0, kD = 0.0, kF = 0.0;
+  private double kP = 0.02, kI = 0.0, kD = 8.0, kF = 0.27;
 
   /**
    * Ejecuta el seguimiento al centro del objetivo sin un fin establecido.

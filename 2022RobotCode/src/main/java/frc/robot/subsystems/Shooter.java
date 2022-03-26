@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
   private final Compressor compressor = new Compressor(02, PneumaticsModuleType.CTREPCM);
 
-  private final WPI_CANCoder encoder = null;//new WPI_CANCoder(52);
+  //private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
 
   private final double wheelDiameter = 6.00; //6 pulgadas
@@ -48,7 +48,7 @@ public class Shooter extends SubsystemBase {
 
     encoderConfigs.sensorDirection = false; //Dirección del valor, ajustar si está invertido
     //encoderConfigs.sensorCoefficient = ; //Coeficiente para la salida de los valores, por defecto en grados (0.087890625) e.g. 4096 * 0.087890625 = 360°
-    encoder.configAllSettings(encoderConfigs);
+    //encoder.configAllSettings(encoderConfigs);
   }
   
   public void moveFullClockwiseHood(){
@@ -111,17 +111,17 @@ public class Shooter extends SubsystemBase {
     return (Units.inchesToMeters(wheelDiameter) * Math.PI) * rps;
   }
 
-  public double getPosition(){
+  /* public double getPosition(){
     return encoder.getPosition();
-  }
+  } */
 
   public double getHoodAngle(){
     return 0; //Cambiar!
   }
 
-  public void resertEncoder(){
+  /* public void resertEncoder(){
     encoder.setPosition(70.0);
-  }
+  } */
 
   @Override
   public void periodic() {

@@ -26,7 +26,7 @@ public class Conveyor extends SubsystemBase {
 
   private final double speedGlobal = 0.4;
 
-  private int count = 0;
+  int count = 0;
 
   /** Creates a new Conveyor. */
   public Conveyor() {
@@ -80,6 +80,11 @@ public class Conveyor extends SubsystemBase {
     }
   }
 
+  public void resetCount(){
+    count = 0;
+  }
+
+
   public int getCount(){
     return count;
   }
@@ -93,5 +98,6 @@ public class Conveyor extends SubsystemBase {
     space_2 = !s3.get();
 
     SmartDashboard.putNumber("conveyorSpeed", motorSUPP.get());
+    SmartDashboard.putBoolean("mainSensor", mainSensor);
   }
 }

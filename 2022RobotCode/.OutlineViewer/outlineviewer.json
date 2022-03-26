@@ -1,0 +1,20 @@
+{
+  "CameraPublisher": {
+    "limelight": {
+      "open": true
+    },
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client",
+    "serverTeam": "5705"
+  },
+  "SmartDashboard": {
+    "autoMode?": {
+      "open": true
+    }
+  },
+  "limelight": {
+    "open": true
+  }
+}
