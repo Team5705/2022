@@ -18,13 +18,23 @@ public class AdjustShotVelocity extends CommandBase {
 
   private boolean finished = false;
   
-  /** Creates a new ShotWithAngulator. */
+  /**
+   * 
+   * @param shooter
+   * @param velocity Velocidad del proyectil en m/s
+   */
   public AdjustShotVelocity(Shooter shooter, double velocity) {
     this.shooter = shooter;
     this.velocity = velocity;
     addRequirements(shooter);
   }
 
+  /**
+   * 
+   * @param shooter
+   * @param velocity Velocidad del proyectil en m/s
+   * @param finished Marcar para terminar al ajustar
+   */
   public AdjustShotVelocity(Shooter shooter, double velocity, boolean finished) {
     this.shooter = shooter;
     this.velocity = velocity;

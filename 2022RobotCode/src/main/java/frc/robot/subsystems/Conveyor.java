@@ -16,13 +16,13 @@ public class Conveyor extends SubsystemBase {
   private final CANSparkMax motorSUPP = new CANSparkMax(ConveyorConstant.m1 , MotorType.kBrushless);
   private final CANSparkMax motorADC = new CANSparkMax(ConveyorConstant.m2, MotorType.kBrushless);
 
-  private final DigitalInput s1 = new DigitalInput(0),
-                             s2 = new DigitalInput(1),
-                             s3 = new DigitalInput(2);
+  private final DigitalInput s1 = new DigitalInput(0);
+                             //s2 = new DigitalInput(1),
+                             //s3 = new DigitalInput(2);
 
-  private boolean mainSensor = false,
-                  space_1 = false,
-                  space_2 = false;
+  private boolean mainSensor = false;
+                  //space_1 = false,
+                  //space_2 = false;
 
   private final double speedGlobal = 0.4;
 
@@ -60,7 +60,7 @@ public class Conveyor extends SubsystemBase {
   }
 
   public void getCargoWithSensor(){
-    if (!mainSensor || (space_1 && space_2) ){
+    if (!mainSensor) {// || (space_1 && space_2) ){
       neutral();
     }
     else {
@@ -68,7 +68,7 @@ public class Conveyor extends SubsystemBase {
     }
   }
 
-  public void updateCount(){
+  /* public void updateCount(){
     if ( (space_1 && !space_2) || (!space_1 && space_2) ){
       count = 1;
     }
@@ -78,7 +78,7 @@ public class Conveyor extends SubsystemBase {
     else {
       count = 0;
     }
-  }
+  } */
 
   public void resetCount(){
     count = 0;
@@ -94,8 +94,8 @@ public class Conveyor extends SubsystemBase {
   @Override
   public void periodic() {
     mainSensor = !s1.get();
-    space_1 = !s2.get();
-    space_2 = !s3.get();
+    //space_1 = !s2.get();
+    //space_2 = !s3.get();
 
     SmartDashboard.putNumber("conveyorSpeed", motorSUPP.get());
     SmartDashboard.putBoolean("mainSensor", mainSensor);

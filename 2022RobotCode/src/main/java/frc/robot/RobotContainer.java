@@ -25,11 +25,14 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.OIConstant;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
-import frc.robot.commands.Tracking;
+import frc.robot.commands.ShootON;
+import frc.robot.commands.RoutinesCommands.SimpleShoot;
+import frc.robot.commands.ShooterCommands.AdjustShotVelocity;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Powertrain;
@@ -54,6 +57,9 @@ public class RobotContainer {
   //Commands
   private final Drive drive = new Drive(powertrain);
 
+  public static XboxController driverController = new XboxController(OIConstant.controllerPort);
+  public static XboxController secondController = new XboxController(OIConstant.controllerPort2);
+
   //Trajectory [] trajectories = new Trajectory[] {trajectory1};
 
   String trajectoryJSON1 = "paths/output/a.wpilib.json";
@@ -62,7 +68,6 @@ public class RobotContainer {
   String trajectoryJSON2 = "paths/output/d2.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
-  public static XboxController driverController = new XboxController(OIConstant.controllerPort);
 
   SendableChooser<String> autonomous = new SendableChooser<String>();
 
@@ -80,12 +85,11 @@ public class RobotContainer {
     
     powertrain.setDefaultCommand(drive);
 
-    autonomous.addOption("Mid", "mid");
-    autonomous.addOption("OnlyBack", "onlyback");
+    autonomous.addOption("mid", "mid");
+    autonomous.addOption("onlyBack", "onlyback");
     autonomous.addOption("oneball", "oneball");
     //autonomous.addOption("Emergency", "emergency");
     //autonomous.addOption("Test", "test");
-    autonomous.setDefaultOption("NULL", null);
     SmartDashboard.putData("autoMode", autonomous);
     
   }
@@ -119,34 +123,35 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> shooter.shoot(driverController.getRawAxis(3)), shooter).
-    //andThen(new InstantCommand(shooter::neutral, shooter)));
 
-    new JoystickButton(driverController, 1).whileHeld(new Tracking(powertrain, vision));
-    //new JoystickButton(driverController, 2).whileHeld(new AdjustShot(shooter, vision));
-    
-    new JoystickButton(driverController, 6)
-      .toggleWhenPressed(new GetBalls(conveyor, intake));
-
-    new JoystickButton(driverController, 2)
-      .whileHeld(new RunCommand(() -> intake.move( driverController.getRawAxis(4) ), intake))
-      .whenReleased(new RunCommand(() -> intake.neutral()));
-
-    new JoystickButton(driverController, 3)
-      .whileHeld(new RunCommand(() -> shooter.shootMove( 0.46 ), shooter))
-      .whenReleased(new RunCommand(() -> shooter.neutral())); 
-      
-    new JoystickButton(driverController, 5)
-      .whileHeld(new RunCommand(() -> conveyor.move(0.4), conveyor))
-      .whenReleased(new RunCommand(() -> conveyor.neutral()));
-     
-
+    /* DRIVER 1 */
+    //BUTTONS
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 
     //POV
+    new POVButton(driverController, 0).whileHeld(null);
+
+
+    /*DRIVER 2*/
+    //BUTTONS
+    new JoystickButton(secondController, 1).whenPressed(new SimpleShoot(powertrain, vision, shooter, conveyor));
+    new JoystickButton(secondController, 2).whileHeld(new ShootON(shooter, secondController.getRawAxis(3)));
+    new JoystickButton(secondController, 3).whenPressed(new AdjustShotVelocity(shooter, 4.0));
+    new JoystickButton(secondController, 6).toggleWhenPressed(new GetBalls(conveyor, intake));
+    //POV
+    new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
+        .whenReleased(new RunCommand(() -> conveyor.neutral()));
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor).
+        andThen(new InstantCommand(conveyor::neutral, conveyor)));
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake).
+        andThen(new InstantCommand(intake::neutral, intake)));
   }
   
+  public void updateAutonomous(){
+      autonomous.getSelected();
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -156,17 +161,17 @@ public class RobotContainer {
     //return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)
     //);
 
-    //if(autonomous.getSelected() == "mid"){
-      //return null;
-    //}
-    //else if(autonomous.getSelected() == "onlyback"){
-      return new SequentialCommandGroup(new RunCommand( () -> powertrain.arcadeDrive(-0.5, 0), powertrain).withTimeout(2.5).andThen( new RunCommand( () -> powertrain.arcadeDrive(0, 0), powertrain) ) );
-    //}
-    //else if(autonomous.getSelected() == "oneball"){
-      //return null;
-    //}
-    //else
-      //return null;
+    if(autonomous.getSelected() == "mid"){
+      return null;
+    }
+    else if(autonomous.getSelected() == "onlyback"){
+      return new RunCommand( () -> powertrain.arcadeDrive(-0.7, 0), powertrain).withTimeout(3).andThen( new RunCommand( () -> powertrain.arcadeDrive(0, 0), powertrain) );
+    }
+    else if(autonomous.getSelected() == "oneball"){
+      return null;
+    }
+    else
+      return null;
   }
 
 

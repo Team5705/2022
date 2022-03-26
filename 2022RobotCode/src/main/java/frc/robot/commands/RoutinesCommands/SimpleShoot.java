@@ -7,6 +7,7 @@ package frc.robot.commands.RoutinesCommands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.ConveyorReverse;
 import frc.robot.commands.Conveyor_input;
 import frc.robot.commands.SimpleTracking;
 import frc.robot.commands.ShooterCommands.AdjustShotVelocity;
@@ -20,12 +21,14 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SimpleShoot extends SequentialCommandGroup {
   private double recoveryTime = 1.0;
+  private double shootVelocity = 14.0;
   /** Creates a new SimpleShoot. */
   public SimpleShoot(Powertrain powertrain, Vision vision, Shooter shooter, Conveyor conveyor) {
-    addCommands(new SimpleTracking(powertrain, vision).deadlineWith(new AdjustShotVelocity(shooter, 7.38, true)), 
-                new ParallelCommandGroup(new AdjustShotVelocity(shooter, 7.38).withTimeout(4),
+    addCommands(new SimpleTracking(powertrain, vision).deadlineWith(new AdjustShotVelocity(shooter, shootVelocity, true)),
+                new ParallelCommandGroup(new AdjustShotVelocity(shooter, shootVelocity).withTimeout(2.6),
                                         new SequentialCommandGroup(new WaitCommand(0.5),
-                                                                    new Conveyor_input(conveyor).withTimeout(0.3),
+                                                                    new ConveyorReverse(conveyor).withTimeout(0.15),//Calcular
+                                                                    new Conveyor_input(conveyor).withTimeout(0.3),//Calcular
                                                                     new WaitCommand(recoveryTime),
                                                                     new Conveyor_input(conveyor).withTimeout(0.6)))
     );

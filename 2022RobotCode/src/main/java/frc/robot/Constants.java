@@ -29,16 +29,14 @@ public final class Constants {
     
     public static final class OIConstant {
         public static final int controllerPort = 0;
+        public static final int controllerPort2 = 1;
     }
     
     public static final class IntakeConstant {
         public static final int m1 = 10; // Intake
         
-        public static final int[] solenoids = new int[] { 3 };
-        public static final int[] sensors = new int[] { 0,   //
-            3,   // B  Banda B
-            1,   // C  Banda B
-            2 }; // D  Banda B
+        public static final int[] solenoids = new int[] { 3, 8 };
+        public static final int[] sensors = new int[] { 0 };
     }
 
     public static final class ConveyorConstant {
@@ -61,9 +59,9 @@ public final class Constants {
         public static final double kvVoltSecondsPerMeter = 2.992;
         public static final double kaVoltSecondsSquaredPerMeter = 0.8227;
 
-        public static final double kPDriveVel = 3.8797;
+        public static final double kPDriveVel = 2.5;//3.8797;
 
-        public static final double kTrackwidthMeters = Units.inchesToMeters(23.75); // Distancia horizontal entre las ruedas en metros
+        public static final double kTrackwidthMeters = Units.inchesToMeters(22.8995); // Distancia horizontal entre las ruedas en metros
                                                                                  
         public static final DifferentialDriveKinematics kDriveKinematics = 
             new DifferentialDriveKinematics(kTrackwidthMeters);

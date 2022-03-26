@@ -26,7 +26,7 @@ public class GetBalls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.move(-0.65);
+    intake.move(0.7);
     conveyor.getCargoWithSensor();
   }
 

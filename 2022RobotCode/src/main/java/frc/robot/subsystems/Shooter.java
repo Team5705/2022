@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -107,7 +106,7 @@ public class Shooter extends SubsystemBase {
    * @return Velocidad en m/s
    */
   public double getShootVelocityMeterPerSeconds(){
-    double rps = m2.getEncoder().getVelocity() / 60;
+    double rps = getShootVelocity() / 60;
     return (Units.inchesToMeters(wheelDiameter) * Math.PI) * rps;
   }
 
@@ -128,7 +127,7 @@ public class Shooter extends SubsystemBase {
     //SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
     SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
     SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
-    SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
+    //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
     SmartDashboard.putNumber("shootSpeed", m1.get());
   }
 }

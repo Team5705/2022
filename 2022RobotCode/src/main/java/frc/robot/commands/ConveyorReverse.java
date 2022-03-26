@@ -5,16 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Conveyor;
 
-public class ShootON extends CommandBase {
-  private final Shooter shooter;
-  private double speed = 0;
-  /** Creates a new ShootON. */
-  public ShootON(Shooter shooter, double speed) {
-    this.shooter = shooter;
-    this.speed = speed;
-    addRequirements(shooter);
+public class ConveyorReverse extends CommandBase {
+  private final Conveyor conveyor;
+
+  public ConveyorReverse(Conveyor conveyor) {
+    this.conveyor = conveyor;
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +22,13 @@ public class ShootON extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootMove(speed);
+    conveyor.reverse();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.neutral();
+    conveyor.neutral();
   }
 
   // Returns true when the command should end.
