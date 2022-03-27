@@ -14,8 +14,8 @@ import frc.robot.Constants.IntakeConstant;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX motor = new WPI_TalonSRX(IntakeConstant.m1);
-  private final Solenoid left = new Solenoid(00, PneumaticsModuleType.CTREPCM, IntakeConstant.solenoids[0]),
-                         right = new Solenoid(00, PneumaticsModuleType.CTREPCM, IntakeConstant.solenoids[1]);
+  private Solenoid left = new Solenoid(30, PneumaticsModuleType.CTREPCM, 0);
+  private Solenoid right = new Solenoid(30, PneumaticsModuleType.CTREPCM, 4);
 
   private final double speedGlobal = 0.7;
 
@@ -24,10 +24,10 @@ public class Intake extends SubsystemBase {
     motor.configFactoryDefault();
     motor.setInverted(true);
 
-    contractIntake();
+    //contractIntake();
   }
 
-  public void extendIntake(){
+ public void extendIntake(){
     left.set(true);
     right.set(true);
   }
