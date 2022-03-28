@@ -132,25 +132,22 @@ public class RobotContainer {
 
 
     /*DRIVER 2*/
+
     //BUTTONS
     //new JoystickButton(secondController, 1).whenPressed(new SimpleShoot(powertrain, vision, shooter, conveyor));
     new JoystickButton(secondController, 2).whileHeld(new ShootON(shooter, 0.6, false));
-    new JoystickButton(secondController, 3).whileHeld(new ShootON(shooter, secondController.getRawAxis(1), true));
+    new JoystickButton(secondController, 3).whileHeld(new ShootON(shooter, secondController.getRawAxis(3), true));
     //new JoystickButton(secondController, 3).whenPressed(new AdjustShotVelocity(shooter, 4.0));
     //new JoystickButton(secondController, 4).whileHeld(new Tracking(powertrain, vision));
     new JoystickButton(secondController, 6).toggleWhenPressed(new GetBalls(conveyor, intake));
+    
     //POV
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor));  
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake));
+    new POVButton(secondController, 90).whenPressed(new InstantCommand(intake::extendIntake, intake));
     new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor));
 
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor));  
-
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake));
-
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.extendIntake(), intake));
-
-    new POVButton(secondController, -1).whileHeld(new RunCommand(() -> conveyor.neutral(), conveyor));
-    new POVButton(secondController, -1).whileHeld(new InstantCommand(conveyor::neutral, conveyor));
-    new POVButton(secondController, -1).whileHeld(new InstantCommand(intake::neutral, intake));
+    new POVButton(secondController, -1).whenPressed(new InstantCommand(conveyor::neutral, conveyor));
   }
   
   public void updateAutonomous(){
@@ -170,13 +167,13 @@ public class RobotContainer {
      // return null;
     //}
     //else if(autonomous.getSelected() == "onlyback"){
-      return new RunCommand( () -> powertrain.arcadeDrive(-0.7, 0), powertrain).withTimeout(3).andThen( new RunCommand( () -> powertrain.arcadeDrive(0, 0), powertrain) );
+      //return new RunCommand( () -> powertrain.arcadeDrive(-0.7, 0), powertrain).withTimeout(3).andThen( new RunCommand( () -> powertrain.arcadeDrive(0, 0), powertrain) );
    // }
     //else if(autonomous.getSelected() == "oneball"){
       //return null;
    // }
     //else
-      //return null;
+      return null;
   }
 
 

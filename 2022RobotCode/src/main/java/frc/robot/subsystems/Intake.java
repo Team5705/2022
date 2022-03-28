@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
     motor.setInverted(true);
     motor.configOpenloopRamp(rampRate);
 
-    //contractIntake();
+    contractIntake();
   }
 
  public void extendIntake(){
@@ -39,12 +39,28 @@ public class Intake extends SubsystemBase {
     right.set(false);
   }
 
+  public boolean getStatusIntake(){
+    boolean statusLeft = left.get();
+    boolean statusRight = right.get();
+
+    if (statusLeft && statusRight)
+      return true;
+    else
+      return false;
+  }
+
   public void foward() {
-    motor.set(speedGlobal);
+    if (getStatusIntake())
+     motor.set(speedGlobal);
+    else
+     motor.set(0);
   }
 
   public void reverse() {
-    motor.set(-speedGlobal);
+    if (getStatusIntake())
+      motor.set(-speedGlobal);
+    else
+      motor.set(0); 
   }
 
   public void neutral() {
@@ -52,7 +68,10 @@ public class Intake extends SubsystemBase {
   }
 
   public void move(double speed) {
-    motor.set(speed);
+    if (getStatusIntake())
+      motor.set(speed);
+    else
+      motor.set(0);
   }
 
   @Override

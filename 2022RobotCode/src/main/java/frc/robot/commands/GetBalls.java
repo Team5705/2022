@@ -24,13 +24,13 @@ public class GetBalls extends CommandBase {
   @Override
   public void initialize() {
     intake.extendIntake();
-    Timer.delay(0.2);
+    Timer.delay(0.3);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.move(0.7);
+    intake.foward();
     conveyor.getCargoWithSensor();
   }
 
