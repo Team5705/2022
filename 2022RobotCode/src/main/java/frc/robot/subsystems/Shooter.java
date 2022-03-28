@@ -22,14 +22,14 @@ public class Shooter extends SubsystemBase {
   private final Servo rightServo = new Servo(1);
   private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushless);
 
-  private final Compressor compressor = new Compressor(02, PneumaticsModuleType.CTREPCM);
+  private final Compressor compressor = new Compressor(30, PneumaticsModuleType.CTREPCM);
 
   //private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
-  private final double rampRate = 0;
+  private final double rampRate = 1.0;
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -79,8 +79,8 @@ public class Shooter extends SubsystemBase {
    * @param speed -1.0 a 1.0
    */
   public void shootMove(double speed){
-    m1.set(speed);
-    m2.set(speed);
+    m1.setVoltage(12 * speed);
+    m2.setVoltage(12 * speed);
     compressor.disable();
   }
 

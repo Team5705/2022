@@ -31,9 +31,6 @@ import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
 import frc.robot.commands.ShootON;
-import frc.robot.commands.Tracking;
-import frc.robot.commands.RoutinesCommands.SimpleShoot;
-import frc.robot.commands.ShooterCommands.AdjustShotVelocity;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Powertrain;
@@ -143,17 +140,17 @@ public class RobotContainer {
     //new JoystickButton(secondController, 4).whileHeld(new Tracking(powertrain, vision));
     new JoystickButton(secondController, 6).toggleWhenPressed(new GetBalls(conveyor, intake));
     //POV
-    new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor)
-        .andThen(new RunCommand(() -> conveyor.neutral(), conveyor)));
+    new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor));
 
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor).
-        andThen(new InstantCommand(conveyor::neutral, conveyor)));  
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor));  
 
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake).
-        andThen(new InstantCommand(intake::neutral, intake)));
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake));
 
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.extendIntake(), intake).
-        andThen(new InstantCommand(intake::contractIntake, intake)));
+    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.extendIntake(), intake));
+
+    new POVButton(secondController, -1).whileHeld(new RunCommand(() -> conveyor.neutral(), conveyor));
+    new POVButton(secondController, -1).whileHeld(new InstantCommand(conveyor::neutral, conveyor));
+    new POVButton(secondController, -1).whileHeld(new InstantCommand(intake::neutral, intake));
   }
   
   public void updateAutonomous(){

@@ -17,12 +17,14 @@ public class Intake extends SubsystemBase {
   private Solenoid left = new Solenoid(30, PneumaticsModuleType.CTREPCM, 0);
   private Solenoid right = new Solenoid(30, PneumaticsModuleType.CTREPCM, 4);
 
-  private final double speedGlobal = 0.7;
+  private final double speedGlobal = 1.0;
+  private final double rampRate = 1.0;
 
   /** Creates a new Intake. */
   public Intake() {
     motor.configFactoryDefault();
     motor.setInverted(true);
+    motor.configOpenloopRamp(rampRate);
 
     //contractIntake();
   }
