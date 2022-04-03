@@ -104,7 +104,8 @@ public class Tracking extends CommandBase {
 
     } 
     else{
-      powertrain.arcadeDrive(0, RobotContainer.driverController.getRawAxis(0));
+      double speed = RobotContainer.driverController.getRawAxis(3)-RobotContainer.driverController.getRawAxis(2);
+      powertrain.arcadeDrive(speed, RobotContainer.driverController.getRawAxis(0));
 
     }
   }

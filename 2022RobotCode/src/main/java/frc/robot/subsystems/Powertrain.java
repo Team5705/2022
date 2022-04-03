@@ -4,13 +4,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,10 +26,15 @@ import frc.robot.Constants.DriveConstant;
 import frc.robot.Constants.pathWeaver;
 
 public class Powertrain extends SubsystemBase {
-  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
+ /*  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
                               rightMaster = new WPI_TalonSRX(DriveConstant.portsMotors[2]);
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
-                              rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]);
+                              rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]); */
+
+  private final CANSparkMax leftMaster = new CANSparkMax(DriveConstant.portsMotors[0], MotorType.kBrushless),
+                            leftFollow = new CANSparkMax(DriveConstant.portsMotors[1], MotorType.kBrushless),
+                            rightMaster = new CANSparkMax(DriveConstant.portsMotors[2], MotorType.kBrushless),
+                            rightFollow = new CANSparkMax(DriveConstant.portsMotors[3], MotorType.kBrushless);
   
   private final WPI_CANCoder leftEncoder = new WPI_CANCoder(50),
                              rightEncoder = new WPI_CANCoder(51);
@@ -231,17 +235,18 @@ public class Powertrain extends SubsystemBase {
   }
 
   public void neutralModeBrake(){
-      leftMaster.setNeutralMode(NeutralMode.Brake);
-      leftFollow.setNeutralMode(NeutralMode.Brake);
-      rightMaster.setNeutralMode(NeutralMode.Brake);
-      rightFollow.setNeutralMode(NeutralMode.Brake);
+    leftMaster.setIdleMode(IdleMode.kBrake);
+    leftMaster.setIdleMode(IdleMode.kBrake);
+    leftFollow.setIdleMode(IdleMode.kBrake);
+    rightMaster.setIdleMode(IdleMode.kBrake);
+    rightFollow.setIdleMode(IdleMode.kBrake);
   }
 
   public void neutralModeCoast(){
-    leftMaster.setNeutralMode(NeutralMode.Coast);
-    leftFollow.setNeutralMode(NeutralMode.Coast);
-    rightMaster.setNeutralMode(NeutralMode.Coast);
-    rightFollow.setNeutralMode(NeutralMode.Coast);
+    leftMaster.setIdleMode(IdleMode.kCoast);
+    leftFollow.setIdleMode(IdleMode.kCoast);
+    rightMaster.setIdleMode(IdleMode.kCoast);
+    rightFollow.setIdleMode(IdleMode.kCoast);
   }
 
   @Override
@@ -261,25 +266,28 @@ public class Powertrain extends SubsystemBase {
 
   private void configTalon_Victor() {
     //Configuraciones por defecto, reseteo de los controladores
-    leftMaster.configFactoryDefault();
-    rightMaster.configFactoryDefault();
-    leftFollow.configFactoryDefault();
-    rightFollow.configFactoryDefault();
+    leftMaster.restoreFactoryDefaults();
+    rightMaster.restoreFactoryDefaults();
+    leftFollow.restoreFactoryDefaults();
+    rightFollow.restoreFactoryDefaults();
     //Control de curva de aceleracion
     double kRamp = 0.15;//0.15;
-    leftMaster.configOpenloopRamp(kRamp);
-    leftFollow.configOpenloopRamp(kRamp);
-    rightMaster.configOpenloopRamp(kRamp);
-    rightFollow.configOpenloopRamp(kRamp);
+    leftMaster.setOpenLoopRampRate(kRamp);
+    leftFollow.setOpenLoopRampRate(kRamp);
+    rightMaster.setOpenLoopRampRate(kRamp);
+    rightFollow.setOpenLoopRampRate(kRamp);
 
     leftFollow.follow(leftMaster);
     rightFollow.follow(rightMaster);
 
-    leftMaster.setInverted(false);
-    rightMaster.setInverted(true);
+    boolean leftInverted = false;
+    boolean rightInverted = true;
+
+    leftMaster.setInverted(leftInverted);
+    rightMaster.setInverted(rightInverted);
     
-    leftFollow.setInverted(InvertType.FollowMaster);
-    rightFollow.setInverted(InvertType.FollowMaster);
+    leftFollow.setInverted(leftInverted);
+    rightFollow.setInverted(rightInverted);
     
     neutralModeBrake();
   }
