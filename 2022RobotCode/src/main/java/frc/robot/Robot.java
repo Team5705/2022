@@ -4,7 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.simulation.PowerDistributionDataJNI;
+import edu.wpi.first.hal.simulation.RoboRioDataJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PneumaticsBase;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -47,6 +57,10 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.updateAutonomous();
+
+    SmartDashboard.putNumber("powerRIO", RoboRioDataJNI.getVInVoltage());
+    SmartDashboard.putNumber("totalPowerUse", PowerDistributionDataJNI.getVoltage(15));
+    
 
     CommandScheduler.getInstance().run();
   }

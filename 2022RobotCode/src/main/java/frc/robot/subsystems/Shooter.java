@@ -129,5 +129,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
     //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
     SmartDashboard.putNumber("shootSpeed", m1.get());
+    SmartDashboard.putNumber("powerShooter1", m1.getBusVoltage());
+    SmartDashboard.putNumber("powerShooter2", m2.getBusVoltage());
   }
 }

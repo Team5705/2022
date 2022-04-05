@@ -262,6 +262,10 @@ public class Powertrain extends SubsystemBase {
     SmartDashboard.putNumber("rateL", getRateLeft());
     SmartDashboard.putNumber("rateR", getRateRight());
     SmartDashboard.putBoolean("navX-MXP_Calibrated", !ahrs.isCalibrating());
+    SmartDashboard.putNumber("powerFrontLeft", leftMaster.getBusVoltage());
+    SmartDashboard.putNumber("powerFrontRight", rightMaster.getBusVoltage());
+    SmartDashboard.putNumber("powerBackLeft", leftFollow.getBusVoltage());
+    SmartDashboard.putNumber("powerBackLeft", rightFollow.getBusVoltage());
   }
 
   private void configTalon_Victor() {

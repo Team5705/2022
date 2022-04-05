@@ -99,5 +99,7 @@ public class Conveyor extends SubsystemBase {
 
     SmartDashboard.putNumber("conveyorSpeed", motorSUPP.get());
     SmartDashboard.putBoolean("mainSensor", mainSensor);
+    SmartDashboard.putNumber("powerConveyor1", motorADC.getBusVoltage());
+    SmartDashboard.putNumber("powerConveyor2", motorSUPP.getBusVoltage());
   }
 }
