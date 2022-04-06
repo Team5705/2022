@@ -10,12 +10,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.GlobalConstant;
 import frc.robot.Constants.IntakeConstant;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX motor = new WPI_TalonSRX(IntakeConstant.m1);
-  private Solenoid left = new Solenoid(30, PneumaticsModuleType.CTREPCM, 0);
-  private Solenoid right = new Solenoid(30, PneumaticsModuleType.CTREPCM, 4);
+  private Solenoid left = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 0);
+  private Solenoid right = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 4);
 
   private final double speedGlobal = 1.0;
   private final double rampRate = 1.0;
@@ -77,6 +78,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intakeSpeed", motor.get());
-    SmartDashboard.putNumber("powerIntake", motor.getBusVoltage());
+    SmartDashboard.putNumber("powerIntakeVoltage", motor.getBusVoltage());
   }
 }

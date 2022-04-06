@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.GlobalConstant;
 import frc.robot.Constants.Shoot;
 
 public class Shooter extends SubsystemBase {
@@ -22,7 +23,7 @@ public class Shooter extends SubsystemBase {
   private final Servo rightServo = new Servo(1);
   private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushless);
 
-  private final Compressor compressor = new Compressor(30, PneumaticsModuleType.CTREPCM);
+  private final Compressor compressor = new Compressor(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM);
 
   //private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
@@ -129,7 +130,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
     //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
     SmartDashboard.putNumber("shootSpeed", m1.get());
-    SmartDashboard.putNumber("powerShooter1", m1.getBusVoltage());
-    SmartDashboard.putNumber("powerShooter2", m2.getBusVoltage());
+    SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
+    SmartDashboard.putNumber("powerShooter2Voltage", m2.getBusVoltage());
   }
 }

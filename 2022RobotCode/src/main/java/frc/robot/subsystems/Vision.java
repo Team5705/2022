@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -22,7 +20,7 @@ public class Vision extends SubsystemBase {
   private NetworkTableEntry tv = table.getEntry("tv");
   private NetworkTableEntry available = table2.getEntry("description");
 
-  public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
+  //public UsbCamera cam0 = CameraServer.startAutomaticCapture(0);
 
   //private boolean availableCamera = false;
 
@@ -40,7 +38,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     ledsOff();
-		cam0.setResolution(120, 160);
+		//cam0.setResolution(120, 160);
 
   }
 
