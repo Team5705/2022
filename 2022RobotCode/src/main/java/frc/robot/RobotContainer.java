@@ -144,7 +144,7 @@ public class RobotContainer {
     //POV
     new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor));  
     new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake));
-    new POVButton(secondController, 90).whenPressed(new InstantCommand(intake::extendIntake, intake));
+//    new POVButton(secondController, 90).whenPressed(new InstantCommand(intake::extendIntake, intake));
     new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor));
 
     new POVButton(secondController, -1).whenPressed(new InstantCommand(conveyor::neutral, conveyor));

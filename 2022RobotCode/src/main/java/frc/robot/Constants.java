@@ -24,8 +24,8 @@ public final class Constants {
     public static final class DriveConstant {
         public static final int[] portsMotors = new int[] { 3,   //leftMaster
                                                             4,   //leftFollow
-                                                            5,   //rightMaster
-                                                            6 }; //rightFollow
+                                                            95,   //rightMaster
+                                                            96 }; //rightFollow
 
         public static final int[] channelsMotors = new int[] { 0,
                                                                1,
@@ -42,7 +42,8 @@ public final class Constants {
     }
     
     public static final class IntakeConstant {
-        public static final int m1 = 10; // Intake
+        //public static final int m1 = 10; // Intake
+        public static final int m1 = 60; // Intake
         public static final int channel = 0;
         
         public static final int[] solenoids = new int[] { 3, 8 };
@@ -50,8 +51,10 @@ public final class Constants {
     }
 
     public static final class ConveyorConstant {
-        public static final int m1 = 35;
-        public static final int m2 = 36;
+        public static final int m1 = 5;
+        public static final int m2 = 6;
+        //public static final int m1 = 35;
+        //public static final int m2 = 36;
 
         public static final int channel_m1 = 0;
         public static final int channel_m2 = 1;

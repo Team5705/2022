@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -14,11 +14,11 @@ import frc.robot.Constants.GlobalConstant;
 import frc.robot.Constants.IntakeConstant;
 
 public class Intake extends SubsystemBase {
-  private final WPI_TalonSRX motor = new WPI_TalonSRX(IntakeConstant.m1);
+  private final WPI_VictorSPX motor = new WPI_VictorSPX(IntakeConstant.m1);
   private Solenoid left = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 0);
   private Solenoid right = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 4);
 
-  private final double speedGlobal = 1.0;
+  private final double speedGlobal = .50;
   private final double rampRate = 1.0;
 
   /** Creates a new Intake. */
@@ -78,6 +78,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intakeSpeed", motor.get());
-    SmartDashboard.putNumber("powerIntakeVoltage", motor.getBusVoltage());
+    //SmartDashboard.putNumber("powerIntakeVoltage", motor.getBusVoltage());
   }
 }
