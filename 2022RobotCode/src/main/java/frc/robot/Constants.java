@@ -51,13 +51,17 @@ public final class Constants {
     }
 
     public static final class ConveyorConstant {
-        public static final int m1 = 5;
-        public static final int m2 = 6;
+        public static final int mSUPP = 5;
+        public static final int mADC = 6;
         //public static final int m1 = 35;
         //public static final int m2 = 36;
 
-        public static final int channel_m1 = 0;
-        public static final int channel_m2 = 1;
+        public static final int mainSensor = 0;
+
+        public static final int channel_mSUPP = 0;
+        public static final int channel_mADC = 1;
+
+        public static final double kSpeedGlobal = 1.0;
     }
         
         

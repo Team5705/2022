@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ConveyorConstant;
 
 public class Conveyor extends SubsystemBase {
-  private final CANSparkMax motorSUPP = new CANSparkMax(ConveyorConstant.m1 , MotorType.kBrushless);
-  private final CANSparkMax motorADC = new CANSparkMax(ConveyorConstant.m2, MotorType.kBrushless);
+  private final CANSparkMax motorSUPP = new CANSparkMax(ConveyorConstant.mSUPP , MotorType.kBrushless);
+  private final CANSparkMax motorADC = new CANSparkMax(ConveyorConstant.mADC, MotorType.kBrushless);
 
-  private final DigitalInput s1 = new DigitalInput(0);
+  private final DigitalInput s1 = new DigitalInput(ConveyorConstant.mainSensor);
                              //s2 = new DigitalInput(1),
                              //s3 = new DigitalInput(2);
 
@@ -24,7 +24,7 @@ public class Conveyor extends SubsystemBase {
                   //space_1 = false,
                   //space_2 = false;
 
-  private final double speedGlobal = 0.4;
+  private final double speedGlobal = ConveyorConstant.kSpeedGlobal;
 
   int count = 0;
 
@@ -84,12 +84,9 @@ public class Conveyor extends SubsystemBase {
     count = 0;
   }
 
-
   public int getCount(){
     return count;
   }
-
-
 
   @Override
   public void periodic() {

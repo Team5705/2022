@@ -51,8 +51,8 @@ public class ControlEnergySystem extends SubsystemBase {
     SmartDashboard.putNumber("powerBackRight", pdp.getCurrent(DriveConstant.channelsMotors[0]));
 
     SmartDashboard.putNumber("powerIntake", pdp.getCurrent(IntakeConstant.channel));
-    SmartDashboard.putNumber("powerConveyor1", pdp.getCurrent(ConveyorConstant.channel_m1));
-    SmartDashboard.putNumber("powerConveyor2", pdp.getCurrent(ConveyorConstant.channel_m2));
+    SmartDashboard.putNumber("powerConveyor1", pdp.getCurrent(ConveyorConstant.channel_mSUPP));
+    SmartDashboard.putNumber("powerConveyor2", pdp.getCurrent(ConveyorConstant.channel_mADC));
     SmartDashboard.putNumber("powerShooter1", pdp.getCurrent(Shoot.channel_m1));
     SmartDashboard.putNumber("powerShooter2", pdp.getCurrent(Shoot.channel_m2));
     SmartDashboard.putNumber("powerHood1", pdp.getCurrent(Shoot.channel_hood));
