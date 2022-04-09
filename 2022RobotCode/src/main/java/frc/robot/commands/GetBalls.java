@@ -24,27 +24,27 @@ public class GetBalls extends CommandBase {
   @Override
   public void initialize() {
     intake.extendIntake();
-    Timer.delay(0.250); // 250 ms
+    //Timer.delay(0.250); // 250 ms
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.foward();
-    conveyor.getCargoWithSensor();
+    //intake.forward();
+    //conveyor.getCargoWithSensor();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intake.contractIntake();
-    intake.neutral();
-    conveyor.neutral();
+    //intake.neutral();
+    //conveyor.neutral();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return conveyor.getCount() == 2;
+    return false;// conveyor.getCount() == 2;
   }
 }

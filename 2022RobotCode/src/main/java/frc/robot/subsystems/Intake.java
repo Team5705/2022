@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -14,17 +14,17 @@ import frc.robot.Constants.GlobalConstant;
 import frc.robot.Constants.IntakeConstant;
 
 public class Intake extends SubsystemBase {
-  private final WPI_VictorSPX motor = new WPI_VictorSPX(IntakeConstant.m1);
+  private final WPI_TalonSRX motor = new WPI_TalonSRX(IntakeConstant.m1);
   private Solenoid left = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 0);
-  private Solenoid right = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 4);
+  //private Solenoid right = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 4);
 
-  private final double speedGlobal = .50;
-  private final double rampRate = 1.0;
+  private final double speedGlobal = 1.0;
+  private final double rampRate = 0.2;
 
   /** Creates a new Intake. */
   public Intake() {
     motor.configFactoryDefault();
-    motor.setInverted(true);
+    motor.setInverted(false);
     motor.configOpenloopRamp(rampRate);
 
     contractIntake();
@@ -32,25 +32,25 @@ public class Intake extends SubsystemBase {
 
  public void extendIntake(){
     left.set(true);
-    right.set(true);
+    //right.set(true);
   }
 
   public void contractIntake(){
     left.set(false);
-    right.set(false);
+    //right.set(false);
   }
 
   public boolean getStatusIntake(){
     boolean statusLeft = left.get();
-    boolean statusRight = right.get();
+    //boolean statusRight = right.get();
 
-    if (statusLeft && statusRight)
+    if (statusLeft)//&& statusRight)
       return true;
     else
       return false;
   }
 
-  public void foward() {
+  public void forward() {
     if (getStatusIntake())
      motor.set(speedGlobal);
     else

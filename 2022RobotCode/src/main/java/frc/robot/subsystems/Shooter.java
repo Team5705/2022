@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
-  private final double rampRate = 1.0;
+  private final double rampRate = 0.3;
 
   /** Creates a new Shooter. */
   public Shooter() {

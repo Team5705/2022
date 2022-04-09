@@ -22,15 +22,15 @@ public final class Constants {
         public static final int portPCM = 30;
     }
     public static final class DriveConstant {
-        public static final int[] portsMotors = new int[] { 3,   //leftMaster
-                                                            4,   //leftFollow
-                                                            95,   //rightMaster
-                                                            96 }; //rightFollow
+        public static final int[] portsMotors = new int[] { 38,   //leftMaster
+                                                            3,   //leftFollow
+                                                            4,   //rightMaster
+                                                            41 }; //rightFollow
 
-        public static final int[] channelsMotors = new int[] { 0,
-                                                               1,
-                                                               7, 
-                                                               8 };                      
+        public static final int[] channelsMotors = new int[] { 15,
+                                                               13,
+                                                               1, 
+                                                               3 };                      
 
         public static final Port Gyro = Port.kOnboardCS0;
 
@@ -44,9 +44,9 @@ public final class Constants {
     public static final class IntakeConstant {
         //public static final int m1 = 10; // Intake
         public static final int m1 = 60; // Intake
-        public static final int channel = 0;
+        public static final int channel = 12;
         
-        public static final int[] solenoids = new int[] { 3, 8 };
+        public static final int[] solenoids = new int[] { 4, 7 };
         public static final int[] sensors = new int[] { 0 };
     }
 
@@ -58,19 +58,19 @@ public final class Constants {
 
         public static final int mainSensor = 0;
 
-        public static final int channel_mSUPP = 0;
-        public static final int channel_mADC = 1;
+        public static final int channel_mSUPP = 11;
+        public static final int channel_mADC = 4;
 
         public static final double kSpeedGlobal = 1.0;
     }
         
         
     public static final class Shoot {
-        public static final int mShooter = 39;  //Motor A | Izquierdo
-        public static final int mShooter2 = 38; //Motor B | Derecho
+        public static final int mShooter = 24;  //Motor A | Izquierdo
+        public static final int mShooter2 = 39; //Motor B | Derecho
 
-        public static final int channel_m1 = 0;
-        public static final int channel_m2 = 1;
+        public static final int channel_m1 = 14;
+        public static final int channel_m2 = 0;
         public static final int channel_hood = 2; //Power Servo Module
     }
         

@@ -46,9 +46,9 @@ public class ControlEnergySystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("powerFrontLeft", pdp.getCurrent(DriveConstant.channelsMotors[0]));
-    SmartDashboard.putNumber("powerFrontright", pdp.getCurrent(DriveConstant.channelsMotors[0]));
-    SmartDashboard.putNumber("powerBackLeft", pdp.getCurrent(DriveConstant.channelsMotors[0]));
-    SmartDashboard.putNumber("powerBackRight", pdp.getCurrent(DriveConstant.channelsMotors[0]));
+    SmartDashboard.putNumber("powerFrontright", pdp.getCurrent(DriveConstant.channelsMotors[1]));
+    SmartDashboard.putNumber("powerBackLeft", pdp.getCurrent(DriveConstant.channelsMotors[2]));
+    SmartDashboard.putNumber("powerBackRight", pdp.getCurrent(DriveConstant.channelsMotors[3]));
 
     SmartDashboard.putNumber("powerIntake", pdp.getCurrent(IntakeConstant.channel));
     SmartDashboard.putNumber("powerConveyor1", pdp.getCurrent(ConveyorConstant.channel_mSUPP));
@@ -63,6 +63,6 @@ public class ControlEnergySystem extends SubsystemBase {
     SmartDashboard.putNumber("batteryVoltage", pdp.getVoltage());
     SmartDashboard.putNumber("totalPowerUse", pdp.getTotalCurrent());
     //SmartDashboard.putNumber("rioCpu", );
-    SmartDashboard.putNumber("rioRam", (double) Runtime.getRuntime().freeMemory());
+    SmartDashboard.putNumber("rioRam", (double) Runtime.getRuntime().freeMemory()/1024/1000);
   }
 }
