@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj.SPI.Port;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final class GlobalConstant {
+    public static final class kGlobal {
         public static final int portPDP = 1;
         public static final int portPCM = 30;
     }
-    public static final class DriveConstant {
+    public static final class kDrive {
         public static final int[] portsMotors = new int[] { 38,   //leftMaster
                                                             3,   //leftFollow
                                                             4,   //rightMaster
@@ -36,21 +36,23 @@ public final class Constants {
 
     }
     
-    public static final class OIConstant {
+    public static final class kOI {
         public static final int controllerPort = 0;
         public static final int controllerPort2 = 1;
     }
     
-    public static final class IntakeConstant {
+    public static final class kIntake {
         //public static final int m1 = 10; // Intake
         public static final int m1 = 60; // Intake
         public static final int channel = 12;
         
-        public static final int[] solenoids = new int[] { 4, 7 };
+        public static final int[] solenoids = {0, 1};
         public static final int[] sensors = new int[] { 0 };
+
+        public static final double speed = 1.0;
     }
 
-    public static final class ConveyorConstant {
+    public static final class kConveyor {
         public static final int mSUPP = 5;
         public static final int mADC = 6;
         //public static final int m1 = 35;
@@ -65,12 +67,14 @@ public final class Constants {
     }
         
         
-    public static final class Shoot {
-        public static final int mShooter = 24;  //Motor A | Izquierdo
-        public static final int mShooter2 = 39; //Motor B | Derecho
+    public static final class kShooter {
+        public static final int mShooterA = 24;  //Motor A | Izquierdo
+        public static final int mShooterB = 39; //Motor B | Derecho
 
         public static final int channel_m1 = 14;
         public static final int channel_m2 = 0;
+        public static final int servoA = 8;
+        public static final int servoB = 8;
         public static final int channel_hood = 2; //Power Servo Module
     }
         

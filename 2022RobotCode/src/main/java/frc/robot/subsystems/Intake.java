@@ -6,45 +6,49 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.GlobalConstant;
-import frc.robot.Constants.IntakeConstant;
+import frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-  private final WPI_TalonSRX motor = new WPI_TalonSRX(IntakeConstant.m1);
-  private Solenoid left = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 0);
-  //private Solenoid right = new Solenoid(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM, 4);
+  private final WPI_TalonSRX motor = new WPI_TalonSRX(kIntake.m1);
+  private DoubleSolenoid extensor = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0], kIntake.solenoids[1]);
+  /* private Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
+  private Solenoid right = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[1]); */
 
-  private final double speedGlobal = 1.0;
   private final double rampRate = 0.2;
 
   /** Creates a new Intake. */
   public Intake() {
     motor.configFactoryDefault();
-    motor.setInverted(false);
+    motor.setInverted(true);
     motor.configOpenloopRamp(rampRate);
 
     contractIntake();
   }
 
  public void extendIntake(){
-    left.set(true);
-    //right.set(true);
+   extensor.set(Value.kReverse);
+    /* left.set(true);
+    right.set(false); */
   }
 
   public void contractIntake(){
-    left.set(false);
-    //right.set(false);
+    extensor.set(Value.kForward);
+    /* left.set(false);
+    right.set(true); */
   }
 
   public boolean getStatusIntake(){
-    boolean statusLeft = left.get();
+    Value status =  extensor.get();
+    //boolean statusLeft = left.get();
     //boolean statusRight = right.get();
 
-    if (statusLeft)//&& statusRight)
+    if (status == Value.kReverse)//&& statusRight)
       return true;
     else
       return false;
@@ -52,14 +56,14 @@ public class Intake extends SubsystemBase {
 
   public void forward() {
     if (getStatusIntake())
-     motor.set(speedGlobal);
+     motor.set(kIntake.speed);
     else
      motor.set(0);
   }
 
   public void reverse() {
     if (getStatusIntake())
-      motor.set(-speedGlobal);
+      motor.set(-kIntake.speed);
     else
       motor.set(0); 
   }
@@ -78,6 +82,9 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intakeSpeed", motor.get());
+    SmartDashboard.putBoolean("intakeDeployed", getStatusIntake());
     //SmartDashboard.putNumber("powerIntakeVoltage", motor.getBusVoltage());
   }
+
+  
 }

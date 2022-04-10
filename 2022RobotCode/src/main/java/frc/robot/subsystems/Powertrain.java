@@ -22,8 +22,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DriveConstant;
-import frc.robot.Constants.pathWeaver;
+import frc.robot.Constants.*;
 
 public class Powertrain extends SubsystemBase {
  /*  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(DriveConstant.portsMotors[0]),
@@ -31,10 +30,10 @@ public class Powertrain extends SubsystemBase {
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
                               rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]); */
 
-  private final CANSparkMax leftMaster = new CANSparkMax(DriveConstant.portsMotors[0], MotorType.kBrushless),
-                            leftFollow = new CANSparkMax(DriveConstant.portsMotors[1], MotorType.kBrushless),
-                            rightMaster = new CANSparkMax(DriveConstant.portsMotors[2], MotorType.kBrushless),
-                            rightFollow = new CANSparkMax(DriveConstant.portsMotors[3], MotorType.kBrushless);
+  private final CANSparkMax leftMaster = new CANSparkMax(kDrive.portsMotors[0], MotorType.kBrushless),
+                            leftFollow = new CANSparkMax(kDrive.portsMotors[1], MotorType.kBrushless),
+                            rightMaster = new CANSparkMax(kDrive.portsMotors[2], MotorType.kBrushless),
+                            rightFollow = new CANSparkMax(kDrive.portsMotors[3], MotorType.kBrushless);
   
   private final WPI_CANCoder leftEncoder = new WPI_CANCoder(50),
                              rightEncoder = new WPI_CANCoder(51);

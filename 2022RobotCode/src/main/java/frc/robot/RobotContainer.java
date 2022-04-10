@@ -26,11 +26,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.Constants.OIConstant;
+import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
-import frc.robot.commands.GetBalls;
-import frc.robot.commands.ShootON;
 import frc.robot.subsystems.ControlEnergySystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
@@ -46,19 +44,19 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
   //Subsystems
-  private final Powertrain powertrain = new Powertrain();
-  private final Vision vision = new Vision();
-  private final Shooter shooter = new Shooter();
-  private final Conveyor conveyor = new Conveyor();
-  private final Intake intake = new Intake();
-  public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
+  public final Powertrain powertrain = new Powertrain();
+  public final Vision vision = new Vision();
+  public final Shooter shooter = new Shooter();
+  public final Conveyor conveyor = new Conveyor();
+  public final Intake intake = new Intake();
+  //public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
   //public static Leds leds = new Leds();
 
   //Commands
   private final Drive drive = new Drive(powertrain);
 
-  public static XboxController driverController = new XboxController(OIConstant.controllerPort);
-  public static XboxController secondController = new XboxController(OIConstant.controllerPort2);
+  public static XboxController driverController = new XboxController(kOI.controllerPort);
+  public static XboxController secondController = new XboxController(kOI.controllerPort2);
 
   //Trajectory [] trajectories = new Trajectory[] {trajectory1};
 
@@ -131,14 +129,16 @@ public class RobotContainer {
     new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
     .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
 
-  new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
-    .whenReleased(new RunCommand(() -> intake.neutral(), intake));
+    new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
+      .whenReleased(new RunCommand(() -> intake.neutral(), intake));
 
-  new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.6), shooter))
-    .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
+    new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.6), shooter))
+      .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
 
-  new JoystickButton(driverController, 5).whenPressed(new InstantCommand(intake::contractIntake, intake));
-  new JoystickButton(driverController, 6).whenPressed(new InstantCommand(intake::extendIntake, intake));
+    new JoystickButton(driverController, 5).whenPressed(new InstantCommand(intake::contractIntake, intake));
+    new JoystickButton(driverController, 6).whenPressed(new InstantCommand(intake::extendIntake, intake));
+    new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
+    new POVButton(driverController, 180).whenPressed(new InstantCommand(vision::ledsOn, vision));
     //POV
     //new POVButton(driverController, 0).whileHeld(null);
 

@@ -10,13 +10,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ConveyorConstant;
+import frc.robot.Constants.kConveyor;
 
 public class Conveyor extends SubsystemBase {
-  private final CANSparkMax motorSUPP = new CANSparkMax(ConveyorConstant.mSUPP , MotorType.kBrushless);
-  private final CANSparkMax motorADC = new CANSparkMax(ConveyorConstant.mADC, MotorType.kBrushless);
+  private final CANSparkMax motorSUPP = new CANSparkMax(kConveyor.mSUPP , MotorType.kBrushless);
+  private final CANSparkMax motorADC = new CANSparkMax(kConveyor.mADC, MotorType.kBrushless);
 
-  private final DigitalInput s1 = new DigitalInput(ConveyorConstant.mainSensor);
+  private final DigitalInput s1 = new DigitalInput(kConveyor.mainSensor);
                              //s2 = new DigitalInput(1),
                              //s3 = new DigitalInput(2);
 
@@ -24,29 +24,27 @@ public class Conveyor extends SubsystemBase {
                   //space_1 = false,
                   //space_2 = false;
 
-  private final double speedGlobal = ConveyorConstant.kSpeedGlobal;
-
   int count = 0;
 
   /** Creates a new Conveyor. */
   public Conveyor() {
-    motorSUPP.restoreFactoryDefaults();
+    //motorSUPP.restoreFactoryDefaults();
     motorSUPP.setInverted(true);
+    //motorADC.restoreFactoryDefaults();
 
-    motorADC.restoreFactoryDefaults();
 
     count = 0;
 
   }
 
   public void forward(){
-    motorSUPP.set(speedGlobal);
-    motorADC.set(speedGlobal);
+    motorSUPP.set(kConveyor.kSpeedGlobal);
+    motorADC.set(kConveyor.kSpeedGlobal);
   }
 
   public void reverse(){
-    motorSUPP.set(-speedGlobal);
-    motorADC.set(-speedGlobal);
+    motorSUPP.set(-kConveyor.kSpeedGlobal);
+    motorADC.set(-kConveyor.kSpeedGlobal);
   }
 
   public void neutral(){

@@ -14,16 +14,16 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.GlobalConstant;
-import frc.robot.Constants.Shoot;
+import frc.robot.Constants.kGlobal;
+import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
-  private final CANSparkMax m1 = new CANSparkMax(Shoot.mShooter, MotorType.kBrushless);
-  private final Servo leftServo = new Servo(0);
-  private final Servo rightServo = new Servo(1);
-  private final CANSparkMax m2 = new CANSparkMax(Shoot.mShooter2, MotorType.kBrushless);
+  private final CANSparkMax m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
+  private final Servo leftServo = new Servo(kShooter.servoA);
+  private final Servo rightServo = new Servo(kShooter.servoB);
+  private final CANSparkMax m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
 
-  private final Compressor compressor = new Compressor(GlobalConstant.portPCM, PneumaticsModuleType.CTREPCM);
+  private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
 
   //private final WPI_CANCoder encoder = new WPI_CANCoder(52);
   private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
