@@ -19,9 +19,10 @@ import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
   private final CANSparkMax m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
-  private final Servo leftServo = new Servo(kShooter.servoA);
-  private final Servo rightServo = new Servo(kShooter.servoB);
   private final CANSparkMax m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
+
+  private final Servo leftServo = new Servo(kShooter.servoLeft);
+  private final Servo rightServo = new Servo(kShooter.servoRight);
 
   private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
 

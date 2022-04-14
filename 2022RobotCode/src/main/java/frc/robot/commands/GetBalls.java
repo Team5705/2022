@@ -17,13 +17,13 @@ public class GetBalls extends CommandBase {
   public GetBalls(Conveyor conveyor, Intake intake) {
     this.conveyor = conveyor;
     this.intake = intake;
-    addRequirements(conveyor, intake);
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.extendIntake();
+    //intake.extendIntake();
     //Timer.delay(0.250); // 250 ms
   }
 
@@ -31,15 +31,15 @@ public class GetBalls extends CommandBase {
   @Override
   public void execute() {
     //intake.forward();
-    //conveyor.getCargoWithSensor();
+    conveyor.getCargoWithSensor();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.contractIntake();
+    //intake.contractIntake();
     //intake.neutral();
-    //conveyor.neutral();
+    conveyor.neutral();
   }
 
   // Returns true when the command should end.

@@ -29,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
+import frc.robot.commands.GetBalls;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ControlEnergySystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Intake;
@@ -44,12 +46,14 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
   //Subsystems
-  public final Powertrain powertrain = new Powertrain();
+  private final Powertrain powertrain = new Powertrain();
+  private final Shooter shooter = new Shooter();
+  private final Conveyor conveyor = new Conveyor();
+  private final Intake intake = new Intake();
+  private final Climber climber = new Climber();
+
   public final Vision vision = new Vision();
-  public final Shooter shooter = new Shooter();
-  public final Conveyor conveyor = new Conveyor();
-  public final Intake intake = new Intake();
-  //public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
+  public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
   //public static Leds leds = new Leds();
 
   //Commands
@@ -126,8 +130,12 @@ public class RobotContainer {
     //BUTTONS
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
-    new JoystickButton(driverController, 1).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
-    .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
+    //new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
+    //  .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
+    new JoystickButton(driverController, 1).toggleWhenPressed(new GetBalls(conveyor, intake));
+    new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> shooter.moveHood(driverController.getRawAxis(5)), shooter))
+      .whenReleased(new InstantCommand(shooter::neutralHood, shooter));
+
 
     new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
       .whenReleased(new RunCommand(() -> intake.neutral(), intake));
@@ -137,8 +145,12 @@ public class RobotContainer {
 
     new JoystickButton(driverController, 5).whenPressed(new InstantCommand(intake::contractIntake, intake));
     new JoystickButton(driverController, 6).whenPressed(new InstantCommand(intake::extendIntake, intake));
+
     new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
-    new POVButton(driverController, 180).whenPressed(new InstantCommand(vision::ledsOn, vision));
+    new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
+
+    new POVButton(driverController, 0).whenPressed(new InstantCommand(climber::extend, climber));
+    new POVButton(driverController, 180).whenPressed(new InstantCommand(climber::contract, climber));
     //POV
     //new POVButton(driverController, 0).whileHeld(null);
 

@@ -27,6 +27,7 @@ public class Intake extends SubsystemBase {
     motor.configFactoryDefault();
     motor.setInverted(true);
     motor.configOpenloopRamp(rampRate);
+    
 
     contractIntake();
   }

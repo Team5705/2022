@@ -63,7 +63,7 @@ public final class Constants {
         public static final int channel_mSUPP = 11;
         public static final int channel_mADC = 4;
 
-        public static final double kSpeedGlobal = 1.0;
+        public static final double kSpeedGlobal = 0.2;
     }
         
         
@@ -73,9 +73,13 @@ public final class Constants {
 
         public static final int channel_m1 = 14;
         public static final int channel_m2 = 0;
-        public static final int servoA = 8;
-        public static final int servoB = 8;
+        public static final int servoLeft = 9;
+        public static final int servoRight = 8;
         public static final int channel_hood = 2; //Power Servo Module
+    }
+
+    public static final class kClimber {
+        public static final int leftSolenoid = 2;
     }
         
     public static final class pathWeaver {
