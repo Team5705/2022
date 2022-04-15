@@ -4,43 +4,40 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Intake;
 
-public class GetBalls extends CommandBase {
-  /** Creates a new GetCommand. */
-  private final Conveyor conveyor;
-
-  public GetBalls(Conveyor conveyor) {
-    this.conveyor = conveyor;
-    addRequirements(conveyor);
+public class IntakeToggle extends CommandBase {
+  private final Intake intake;
+  public IntakeToggle(Intake intake) {
+    this.intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //intake.extendIntake();
-    //Timer.delay(0.250); // 250 ms
+    intake.extendIntake();
+    Timer.delay(0.25);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //intake.forward();
-    conveyor.getCargoWithSensor();
+    intake.forward();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //intake.contractIntake();
-    //intake.neutral();
-    conveyor.neutral();
+    intake.contractIntake();
+    intake.neutral();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;// conveyor.getCount() == 2;
+    return false;
   }
 }

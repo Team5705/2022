@@ -4,35 +4,37 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.ParableShot;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
-public class AdjustShotLoop extends CommandBase {
-  private final Shooter shooter;
+public class AdjustHoodLoop extends CommandBase {
+  private final Hood hood;
   private final Vision vision;
 
   private static ParableShot parableShot = new ParableShot();
-  private static PID pidHood = new PID(0, 0, 0, false); //AJUSTAR!
-  private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
+  private static PID pidHood = new PID(0.005, 0, 0, true); //AJUSTAR!
 
-  private double angle, 
-                 velocity;
+  private double angle;
   
   /** Creates a new ShotWithAngulator. */
-  public AdjustShotLoop(Shooter shooter, Vision  vision) {
-    this.shooter = shooter;
+  public AdjustHoodLoop(Hood hood, Vision  vision) {
+    this.hood = hood;
     this.vision = vision;
-    addRequirements(shooter);
+    addRequirements(hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     //Leds limelightON()
+    vision.ledsOn();
 
     //Comprobar que haya objetivo para la limelight sino girar el robot. -> Mejor ejecutar un comando a parte para asegurar siempre el valor.
 
@@ -43,7 +45,7 @@ public class AdjustShotLoop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    parableShot.setDistance(vision.getDistance() + 0);//Limelight distance report
+    parableShot.setDistance(vision.getDistance());//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)
@@ -52,28 +54,32 @@ public class AdjustShotLoop extends CommandBase {
       end(true);
     else{
       angle = parableShot.getAngle();
-      velocity = parableShot.getVelocity();
     }
 
-    pidShoot.setDesiredValue(velocity);
+    pidHood.setDesiredValue(angle);
 
     //set degrees on the servos for adjust
     //set value in the shooter motors for adjust
-    pidShoot.runPID(shooter.getShootVelocityMeterPerSeconds());
+    pidHood.runPID(hood.getHoodAngle());
 
-    double speedShooter = pidShoot.valuePID();
+    double speed = pidHood.valuePID();
 
-    //shooter.moveHood(speed);
-    shooter.shootMove(speedShooter);
+    hood.moveHood(speed);
+    if (speed > 0.8)
+      speed = 0.8;
+    else if (speed < -0.8)
+      speed = -0.8;
+    //shooter.shootMove(speedShooter);
 
-    SmartDashboard.putNumber("PIDShooter", speedShooter);
+    SmartDashboard.putNumber("AngleDesired", angle);
+    SmartDashboard.putNumber("PIDHood", speed);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //shooter.moveHood(0);
+    hood.moveHood(0);
     //shooter.shootMove(0);
   }
 

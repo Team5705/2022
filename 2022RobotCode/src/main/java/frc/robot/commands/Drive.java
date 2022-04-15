@@ -28,7 +28,7 @@ public class Drive extends CommandBase {
   public void execute() {
     double xSp = RobotContainer.driverController.getRawAxis(3) - RobotContainer.driverController.getRawAxis(2);
     double turn = RobotContainer.driverController.getRawAxis(0);
-    powertrain.arcadeDrive(xSp, turn * 0.7);
+    powertrain.arcadeDrive(xSp*0.8, turn * 0.5);
 
     SmartDashboard.putNumber("speed", xSp);
     SmartDashboard.putNumber("turn", turn);

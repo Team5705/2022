@@ -63,13 +63,10 @@ public class AdjustShot extends CommandBase {
     //pidHood.runPID(shooter.getHoodAngle());
     //pidShoot.runPID(shooter.getShootVelocityMeterPerSeconds());
 
-    double speedHood = pidHood.valuePID();
     double speedShooter = pidShoot.valuePID();
 
-    shooter.moveHood(speedHood);
     shooter.shootMove(speedShooter);
 
-    SmartDashboard.putNumber("PIDHood", speedHood);
     SmartDashboard.putNumber("PIDShooter", speedShooter);
 
     SmartDashboard.putNumber("Angle", angle);
@@ -80,7 +77,6 @@ public class AdjustShot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.moveHood(0);
     shooter.shootMove(0);
   }
 
@@ -88,6 +84,6 @@ public class AdjustShot extends CommandBase {
   @Override
   public boolean isFinished() {
     //Grados de la capucha iguales al calculado
-    return (shooter.getHoodAngle() >= angle) && (shooter.getShootVelocityMeterPerSeconds() >= velocity);
+    return (shooter.getShootVelocityMeterPerSeconds() >= velocity);
   }
 }

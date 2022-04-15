@@ -34,6 +34,9 @@ public final class Constants {
 
         public static final Port Gyro = Port.kOnboardCS0;
 
+        public static final int leftEncoder = 50;
+        public static final int rightEncoder = 51;
+
     }
     
     public static final class kOI {

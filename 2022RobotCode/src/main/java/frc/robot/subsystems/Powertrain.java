@@ -35,8 +35,8 @@ public class Powertrain extends SubsystemBase {
                             rightMaster = new CANSparkMax(kDrive.portsMotors[2], MotorType.kBrushless),
                             rightFollow = new CANSparkMax(kDrive.portsMotors[3], MotorType.kBrushless);
   
-  private final WPI_CANCoder leftEncoder = new WPI_CANCoder(50),
-                             rightEncoder = new WPI_CANCoder(51);
+  private final WPI_CANCoder leftEncoder = new WPI_CANCoder(kDrive.leftEncoder),
+                             rightEncoder = new WPI_CANCoder(kDrive.rightEncoder);
   private CANCoderConfiguration leftEncoderConfigs = new CANCoderConfiguration();
   private CANCoderConfiguration rightEncoderConfigs = new CANCoderConfiguration();
 

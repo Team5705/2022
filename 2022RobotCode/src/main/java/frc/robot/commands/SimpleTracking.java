@@ -20,8 +20,8 @@ import frc.robot.subsystems.Vision;
 public class SimpleTracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.02, 0, 8, 0, 0.27, false);
-  private static PID pidY = new PID(0.02, 0, 8, 0, 0.27, false);
+  private static PID pidX = new PID(0.02, 0, 8, 0, 0.36, false);
+  private static PID pidY = new PID(0.02, 0, 8, 0, 0.18, false);
   private boolean finished = false;
   private double distance = 0;
   private final double range = 0.1;
@@ -69,7 +69,7 @@ public class SimpleTracking extends CommandBase {
   @Override
   public void initialize() {
     vision.ledsOn();
-    vision.selectPipeline(1); //Pipeline calibrada para la distancia correcta
+    vision.selectPipeline(0); //Pipeline calibrada para la distancia correcta
 
    }
 

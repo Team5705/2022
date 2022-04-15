@@ -132,7 +132,7 @@ public class PID {
      * @param value Valor del sensor a seguir
      */
     public void runPID(double value) {
-        err = (desiredValue - value); //* (valueInverted ? -1.0 : 1.0);
+        err = (desiredValue - value) * (valueInverted ? -1.0 : 1.0);
 
         errI = (err * kT) + errI_P;
 

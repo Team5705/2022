@@ -30,9 +30,13 @@ import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
+import frc.robot.commands.IntakeToggle;
+import frc.robot.commands.SimpleTracking;
+import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ControlEnergySystem;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Powertrain;
 import frc.robot.subsystems.Shooter;
@@ -51,6 +55,7 @@ public class RobotContainer {
   private final Conveyor conveyor = new Conveyor();
   private final Intake intake = new Intake();
   private final Climber climber = new Climber();
+  private final Hood hood = new Hood();
 
   public final Vision vision = new Vision();
   public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
@@ -58,6 +63,7 @@ public class RobotContainer {
 
   //Commands
   private final Drive drive = new Drive(powertrain);
+  private final GetBalls getBalls = new GetBalls(conveyor);
 
   public static XboxController driverController = new XboxController(kOI.controllerPort);
   public static XboxController secondController = new XboxController(kOI.controllerPort2);
@@ -86,6 +92,7 @@ public class RobotContainer {
     configureButtonBindings();
     
     powertrain.setDefaultCommand(drive);
+    conveyor.setDefaultCommand(getBalls);
 
     autonomous.addOption("mid", "mid");
     autonomous.addOption("onlyBack", "onlyback");
@@ -132,19 +139,26 @@ public class RobotContainer {
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
     //new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
     //  .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
-    new JoystickButton(driverController, 1).toggleWhenPressed(new GetBalls(conveyor, intake));
-    new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> shooter.moveHood(driverController.getRawAxis(5)), shooter))
-      .whenReleased(new InstantCommand(shooter::neutralHood, shooter));
+    //new JoystickButton(driverController, 1).toggleWhenPressed(new GetBalls(conveyor, intake));
+    new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
+      .whenReleased(new InstantCommand(hood::neutralHood, shooter));
 
 
-    new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
-      .whenReleased(new RunCommand(() -> intake.neutral(), intake));
+    //new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
+    //  .whenReleased(new RunCommand(() -> intake.neutral(), intake));
+    new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
 
-    new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.6), shooter))
+    new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.5), shooter))
       .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
 
-    new JoystickButton(driverController, 5).whenPressed(new InstantCommand(intake::contractIntake, intake));
-    new JoystickButton(driverController, 6).whenPressed(new InstantCommand(intake::extendIntake, intake));
+    new JoystickButton(driverController, 5).whenPressed(new RunCommand(() -> conveyor.move(0.4), conveyor))
+      .whenReleased(new InstantCommand(conveyor::neutral, conveyor));
+    new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
+
+    new JoystickButton(driverController, 9).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor))
+      .whileHeld(new RunCommand(() -> shooter.shootMove(-0.2), shooter))
+      .whenReleased(new InstantCommand(conveyor::neutral, conveyor))
+      .whenReleased(new InstantCommand(shooter::neutral, shooter));
 
     new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
     new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
@@ -157,34 +171,7 @@ public class RobotContainer {
 
     /*DRIVER 2*/
 
-    /* //BUTTONS
-    //new JoystickButton(secondController, 1).whenPressed(new SimpleShoot(powertrain, vision, shooter, conveyor));
-    new JoystickButton(secondController, 2).whileHeld(new ShootON(shooter, 0.6, false));
-    new JoystickButton(secondController, 3).whileHeld(new ShootON(shooter, secondController.getRawAxis(3), true));
-    //new JoystickButton(secondController, 3).whenPressed(new AdjustShotVelocity(shooter, 4.0));
-    //new JoystickButton(secondController, 4).whileHeld(new Tracking(powertrain, vision));
-    new JoystickButton(secondController, 6).toggleWhenPressed(new GetBalls(conveyor, intake));
-    
-    //POV
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor));  
-    new POVButton(secondController, 90).whileHeld(new RunCommand(() -> intake.reverse(), intake));
-//    new POVButton(secondController, 90).whenPressed(new InstantCommand(intake::extendIntake, intake));
-    new POVButton(secondController, 270).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor));
-
-    new POVButton(secondController, -1).whenPressed(new InstantCommand(conveyor::neutral, conveyor)); *
-
-    new JoystickButton(secondController, 1).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
-      .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
-
-    new JoystickButton(secondController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
-      .whenReleased(new RunCommand(() -> intake.neutral(), intake));
-
-    new JoystickButton(secondController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(secondController.getRightTriggerAxis()), shooter))
-      .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
-
-    new JoystickButton(secondController, 5).whenPressed(new InstantCommand(intake::contractIntake, intake));
-    new JoystickButton(secondController, 6).whenPressed(new InstantCommand(intake::extendIntake, intake));
-    */
+    //new JoystickButton(secondController, 1).whileHeld(new AdjustHoodLoop(hood, vision));
   }
   
   public void updateAutonomous(){
