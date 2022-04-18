@@ -292,7 +292,7 @@ public class Powertrain extends SubsystemBase {
   }
 
   private void configEncoders(){
-    leftEncoderConfigs.sensorDirection = false; //Dirección del valor, ajustar si está invertido
+    leftEncoderConfigs.sensorDirection = true; //Dirección del valor, ajustar si está invertido
     //Coeficiente para la salida de los valores, por defecto en grados (0.087890625) e.g. 4096 * 0.087890625 = 360°
     leftEncoderConfigs.sensorCoefficient = 1.1688933603688586170451827431929e-4; //Valores en metros
     leftEncoder.configAllSettings(leftEncoderConfigs);

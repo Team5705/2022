@@ -22,7 +22,7 @@ public class Conveyor_input extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyor.forward();
+    conveyor.move(0.4);
   }
 
   // Called once the command ends or is interrupted.

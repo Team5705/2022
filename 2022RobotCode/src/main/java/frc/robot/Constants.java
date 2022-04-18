@@ -49,7 +49,7 @@ public final class Constants {
         public static final int m1 = 60; // Intake
         public static final int channel = 12;
         
-        public static final int[] solenoids = {0, 1};
+        public static final int[] solenoids = {7, 1};
         public static final int[] sensors = new int[] { 0 };
 
         public static final double speed = 1.0;
@@ -90,11 +90,11 @@ public final class Constants {
         public static final double yInitialPosition = 0; // y IMPORTANT | Meters
         public static final double initialHeading = 0; //degrees
 
-        public static final double ksVolts = 0.93394;
-        public static final double kvVoltSecondsPerMeter = 2.992;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.8227;
+        public static final double ksVolts = 0.16512;
+        public static final double kvVoltSecondsPerMeter = 2.5;//784;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.46835;
 
-        public static final double kPDriveVel = 2.5;//3.8797;
+        public static final double kPDriveVel = 3.7335;
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(22.8995); // Distancia horizontal entre las ruedas en metros
                                                                                  

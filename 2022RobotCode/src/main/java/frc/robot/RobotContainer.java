@@ -21,17 +21,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
+import frc.robot.commands.ConveyorReverse;
+import frc.robot.commands.Conveyor_input;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
 import frc.robot.commands.IntakeToggle;
+import frc.robot.commands.ShootON;
 import frc.robot.commands.SimpleTracking;
+import frc.robot.commands.SimpleTrackingOnlyX;
 import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ControlEnergySystem;
@@ -70,10 +76,10 @@ public class RobotContainer {
 
   //Trajectory [] trajectories = new Trajectory[] {trajectory1};
 
-  String trajectoryJSON1 = "paths/output/a.wpilib.json";
+  String trajectoryJSON1 = "paths/output/oi.wpilib.json";
   Trajectory trajectory1 = new Trajectory();
 
-  String trajectoryJSON2 = "paths/output/d2.wpilib.json";
+  String trajectoryJSON2 = "paths/output/io.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
 
@@ -146,19 +152,15 @@ public class RobotContainer {
 
     //new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
     //  .whenReleased(new RunCommand(() -> intake.neutral(), intake));
-    new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
+    new JoystickButton(driverController, 1).whileHeld(new SimpleTrackingOnlyX(powertrain, vision));
 
     new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.5), shooter))
       .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
 
-    new JoystickButton(driverController, 5).whenPressed(new RunCommand(() -> conveyor.move(0.4), conveyor))
-      .whenReleased(new InstantCommand(conveyor::neutral, conveyor));
+    new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));
     new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
 
-    new JoystickButton(driverController, 9).whileHeld(new RunCommand(() -> conveyor.reverse(), conveyor))
-      .whileHeld(new RunCommand(() -> shooter.shootMove(-0.2), shooter))
-      .whenReleased(new InstantCommand(conveyor::neutral, conveyor))
-      .whenReleased(new InstantCommand(shooter::neutral, shooter));
+    new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
 
     new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
     new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
@@ -197,7 +199,26 @@ public class RobotContainer {
       //return null;
    // }
     //else
-      return null;
+      return new SequentialCommandGroup(
+        new ParallelCommandGroup(
+          runPath(trajectory1), 
+          new IntakeToggle(intake).withTimeout(3)
+        ),
+        new ParallelCommandGroup(
+          new ConveyorReverse(conveyor, shooter).withTimeout(1.5), 
+          new SimpleTrackingOnlyX(powertrain, vision, true)
+        ),
+        new ParallelCommandGroup(
+          new ShootON(shooter).withTimeout(4),
+          new SequentialCommandGroup(
+            new WaitCommand(1.5), new Conveyor_input(conveyor).withTimeout(3)
+          )
+        ),
+        new SequentialCommandGroup(
+          runPath(trajectory2),
+          new IntakeToggle(intake).withTimeout(5)
+        )
+      );
   }
 
 

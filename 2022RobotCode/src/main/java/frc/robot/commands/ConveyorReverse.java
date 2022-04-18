@@ -6,13 +6,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Conveyor;
+import frc.robot.subsystems.Shooter;
 
 public class ConveyorReverse extends CommandBase {
   private final Conveyor conveyor;
+  private final Shooter shooter;
 
-  public ConveyorReverse(Conveyor conveyor) {
+  public ConveyorReverse(Conveyor conveyor, Shooter shooter) {
     this.conveyor = conveyor;
-    addRequirements(conveyor);
+    this.shooter = shooter;
+    addRequirements(conveyor, shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -23,12 +26,14 @@ public class ConveyorReverse extends CommandBase {
   @Override
   public void execute() {
     conveyor.reverse();
+    shooter.shootMove(-0.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     conveyor.neutral();
+    shooter.neutral();
   }
 
   // Returns true when the command should end.

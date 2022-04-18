@@ -96,6 +96,6 @@ public class Hood extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("EncoderHoodPosition", getPosition());
+    SmartDashboard.putNumber("hoodAngle", getPosition());
   }
 }

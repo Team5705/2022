@@ -27,7 +27,7 @@ public class SimpleShoot extends SequentialCommandGroup {
     addCommands(new SimpleTracking(powertrain, vision).deadlineWith(new AdjustShotVelocity(shooter, shootVelocity, true)),
                 new ParallelCommandGroup(new AdjustShotVelocity(shooter, shootVelocity).withTimeout(2.6),
                                         new SequentialCommandGroup(new WaitCommand(0.5),
-                                                                    new ConveyorReverse(conveyor).withTimeout(0.15),//Calcular
+                                                                    new ConveyorReverse(conveyor, shooter).withTimeout(0.15),//Calcular
                                                                     new Conveyor_input(conveyor).withTimeout(0.3),//Calcular
                                                                     new WaitCommand(recoveryTime),
                                                                     new Conveyor_input(conveyor).withTimeout(0.6)))
