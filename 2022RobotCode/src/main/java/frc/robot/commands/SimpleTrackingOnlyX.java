@@ -22,11 +22,7 @@ public class SimpleTrackingOnlyX extends CommandBase {
   private final Powertrain powertrain;
   private static PID pidX = new PID(0.02, 0, 8, 0, 0.10, false);
   private boolean finished = false;
-  private double distance = 0;
   private final double range = 0.1;
-
-  private final double minimumDistance = 2.70; //meters
-  private final double maximumDistance = 4.60; //meterss
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("PID_Test");
   private NetworkTableEntry nkP = table.getEntry("kP");

@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.ParableShot;
 import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class AdjustHood extends CommandBase {
@@ -87,6 +86,6 @@ public class AdjustHood extends CommandBase {
   @Override
   public boolean isFinished() {
     //Grados de la capucha iguales al calculado
-    return (hood.getHoodAngle() >= angle);
+    return (hood.getPosition() >= angle);
   }
 }

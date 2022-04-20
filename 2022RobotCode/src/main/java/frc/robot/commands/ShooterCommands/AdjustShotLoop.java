@@ -16,11 +16,9 @@ public class AdjustShotLoop extends CommandBase {
   private final Vision vision;
 
   private static ParableShot parableShot = new ParableShot();
-  private static PID pidHood = new PID(0, 0, 0, false); //AJUSTAR!
   private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
 
-  private double angle, 
-                 velocity;
+  private double velocity;
   
   /** Creates a new ShotWithAngulator. */
   public AdjustShotLoop(Shooter shooter, Vision  vision) {
@@ -51,7 +49,6 @@ public class AdjustShotLoop extends CommandBase {
     else if (parableShot.getVelocity() == 0)
       end(true);
     else{
-      angle = parableShot.getAngle();
       velocity = parableShot.getVelocity();
     }
 

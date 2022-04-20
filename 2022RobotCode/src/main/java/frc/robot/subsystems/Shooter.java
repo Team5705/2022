@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +20,6 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
 
   private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
-  private final PneumaticsControlModule pcm = new PneumaticsControlModule(kGlobal.portPCM);
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
@@ -34,8 +32,6 @@ public class Shooter extends SubsystemBase {
     m2.restoreFactoryDefaults();
     m2.setOpenLoopRampRate(rampRate);
     m2.setInverted(true);
-
-    //pcm.enableCompressorHybrid(90, 120);
   }
 
   /**

@@ -51,19 +51,8 @@ public class Hood extends SubsystemBase {
    * @param speed De -1.0 a 1.0
    */
   public void moveHood(double speed){
-    /* if(speed > 0){
-      if (getPosition() <= 55){
-        leftServo.setSpeed(0);
-        rightServo.setSpeed(0);  
-      }
-      else{
-        leftServo.setSpeed(speed);
-        rightServo.setSpeed(-speed);
-      }
-    }
-
-    else if(speed < 0){
-      if (getPosition() >= 70){
+    /* if(speed < 0){
+      if(getPosition() > 70.0){
         leftServo.setSpeed(0);
         rightServo.setSpeed(0);
       }
@@ -71,12 +60,7 @@ public class Hood extends SubsystemBase {
         leftServo.setSpeed(speed);
         rightServo.setSpeed(-speed);
       }
-    }
-    
-    else{
-      leftServo.setSpeed(0);
-      rightServo.setSpeed(0);
-    }  */ 
+    } */
     leftServo.setSpeed(speed);
     rightServo.setSpeed(-speed);
   }
@@ -88,11 +72,6 @@ public class Hood extends SubsystemBase {
   public void resetEncoder(){
     encoder.setPosition(70.0);
   }
-
-  public double getHoodAngle(){
-    return 0; //Cambiar!
-  }
-
 
   @Override
   public void periodic() {

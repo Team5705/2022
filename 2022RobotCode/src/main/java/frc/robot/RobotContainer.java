@@ -36,7 +36,6 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
 import frc.robot.commands.IntakeToggle;
 import frc.robot.commands.ShootON;
-import frc.robot.commands.SimpleTracking;
 import frc.robot.commands.SimpleTrackingOnlyX;
 import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.subsystems.Climber;
@@ -141,39 +140,30 @@ public class RobotContainer {
 
     /* DRIVER 1 */
     //BUTTONS
-    new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
-    new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
-    //new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> conveyor.forward(), conveyor))
-    //  .whenReleased(new RunCommand(() -> conveyor.neutral(), conveyor));
-    //new JoystickButton(driverController, 1).toggleWhenPressed(new GetBalls(conveyor, intake));
-    new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
-      .whenReleased(new InstantCommand(hood::neutralHood, shooter));
-
-
-    //new JoystickButton(driverController, 2).whileHeld(new RunCommand(() -> intake.forward(), intake))
-    //  .whenReleased(new RunCommand(() -> intake.neutral(), intake));
     new JoystickButton(driverController, 1).whileHeld(new SimpleTrackingOnlyX(powertrain, vision));
-
     new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.5), shooter))
-      .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
-
+    .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
+    //new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
+    //.whenReleased(new InstantCommand(hood::neutralHood, shooter));
+    
     new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));
     new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
 
-    new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
+    new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
+    new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
 
+    new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
+    //POV
     new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
     new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
-
+    
     new POVButton(driverController, 0).whenPressed(new InstantCommand(climber::extend, climber));
     new POVButton(driverController, 180).whenPressed(new InstantCommand(climber::contract, climber));
-    //POV
-    //new POVButton(driverController, 0).whileHeld(null);
-
-
+    
     /*DRIVER 2*/
-
-    //new JoystickButton(secondController, 1).whileHeld(new AdjustHoodLoop(hood, vision));
+    
+    new JoystickButton(secondController, 1).whenPressed(new AdjustHoodLoop(hood, 58.0));
+    new JoystickButton(secondController, 2).whenPressed(new AdjustHoodLoop(hood, 70.0));
   }
   
   public void updateAutonomous(){
@@ -215,8 +205,8 @@ public class RobotContainer {
           )
         ),
         new SequentialCommandGroup(
-          runPath(trajectory2),
-          new IntakeToggle(intake).withTimeout(5)
+          runPath(trajectory2)
+          //new IntakeToggle(intake).withTimeout(5)
         )
       );
   }
