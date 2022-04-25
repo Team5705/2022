@@ -6,16 +6,16 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX motor = new WPI_TalonSRX(kIntake.m1);
-  private DoubleSolenoid extensor = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0], kIntake.solenoids[1]);
+  //private DoubleSolenoid extensor = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0], kIntake.solenoids[1]);
+  private Solenoid sole = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
   /* private Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
   private Solenoid right = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[1]); */
 
@@ -32,23 +32,23 @@ public class Intake extends SubsystemBase {
   }
 
  public void extendIntake(){
-   extensor.set(Value.kReverse);
-    /* left.set(true);
-    right.set(false); */
+   //extensor.set(Value.kReverse);
+   sole.set(true);
   }
 
   public void contractIntake(){
-    extensor.set(Value.kForward);
-    /* left.set(false);
-    right.set(true); */
+    //extensor.set(Value.kForward);
+    sole.set(false);
   }
 
   public boolean getStatusIntake(){
-    Value status =  extensor.get();
+    //Value status =  extensor.get();
+    boolean status = sole.get();
     //boolean statusLeft = left.get();
     //boolean statusRight = right.get();
 
-    if (status == Value.kReverse)//&& statusRight)
+    //if (status == Value.kForward)//&& statusRight)
+    if(status)
       return true;
     else
       return false;

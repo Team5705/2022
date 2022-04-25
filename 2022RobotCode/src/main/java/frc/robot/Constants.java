@@ -49,7 +49,7 @@ public final class Constants {
         public static final int m1 = 60; // Intake
         public static final int channel = 12;
         
-        public static final int[] solenoids = {7, 1};
+        public static final int[] solenoids = {2};
         public static final int[] sensors = new int[] { 0 };
 
         public static final double speed = 1.0;
@@ -82,7 +82,8 @@ public final class Constants {
     }
 
     public static final class kClimber {
-        public static final int leftSolenoid = 2;
+        public static final int leftSolenoid = 4;
+        public static final int rightSolenoid = 5;
     }
         
     public static final class pathWeaver {

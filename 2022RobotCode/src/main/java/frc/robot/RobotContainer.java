@@ -30,12 +30,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
+import frc.robot.commands.AutoShooting;
 import frc.robot.commands.ConveyorReverse;
 import frc.robot.commands.Conveyor_input;
 import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
 import frc.robot.commands.IntakeToggle;
 import frc.robot.commands.ShootON;
+import frc.robot.commands.SimpleTracking;
 import frc.robot.commands.SimpleTrackingOnlyX;
 import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.subsystems.Climber;
@@ -59,7 +61,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Conveyor conveyor = new Conveyor();
   private final Intake intake = new Intake();
-  private final Climber climber = new Climber();
+  public final Climber climber = new Climber();
   private final Hood hood = new Hood();
 
   public final Vision vision = new Vision();
@@ -140,18 +142,16 @@ public class RobotContainer {
 
     /* DRIVER 1 */
     //BUTTONS
-    new JoystickButton(driverController, 1).whileHeld(new SimpleTrackingOnlyX(powertrain, vision));
-    new JoystickButton(driverController, 3).whileHeld(new RunCommand(() -> shooter.shootMove(0.5), shooter))
-    .whenReleased(new RunCommand(() -> shooter.neutral(), shooter));
-    //new JoystickButton(driverController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
-    //.whenReleased(new InstantCommand(hood::neutralHood, shooter));
+    new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
+    new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
+    new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     
     new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));
     new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
-
+    
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
-
+    
     new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
     //POV
     new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
@@ -164,6 +164,8 @@ public class RobotContainer {
     
     new JoystickButton(secondController, 1).whenPressed(new AdjustHoodLoop(hood, 58.0));
     new JoystickButton(secondController, 2).whenPressed(new AdjustHoodLoop(hood, 70.0));
+    new JoystickButton(secondController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
+      .whenReleased(new InstantCommand(hood::neutralHood, shooter));
   }
   
   public void updateAutonomous(){
@@ -176,38 +178,31 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //return new SequentialCommandGroup(runPath(trajectory1), runPath(trajectory2)
-    //);
-
-    //if(autonomous.getSelected() == "mid"){
-     // return null;
-    //}
-    //else if(autonomous.getSelected() == "onlyback"){
-      //return new RunCommand( () -> powertrain.arcadeDrive(-0.7, 0), powertrain).withTimeout(3).andThen( new RunCommand( () -> powertrain.arcadeDrive(0, 0), powertrain) );
-   // }
-    //else if(autonomous.getSelected() == "oneball"){
-      //return null;
-   // }
-    //else
       return new SequentialCommandGroup(
-        new ParallelCommandGroup(
-          runPath(trajectory1), 
-          new IntakeToggle(intake).withTimeout(3)
+        /* new ParallelCommandGroup(
+          runPath(trajectory1)//, 
+          //new IntakeToggle(intake).withTimeout(5)
         ),
         new ParallelCommandGroup(
-          new ConveyorReverse(conveyor, shooter).withTimeout(1.5), 
-          new SimpleTrackingOnlyX(powertrain, vision, true)
+          //new ConveyorReverse(conveyor, shooter).withTimeout(1.5), 
+          new SimpleTracking(powertrain, vision, true).withTimeout(1.2)
         ),
         new ParallelCommandGroup(
-          new ShootON(shooter).withTimeout(4),
+          new ShootON(shooter).withTimeout(2),
           new SequentialCommandGroup(
-            new WaitCommand(1.5), new Conveyor_input(conveyor).withTimeout(3)
+            new WaitCommand(1.5), new Conveyor_input(conveyor).withTimeout(0.5)
           )
         ),
         new SequentialCommandGroup(
           runPath(trajectory2)
-          //new IntakeToggle(intake).withTimeout(5)
-        )
+        ) */
+
+        new ParallelCommandGroup(
+          runPath(trajectory1)//, 
+          //new IntakeToggle(intake).withTimeout(2)
+        ),
+        new AutoShooting(powertrain, vision, shooter, conveyor),
+        runPath(trajectory2)
       );
   }
 
@@ -240,5 +235,4 @@ public class RobotContainer {
                                       ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)));
     //return ramseteCommand;
   }
-  
 }

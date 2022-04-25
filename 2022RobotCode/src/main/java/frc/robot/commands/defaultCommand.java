@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Conveyor;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Climber;
 
-public class Conveyor_input extends CommandBase {
-  private final Conveyor conveyor;
-
-  public Conveyor_input(Conveyor conveyor) {
-    this.conveyor = conveyor;
-    addRequirements(conveyor);
+public class defaultCommand extends CommandBase {
+  private final Climber climber;
+  public defaultCommand(Climber climber) {
+    this.climber = climber;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -22,14 +22,21 @@ public class Conveyor_input extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyor.move(0.7);//4);
+    switch (RobotContainer.driverController.getPOV()) {
+      case 0:
+        climber.extend();
+        break;
+      case 180:
+        climber.contract();
+      default:
+        climber.off();
+        break;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    conveyor.neutral();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

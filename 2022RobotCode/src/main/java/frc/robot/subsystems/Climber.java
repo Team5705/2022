@@ -4,30 +4,36 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.kClimber;
 import frc.robot.Constants.kGlobal;
 
 public class Climber extends SubsystemBase {
-  private final Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid);
+  //private final Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid);
+  private DoubleSolenoid sol = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid, kClimber.rightSolenoid);
 
   /** Creates a new Climber. */
-  public Climber() {
+  public Climber() { 
   }
 
   public void extend(){
-    left.set(true);
+    sol.set(Value.kForward);
   }
 
   public void contract(){
-    left.set(false);
+    sol.set(Value.kReverse);
   }
 
-  @Override
+  public void off(){
+    sol.set(Value.kOff);
+  }
+
   public void periodic() {
-    SmartDashboard.putBoolean("Climber", left.get());
+    //
   }
 }

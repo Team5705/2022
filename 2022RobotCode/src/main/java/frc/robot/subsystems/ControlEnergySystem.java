@@ -60,5 +60,6 @@ public class ControlEnergySystem extends SubsystemBase {
     SmartDashboard.putNumber("totalPowerUse", pdp.getTotalCurrent());
     //SmartDashboard.putNumber("rioCpu", );
     SmartDashboard.putNumber("rioRam", (double) Runtime.getRuntime().freeMemory()/1024/1000);
+
   }
 }

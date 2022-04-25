@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.RobotContainer;
@@ -20,14 +19,11 @@ import frc.robot.subsystems.Vision;
 public class SimpleTracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.02, 0, 8, 0, 0.36, false);
-  private static PID pidY = new PID(0.02, 0, 8, 0, 0.18, false);
+  private static PID pidX = new PID(0.02, 0, 6, 0, 0.16, false);
+  private static PID pidY = new PID(0.02, 0, 8, 0, 0.205, false);
   private boolean finished = false;
-  private double distance = 0;
-  private final double range = 0.1;
+  private final double range = 1.1;
 
-  private final double minimumDistance = 2.70; //meters
-  private final double maximumDistance = 4.60; //meterss
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("PID_Test");
   private NetworkTableEntry nkP = table.getEntry("kP");
@@ -75,8 +71,6 @@ public class SimpleTracking extends CommandBase {
 
   @Override
   public void execute() {
-    update();
-    pidX.setValues(kP, kI, kD, kF);
     //pidY.setValues(kP, kI, kD, kF);
 
     pidX.runPIDErr(vision.getX());
@@ -91,7 +85,9 @@ public class SimpleTracking extends CommandBase {
 
     } 
     else{
-      powertrain.arcadeDrive(0, RobotContainer.driverController.getRawAxis(0));
+      powertrain.arcadeDrive(
+        RobotContainer.driverController.getRawAxis(3) - RobotContainer.driverController.getRawAxis(2), 
+        RobotContainer.driverController.getRawAxis(0));
 
     }
   }
@@ -106,7 +102,7 @@ public class SimpleTracking extends CommandBase {
 
     if (finished){
 
-      return (Math.abs(vision.getX()) <= range && vision.getX() != 0) && (distance > minimumDistance && distance < maximumDistance);
+      return (Math.abs(vision.getX()) <= range && vision.getX() != 0) && (Math.abs(vision.getY()) <= range && vision.getY() != 0);
     }
     else {
       return false;
@@ -114,14 +110,5 @@ public class SimpleTracking extends CommandBase {
   }
 
   public void update(){
-    kP = nkP.getDouble(0);
-    kI = nkI.getDouble(0);
-    kD = nkD.getDouble(0);
-    kF = nkF.getDouble(0);
-
-    SmartDashboard.putNumber("kP", kP);
-    SmartDashboard.putNumber("kI", kI);
-    SmartDashboard.putNumber("kD", kD);
-    SmartDashboard.putNumber("kF", kF);
   }
 }

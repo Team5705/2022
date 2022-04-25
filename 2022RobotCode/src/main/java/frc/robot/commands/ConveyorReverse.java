@@ -15,7 +15,7 @@ public class ConveyorReverse extends CommandBase {
   public ConveyorReverse(Conveyor conveyor, Shooter shooter) {
     this.conveyor = conveyor;
     this.shooter = shooter;
-    addRequirements(conveyor, shooter);
+    addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
