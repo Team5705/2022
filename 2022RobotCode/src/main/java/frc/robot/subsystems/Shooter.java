@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
-  private final double rampRate = 0.5;
+  private final double rampRate = 0.2;
 
   public Shooter() {
     m1.restoreFactoryDefaults();

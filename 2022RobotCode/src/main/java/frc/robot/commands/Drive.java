@@ -7,13 +7,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ShooterCommands.AdjustHood;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Powertrain;
+import frc.robot.subsystems.Vision;
 
 public class Drive extends CommandBase {
-  private final Powertrain powertrain;
+  private final Powertrain powertrain;/* 
+  private final Hood hood;
+  private final Vision vision; */
   
-  public Drive(Powertrain powertrain) {
+  public Drive(Powertrain powertrain){//, Hood hood, Vision vision) {
     this.powertrain = powertrain;
+   /*  this.hood = hood;
+    this.vision = vision; */
     addRequirements(this.powertrain);
   }
 
@@ -32,6 +39,9 @@ public class Drive extends CommandBase {
 
     SmartDashboard.putNumber("speed", xSp);
     SmartDashboard.putNumber("turn", turn);
+    /*  if (xSp > 1.0){
+       new AdjustHood(hood, vision);
+     } */
   }
 
   // Called once the command ends or is interrupted.

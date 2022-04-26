@@ -40,7 +40,7 @@ public class AutoShooting extends SequentialCommandGroup {
             new SequentialCommandGroup(
               new SimpleTracking(powertrain, vision, true),//.withTimeout(2),
               new WaitCommand(1.0),
-              new Conveyor_input(conveyor).withTimeout(1.2)
+              new Conveyor_input(conveyor).withTimeout(1.5)
             ), 
             new ShootON(shooter)
           )

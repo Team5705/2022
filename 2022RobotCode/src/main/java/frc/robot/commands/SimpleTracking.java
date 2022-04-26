@@ -19,10 +19,10 @@ import frc.robot.subsystems.Vision;
 public class SimpleTracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.02, 0, 6, 0, 0.16, false);
-  private static PID pidY = new PID(0.02, 0, 8, 0, 0.205, false);
+  private static PID pidX = new PID(0.1, 0, 6, 0, 0.1, false);//0.16
+  private static PID pidY = new PID(0.1, 0, 6, 0, 0.1, false);//0.15
   private boolean finished = false;
-  private final double range = 1.1;
+  private final double range = 0.9;
 
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("PID_Test");
