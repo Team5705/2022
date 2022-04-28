@@ -7,9 +7,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.RobotContainer;
@@ -19,19 +16,19 @@ import frc.robot.subsystems.Vision;
 public class SimpleTracking extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.1, 0, 6, 0, 0.1, false);//0.16
-  private static PID pidY = new PID(0.1, 0, 6, 0, 0.1, false);//0.15
+  private static PID pidX = new PID(0.00, 0.00, 0.0, 0.0);//0.16
+  private static PID pidY = new PID(0.00, 0.00, 0.0, 0.0);//0.15
   private boolean finished = false;
   private final double range = 0.9;
 
 
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("PID_Test");
+  /* private NetworkTable table = NetworkTableInstance.getDefault().getTable("PID_Test");
   private NetworkTableEntry nkP = table.getEntry("kP");
   private NetworkTableEntry nkI = table.getEntry("kI");
   private NetworkTableEntry nkD = table.getEntry("kD");
   private NetworkTableEntry nkF = table.getEntry("kF");
 
-  private double kP = 0.0, kI = 0.0, kD = 0.0, kF = 0.0;
+  private double kP = 0.0, kI = 0.0, kD = 0.0, kF = 0.0; */
 
   /**
    * Ejecuta el seguimiento al centro del objetivo sin un fin establecido.
@@ -64,6 +61,8 @@ public class SimpleTracking extends CommandBase {
 
   @Override
   public void initialize() {
+    //pidX.setValueInverted(true);
+    //pidY.setValueInverted(true);
     vision.ledsOn();
     vision.selectPipeline(0); //Pipeline calibrada para la distancia correcta
 
@@ -102,7 +101,9 @@ public class SimpleTracking extends CommandBase {
 
     if (finished){
 
-      return (Math.abs(vision.getX()) <= range && vision.getX() != 0) && (Math.abs(vision.getY()) <= range && vision.getY() != 0);
+      //return (Math.abs(vision.getX()) <= range && vision.getX() != 0) && (Math.abs(vision.getY()) <= range && vision.getY() != 0);
+      return (vision.getX() >= -range && vision.getX() <= range) && 
+             (vision.getY() >= -range && vision.getY() <= range);
     }
     else {
       return false;

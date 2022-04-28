@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 /**
@@ -17,7 +13,7 @@ public class PID {
     private boolean valueInverted = false;
     private double desiredValue;
 
-    private final double kT = 20; // Tiempo de ejecución del comnado en línea, son 0.020 segundos por ciclo
+    private final double kT = 0.020; // Tiempo de ejecución del comnado en línea, son 0.020 segundos por ciclo
     private double err = 0; // Error
     private double errI = 0; // Integral
     private double errD = 0; // Diferencial
@@ -102,12 +98,22 @@ public class PID {
 
     }
 
+    public void setValueInverted(boolean value){
+        this.valueInverted = value;
+    }
+
     /**
      * Establecer elv alor deseado cuantas veces sea necesario. Llamar antes de ejecutar el algoritmo runPID.
      * @param value
      */
     public void setDesiredValue(double value){
         desiredValue = value;
+    }
+
+    public void setValues(double kP, double kI, double kD){
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
     }
 
     /**
@@ -122,7 +128,6 @@ public class PID {
         this.kI = kI;
         this.kD = kD;
         this.bias = kF;
-
     }
     
     /**

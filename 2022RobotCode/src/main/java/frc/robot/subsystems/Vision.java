@@ -55,10 +55,18 @@ public class Vision extends SubsystemBase {
     } 
   }
 
+  /**
+   * 
+   * @return Error en grados.
+   */
   public double getX() {
     return tx.getDouble(0.0);
   }
 
+  /**
+   * 
+   * @return Error en grados.
+   */
   public double getY() {
     return ty.getDouble(0.0);
   }
@@ -68,7 +76,7 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean availableTarget() {
-    if (tv.getDouble(0.0) > 0)
+    if (tv.getDouble(0.0) > 0.0)
       return true;
     else
       return false;

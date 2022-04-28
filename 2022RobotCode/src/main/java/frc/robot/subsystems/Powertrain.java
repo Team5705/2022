@@ -57,7 +57,7 @@ public class Powertrain extends SubsystemBase {
 
   public Powertrain() {
 
-    configTalon_Victor();
+    configControllers();
     configEncoders();
 
     resetEncoders();
@@ -263,18 +263,24 @@ public class Powertrain extends SubsystemBase {
     SmartDashboard.putBoolean("navX-MXP_Calibrated", !ahrs.isCalibrating());
   }
 
-  private void configTalon_Victor() {
+  private void configControllers() {
     //Configuraciones por defecto, reseteo de los controladores
-    leftMaster.restoreFactoryDefaults();
+    /* leftMaster.restoreFactoryDefaults();
     rightMaster.restoreFactoryDefaults();
     leftFollow.restoreFactoryDefaults();
-    rightFollow.restoreFactoryDefaults();
+    rightFollow.restoreFactoryDefaults(); */
+
     //Control de curva de aceleracion
     double kRamp = 0.15;//0.15;
     leftMaster.setOpenLoopRampRate(kRamp);
     leftFollow.setOpenLoopRampRate(kRamp);
     rightMaster.setOpenLoopRampRate(kRamp);
     rightFollow.setOpenLoopRampRate(kRamp);
+
+    leftMaster.setClosedLoopRampRate(kRamp);
+    leftFollow.setClosedLoopRampRate(kRamp);
+    rightMaster.setClosedLoopRampRate(kRamp);
+    rightFollow.setClosedLoopRampRate(kRamp);
 
     leftFollow.follow(leftMaster);
     rightFollow.follow(rightMaster);
