@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
@@ -23,7 +24,9 @@ public class Shooter extends SubsystemBase {
 
   private final double wheelDiameter = 6.00; //6 pulgadas
 
-  private final double rampRate = 0.2;
+  private final double rampRate = 0.0;
+
+  private final double speedTransfer = 0.35; // 35%
 
   public Shooter() {
     m1.restoreFactoryDefaults();
@@ -32,6 +35,31 @@ public class Shooter extends SubsystemBase {
     m2.restoreFactoryDefaults();
     m2.setOpenLoopRampRate(rampRate);
     m2.setInverted(true);
+
+    //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
+    m1.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
+    m2.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
+
+    //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
+    m1.getPIDController().setP(0.001, 0);
+    m1.getPIDController().setI(0.000, 0);
+    m1.getPIDController().setD(0.000, 0);
+    m1.getPIDController().setFF(0.05, 0);
+
+    m2.getPIDController().setP(0.001, 0);
+    m2.getPIDController().setI(0.000, 0);
+    m2.getPIDController().setD(0.000, 0);
+    m2.getPIDController().setFF(0.05, 0);
+  }
+  
+  /**
+   * Ajusta la velocidad dada por medio del PIDF integrado de cada controlador.
+   * @param mps [m/s] Metros por segundo / Meters per Second
+   */
+  public void adjustRPM(double mps){
+    m1.getPIDController().setReference(mps, ControlType.kVelocity);
+    m2.getPIDController().setReference(mps, ControlType.kVelocity);
+
   }
 
   /**
@@ -76,9 +104,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter_RPM", getShootVelocity());
-    SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
-    //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * 0.2);
+    SmartDashboard.putNumber("Shooter_Velocity", getShootVelocity());
+    //SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
+    SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * speedTransfer);
     SmartDashboard.putNumber("shooterSpeed", m1.get());
     SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
     SmartDashboard.putNumber("powerShooter2Voltage", m2.getBusVoltage());
