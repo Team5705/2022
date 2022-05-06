@@ -38,6 +38,7 @@ import frc.robot.commands.IntakeToggle;
 import frc.robot.commands.ShootON;
 import frc.robot.commands.SimpleTracking;
 import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
+import frc.robot.commands.ShooterCommands.AdjustShotLoop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ControlEnergySystem;
 import frc.robot.subsystems.Conveyor;
@@ -141,7 +142,8 @@ public class RobotContainer {
     /* DRIVER 1 */
     //BUTTONS
     new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
-    new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
+    //new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
+    new JoystickButton(driverController, 3).whileHeld(new AdjustShotLoop(shooter, vision));
     new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     
     new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));

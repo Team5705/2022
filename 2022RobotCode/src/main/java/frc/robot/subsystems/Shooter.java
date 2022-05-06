@@ -37,19 +37,29 @@ public class Shooter extends SubsystemBase {
     m2.setInverted(true);
 
     //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
-    m1.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
-    m2.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
+    //m1.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
+    //m2.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
-    m1.getPIDController().setP(0.001, 0);
-    m1.getPIDController().setI(0.000, 0);
-    m1.getPIDController().setD(0.000, 0);
-    m1.getPIDController().setFF(0.05, 0);
+    double kP = 250e-5;
+    double kI = 5e-7
+    ;
+    double kD = 380e-4;
+    double kIz = 0;
+    double kFF = 0.000015;
 
-    m2.getPIDController().setP(0.001, 0);
-    m2.getPIDController().setI(0.000, 0);
-    m2.getPIDController().setD(0.000, 0);
-    m2.getPIDController().setFF(0.05, 0);
+    m1.getPIDController().setP(kP);
+    m1.getPIDController().setI(kI);
+    m1.getPIDController().setD(kD);
+    m1.getPIDController().setIZone(kIz);
+    m1.getPIDController().setFF(kFF);
+
+    m2.getPIDController().setP(kP);
+    m2.getPIDController().setI(kI);
+    m2.getPIDController().setD(kD);
+    m2.getPIDController().setIZone(kIz);
+    m2.getPIDController().setFF(kFF);
+    //m2.getPIDController().setOutputRange(-1, 1);
   }
   
   /**
@@ -57,8 +67,8 @@ public class Shooter extends SubsystemBase {
    * @param mps [m/s] Metros por segundo / Meters per Second
    */
   public void adjustRPM(double mps){
-    m1.getPIDController().setReference(mps, ControlType.kVelocity);
-    m2.getPIDController().setReference(mps, ControlType.kVelocity);
+    //m1.getPIDController().setReference(mps, CANSparkMax.ControlType.kVelocity);
+    m2.getPIDController().setReference(mps, CANSparkMax.ControlType.kVelocity);
 
   }
 
@@ -106,7 +116,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter_Velocity", getShootVelocity());
     //SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
-    SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * speedTransfer);
+    //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * speedTransfer);
     SmartDashboard.putNumber("shooterSpeed", m1.get());
     SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
     SmartDashboard.putNumber("powerShooter2Voltage", m2.getBusVoltage());

@@ -41,7 +41,7 @@ public class AdjustShotLoop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    parableShot.setDistance(vision.getDistance() + 0);//Limelight distance report
+    /* parableShot.setDistance(vision.getDistance() + 0);//Limelight distance report
     parableShot.executeAlgorithm();
 
     if (parableShot.getAngle() == 0)
@@ -63,7 +63,9 @@ public class AdjustShotLoop extends CommandBase {
     //shooter.moveHood(speed);
     shooter.shootMove(speedShooter);
 
-    SmartDashboard.putNumber("PIDShooter", speedShooter);
+    SmartDashboard.putNumber("PIDShooter", speedShooter); */
+
+    shooter.adjustRPM(2080);
 
   }
 
@@ -71,7 +73,7 @@ public class AdjustShotLoop extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     //shooter.moveHood(0);
-    //shooter.shootMove(0);
+    shooter.shootMove(0);
   }
 
   // Returns true when the command should end.
