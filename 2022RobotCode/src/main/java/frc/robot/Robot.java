@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.music.Orchestra;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +25,56 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  Orchestra _orchestra;
+
+  WPI_TalonFX fx = new WPI_TalonFX(59);
+
+  /* An array of songs that are available to be played, can you guess the song/artists? */
+  String[] _songs = new String[] {
+    "song1.chrp",
+    "song2.chrp",
+    "song3.chrp",
+    "song4.chrp",
+    "song5.chrp",
+    "song6.chrp",
+    "song7.chrp",
+    "song8.chrp",
+    "song9.chrp", /* the remaining songs play better with three or more FXs */
+    "song10.chrp",
+    "song11.chrp",
+  };
+
+  /* track which song is selected for play */
+  int _songSelection = 0;
+
+  /* overlapped actions */
+  int _timeToPlayLoops = 0;
+
+  void LoadMusicSelection(int offset)
+    {
+        /* increment song selection */
+        _songSelection += offset;
+        /* wrap song index in case it exceeds boundary */
+        if (_songSelection >= _songs.length) {
+            _songSelection = 0;
+        }
+        if (_songSelection < 0) {
+            _songSelection = _songs.length - 1;
+        }
+        /* load the chirp file */
+        _orchestra.loadMusic(_songs[_songSelection]); 
+
+        /* print to console */
+        System.out.println("Song selected is: " + _songs[_songSelection] + ".  Press left/right on d-pad to change.");
+        
+        /* schedule a play request, after a delay.  
+            This gives the Orchestra service time to parse chirp file.
+            If play() is called immedietely after, you may get an invalid action error code. */
+        _timeToPlayLoops = 10;
+    }
+
+
+
   //String trajectoryJSON = "paths/a.wpilib.json";
   //Trajectory trajectory = new Trajectory();
   
@@ -32,6 +88,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.vision.ledsOff();
+
+    ArrayList<TalonFX> _instruments = new ArrayList<TalonFX>();
+
+    _instruments.add(fx);
+    _orchestra = new Orchestra(_instruments);
+    _orchestra.loadMusic("song1.chrp");
   }
 
   /**
@@ -48,14 +110,15 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     m_robotContainer.updateAutonomous();    
-
+    
     CommandScheduler.getInstance().run();
   }
-
+  
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
     m_robotContainer.climber.contract();
+    _orchestra.stop();
   }
   
   @Override
@@ -64,7 +127,7 @@ public class Robot extends TimedRobot {
     //m_robotContainer.climber.contract();
     //m_robotContainer.intake.contractIntake();
   }
-
+  
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
@@ -90,8 +153,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    _orchestra.play();
   }
-
+  
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {}
