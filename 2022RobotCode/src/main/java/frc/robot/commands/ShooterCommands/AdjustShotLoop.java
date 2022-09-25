@@ -4,10 +4,12 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.PID;
 import frc.robot.ParableShot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -65,8 +67,8 @@ public class AdjustShotLoop extends CommandBase {
 
     SmartDashboard.putNumber("PIDShooter", speedShooter); */
 
-    shooter.adjustRPM(2080);
-
+    shooter.adjustRPM(2400);
+    //shooter.adjustRPM(RobotContainer.driverController.getRawAxis(4) * 4000);
   }
 
   // Called once the command ends or is interrupted.

@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
 
   Orchestra _orchestra;
 
-  WPI_TalonFX fx = new WPI_TalonFX(59);
+  //WPI_TalonFX fx = new WPI_TalonFX(59);
 
   /* An array of songs that are available to be played, can you guess the song/artists? */
   String[] _songs = new String[] {
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
 
     ArrayList<TalonFX> _instruments = new ArrayList<TalonFX>();
 
-    _instruments.add(fx);
+    //_instruments.add(fx);
     _orchestra = new Orchestra(_instruments);
     _orchestra.loadMusic("song1.chrp");
   }
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.climber.contract();
+    //m_robotContainer.climber.contract();
     _orchestra.stop();
   }
   

@@ -52,7 +52,7 @@ public final class Constants {
         public static final int[] solenoids = {2};
         public static final int[] sensors = new int[] { 0 };
 
-        public static final double speed = 1.0;
+        public static final double speed = 0.7;
     }
 
     public static final class kConveyor {

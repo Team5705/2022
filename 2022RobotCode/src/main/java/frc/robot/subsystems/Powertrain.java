@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -271,7 +272,7 @@ public class Powertrain extends SubsystemBase {
     rightFollow.restoreFactoryDefaults(); */
 
     //Control de curva de aceleracion
-    double kRamp = 0.15;//0.15;
+    /* double kRamp = 0.0;//0.15;
     leftMaster.setOpenLoopRampRate(kRamp);
     leftFollow.setOpenLoopRampRate(kRamp);
     rightMaster.setOpenLoopRampRate(kRamp);
@@ -280,7 +281,7 @@ public class Powertrain extends SubsystemBase {
     leftMaster.setClosedLoopRampRate(kRamp);
     leftFollow.setClosedLoopRampRate(kRamp);
     rightMaster.setClosedLoopRampRate(kRamp);
-    rightFollow.setClosedLoopRampRate(kRamp);
+    rightFollow.setClosedLoopRampRate(kRamp); */
 
     leftFollow.follow(leftMaster);
     rightFollow.follow(rightMaster);

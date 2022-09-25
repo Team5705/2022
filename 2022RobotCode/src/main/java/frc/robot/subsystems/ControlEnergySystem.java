@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
 public class ControlEnergySystem extends SubsystemBase {
-  private final PneumaticsControlModule pcm = new PneumaticsControlModule(kGlobal.portPCM);
+  //private final PneumaticsControlModule pcm = new PneumaticsControlModule(kGlobal.portPCM);
   private final PowerDistribution pdp = new PowerDistribution(kGlobal.portPDP, ModuleType.kCTRE);
 
   /**
@@ -55,7 +55,7 @@ public class ControlEnergySystem extends SubsystemBase {
 
     SmartDashboard.putNumber("powerRio", RobotController.getInputVoltage());
     SmartDashboard.putNumber("powerRioCurrent", RobotController.getInputCurrent());
-    SmartDashboard.putNumber("powerPcm", pcm.getCompressorCurrent());
+    //SmartDashboard.putNumber("powerPcm", pcm.getCompressorCurrent());
     SmartDashboard.putNumber("batteryVoltage", pdp.getVoltage());
     SmartDashboard.putNumber("totalPowerUse", pdp.getTotalCurrent());
     //SmartDashboard.putNumber("rioCpu", );

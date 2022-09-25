@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     motor.configFactoryDefault();
     motor.setInverted(true);
-    motor.configOpenloopRamp(rampRate);
+    //motor.configOpenloopRamp(rampRate);
     
 
     contractIntake();
@@ -56,14 +56,14 @@ public class Intake extends SubsystemBase {
 
   public void forward() {
     if (getStatusIntake())
-     motor.set(kIntake.speed);
+     motor.set(-kIntake.speed);
     else
      motor.set(0);
   }
 
   public void reverse() {
     if (getStatusIntake())
-      motor.set(-kIntake.speed);
+      motor.set(kIntake.speed);
     else
       motor.set(0); 
   }
@@ -74,7 +74,7 @@ public class Intake extends SubsystemBase {
 
   public void move(double speed) {
     if (getStatusIntake())
-      motor.set(speed);
+      motor.set(-speed);
     else
       motor.set(0);
   }
