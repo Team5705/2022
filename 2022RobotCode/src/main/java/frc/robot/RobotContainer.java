@@ -59,7 +59,7 @@ public class RobotContainer {
   private final Powertrain powertrain = new Powertrain();
   private final Shooter shooter = new Shooter();
   private final Conveyor conveyor = new Conveyor();
-  //private final Intake intake = new Intake();
+  private final Intake intake = new Intake();
   //public final Climber climber = new Climber();
   private final Hood hood = new Hood();
 
@@ -141,21 +141,22 @@ public class RobotContainer {
 
     /* DRIVER 1 */
     //BUTTONS
-    new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
+    //new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
     //new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
-    new JoystickButton(driverController, 3).whileHeld(new AdjustShotLoop(shooter, vision));
-    new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
+    new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
+    //new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     
     new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));
-    //new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
+    new JoystickButton(driverController, 6).toggleWhenPressed(new IntakeToggle(intake));
     
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
     
     new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
-    //POV
-    new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
-    new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
+
+    /**POV**/
+    //new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
+    //new POVButton(driverController, 270).whenPressed(new InstantCommand(vision::ledsOn, vision));
     
     //new POVButton(driverController, 0).whenPressed(new InstantCommand(climber::extend, climber));
     //new POVButton(driverController, 180).whenPressed(new InstantCommand(climber::contract, climber));
@@ -164,9 +165,9 @@ public class RobotContainer {
     /*DRIVER 2*/
     
     //new JoystickButton(driverController, 4).whenPressed(new AdjustHoodLoop(hood, 58.0));
-   // new JoystickButton(driverController, 2).whenPressed(new AdjustHoodLoop(hood, 70.0));
-    //new JoystickButton(secondController, 4).whileHeld(new RunCommand(() -> hood.moveHood(driverController.getRawAxis(5)), shooter))
-      //.whenReleased(new InstantCommand(hood::neutralHood, shooter));
+    //new JoystickButton(driverController, 2).whenPressed(new AdjustHoodLoop(hood, 70.0));
+    new JoystickButton(secondController, 4).whileHeld(new RunCommand(() -> hood.moveHood(secondController.getRawAxis(1)), hood))
+      .whenReleased(new InstantCommand(hood::neutralHood, hood));
   }
   
   public void updateAutonomous(){

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,6 +20,8 @@ import frc.robot.Constants.kShooter;
 public class Shooter extends SubsystemBase {
   private final CANSparkMax m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
   private final CANSparkMax m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
+  private SparkMaxPIDController m1_pidController, m2_pidController;
+  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   //private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
 
@@ -43,24 +46,39 @@ public class Shooter extends SubsystemBase {
     //m2.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
-    double kP = 170e-5;  //170-5
-    double kI = 5e-7;    //5e-7
-    double kD = 300e-3;  //380e-3
-    double kIz = 0;
-    double kFF = 0.0000015;
+    kP = 0.0001;//170e-5;  //170e-5
+    kI = 0.000001;    //5e-7
+    kD = 0;  //380e-3
+    kIz = 200;
+    kFF = 0.0002;
+    kMaxOutput = 1;
+    kMinOutput = -1;
 
-    m1.getPIDController().setP(kP);
-    m1.getPIDController().setI(kI);
-    m1.getPIDController().setD(kD);
-    m1.getPIDController().setIZone(kIz);
-    m1.getPIDController().setFF(kFF);
+    m1_pidController = m1.getPIDController();
+    m2_pidController = m2.getPIDController();
+    
+    m1_pidController.setP(kP);
+    m1_pidController.setI(kI);
+    m1_pidController.setD(kD);
+    m1_pidController.setIZone(kIz);
+    m1_pidController.setFF(kFF);
+    m1_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-    m2.getPIDController().setP(kP);
-    m2.getPIDController().setI(kI);
-    m2.getPIDController().setD(kD);
-    m2.getPIDController().setIZone(kIz);
-    m2.getPIDController().setFF(kFF);
-    //m2.getPIDController().setOutputRange(-1, 1); 
+    m2_pidController.setP(kP);
+    m2_pidController.setI(kI);
+    m2_pidController.setD(kD);
+    m2_pidController.setIZone(kIz);
+    m2_pidController.setFF(kFF);
+    m2_pidController.setOutputRange(kMinOutput, kMaxOutput);
+
+    // display PID coefficients on SmartDashboard
+    SmartDashboard.putNumber("P Gain", kP);
+    SmartDashboard.putNumber("I Gain", kI);
+    SmartDashboard.putNumber("D Gain", kD);
+    SmartDashboard.putNumber("I Zone", kIz);
+    SmartDashboard.putNumber("Feed Forward", kFF);
+    SmartDashboard.putNumber("Max Output", kMaxOutput);
+    SmartDashboard.putNumber("Min Output", kMinOutput);
   }
   
   /**
@@ -126,5 +144,26 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
     SmartDashboard.putNumber("powerShooter2Voltage", m2.getBusVoltage());
     SmartDashboard.putBoolean("PressureSwitch", getPressureSwitch());
+
+    // read PID coefficients from SmartDashboard
+    double p = SmartDashboard.getNumber("P Gain", 0);
+    double i = SmartDashboard.getNumber("I Gain", 0);
+    double d = SmartDashboard.getNumber("D Gain", 0);
+    double iz = SmartDashboard.getNumber("I Zone", 0);
+    double ff = SmartDashboard.getNumber("Feed Forward", 0);
+    double max = SmartDashboard.getNumber("Max Output", 0);
+    double min = SmartDashboard.getNumber("Min Output", 0);
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kP)) { m1_pidController.setP(p); m2_pidController.setP(p); kP = p; }
+    if((i != kI)) { m1_pidController.setI(i); m2_pidController.setI(i); kI = i; }
+    if((d != kD)) { m1_pidController.setD(d); m2_pidController.setD(d); kD = d; }
+    if((iz != kIz)) { m1_pidController.setIZone(iz); m2_pidController.setIZone(iz); kIz = iz; }
+    if((ff != kFF)) { m1_pidController.setFF(ff); m2_pidController.setFF(ff); kFF = ff; }
+    if((max != kMaxOutput) || (min != kMinOutput)) { 
+      m1_pidController.setOutputRange(min, max);
+      m2_pidController.setOutputRange(min, max); 
+      kMinOutput = min; kMaxOutput = max; 
+    }
   }
 }

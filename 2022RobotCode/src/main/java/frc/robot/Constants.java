@@ -76,8 +76,10 @@ public final class Constants {
 
         public static final int channel_m1 = 14;
         public static final int channel_m2 = 0;
-        public static final int servoLeft = 9;
-        public static final int servoRight = 8;
+
+        public static final int servoLeft = 8;
+        public static final int servoRight = 9;
+        
         public static final int channel_hood = 2; //Power Servo Module
     }
 

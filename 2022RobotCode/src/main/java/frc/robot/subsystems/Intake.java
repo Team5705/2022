@@ -55,17 +55,19 @@ public class Intake extends SubsystemBase {
   }
 
   public void forward() {
-    if (getStatusIntake())
+    /* if (getStatusIntake())
      motor.set(-kIntake.speed);
     else
-     motor.set(0);
+     motor.set(0); */
+     motor.set(-kIntake.speed);
   }
 
   public void reverse() {
-    if (getStatusIntake())
+    /* if (getStatusIntake())
       motor.set(kIntake.speed);
     else
-      motor.set(0); 
+      motor.set(0); */
+      motor.set(kIntake.speed);
   }
 
   public void neutral() {
@@ -82,7 +84,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("intakeSpeed", motor.get());
-    SmartDashboard.putBoolean("intakeDeployed", getStatusIntake());
+    //SmartDashboard.putBoolean("intakeDeployed", getStatusIntake());
     //SmartDashboard.putNumber("powerIntakeVoltage", motor.getBusVoltage());
   }
 
