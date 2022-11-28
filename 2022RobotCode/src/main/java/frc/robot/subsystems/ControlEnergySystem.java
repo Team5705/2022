@@ -42,8 +42,8 @@ public class ControlEnergySystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("powerFrontLeft", pdp.getCurrent(kDrive.channelsMotors[0]));
-    SmartDashboard.putNumber("powerFrontright", pdp.getCurrent(kDrive.channelsMotors[1]));
-    SmartDashboard.putNumber("powerBackLeft", pdp.getCurrent(kDrive.channelsMotors[2]));
+    SmartDashboard.putNumber("powerFrontRight", pdp.getCurrent(kDrive.channelsMotors[2]));
+    SmartDashboard.putNumber("powerBackLeft", pdp.getCurrent(kDrive.channelsMotors[1]));
     SmartDashboard.putNumber("powerBackRight", pdp.getCurrent(kDrive.channelsMotors[3]));
 
     SmartDashboard.putNumber("powerIntake", pdp.getCurrent(kIntake.channel));

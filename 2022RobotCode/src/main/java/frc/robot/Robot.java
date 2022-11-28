@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     //m_robotContainer.climber.contract();
-    _orchestra.stop();
+   // _orchestra.stop();
   }
   
   @Override
@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    _orchestra.play();
+    //_orchestra.play();
   }
   
   /** This function is called periodically during operator control. */

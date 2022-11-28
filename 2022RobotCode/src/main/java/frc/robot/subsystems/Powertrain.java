@@ -19,7 +19,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,8 +38,8 @@ public class Powertrain extends SubsystemBase {
   
   private final WPI_CANCoder leftEncoder = new WPI_CANCoder(kDrive.leftEncoder),
                              rightEncoder = new WPI_CANCoder(kDrive.rightEncoder);
-  private CANCoderConfiguration leftEncoderConfigs = new CANCoderConfiguration();
-  private CANCoderConfiguration rightEncoderConfigs = new CANCoderConfiguration();
+  private CANCoderConfiguration leftEncoderConfigs = new CANCoderConfiguration(),
+                                rightEncoderConfigs = new CANCoderConfiguration();
 
   private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
   
@@ -49,8 +49,10 @@ public class Powertrain extends SubsystemBase {
 
   private Pose2d initialPosition = new Pose2d(pathWeaver.xInitialPosition, // x
                                               pathWeaver.yInitialPosition, // y
-                                              Rotation2d.fromDegrees(pathWeaver.initialHeading)); // Heading in degrees
+                                              Rotation2d.fromDegrees(pathWeaver.initialDegree)); // Heading in degrees
   private final DifferentialDriveOdometry odometry;
+
+  private final Field2d field = new Field2d();
 
   private double last_world_linear_accel_x;
   private double last_world_linear_accel_y;
@@ -63,13 +65,18 @@ public class Powertrain extends SubsystemBase {
 
     resetEncoders();
     zeroHeading();
+    ahrs.calibrate();
+    //ahrs.reset();
+    //ahrs.setAngleAdjustment(pathWeaver.initialDegree);
 
-    odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), initialPosition);
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navAngle()), initialPosition);
+    SmartDashboard.putData("Field", field);
 
 
     new PrintCommand("Powertrain iniciado");
   }
 
+  
   /**
    * Hace funcionar el chasis con valores de -1.0 a 1.0
    *
@@ -98,8 +105,9 @@ public class Powertrain extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void setVolts(double leftVolts, double rightVolts) {
-    leftMaster.setVoltage(leftVolts);
-    rightMaster.setVoltage(rightVolts);
+
+    leftMaster.setVoltage(leftVolts);//*(10/12));
+    rightMaster.setVoltage(rightVolts);//*(10/12));
     drive.feed();
 
   }
@@ -173,10 +181,10 @@ public class Powertrain extends SubsystemBase {
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
-  public double getHeading() {
+  /* public double getHeading() {
     return ahrs.getRotation2d().getDegrees();
     //return Rotation2d.fromDegrees(Math.IEEEremainder(navAngle(), 360) * (pathWeaver.kGyroReversed ? -1.0 : 1.0));
-  }
+  } */
 
   /**
    * Resets the odometry to the specified pose.
@@ -252,6 +260,7 @@ public class Powertrain extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(ahrs.getRotation2d(), getDistanceLeft(), getDistanceRight());
+    field.setRobotPose(odometry.getPoseMeters());
 
     SmartDashboard.putNumber("gyro", angleNormalized());
     //SmartDashboard.putNumber("NavAngle", navAngle());
@@ -262,14 +271,19 @@ public class Powertrain extends SubsystemBase {
     SmartDashboard.putNumber("rateL", getRateLeft());
     SmartDashboard.putNumber("rateR", getRateRight());
     SmartDashboard.putBoolean("navX-MXP_Calibrated", !ahrs.isCalibrating());
+
+    SmartDashboard.putNumber("X_Field", odometry.getPoseMeters().getX());
+    SmartDashboard.putNumber("Y_Field", odometry.getPoseMeters().getY());
+    SmartDashboard.putNumber("Radians", odometry.getPoseMeters().getRotation().getRadians());
+    SmartDashboard.putNumber("Degrees", odometry.getPoseMeters().getRotation().getDegrees());
   }
 
   private void configControllers() {
     //Configuraciones por defecto, reseteo de los controladores
-    /* leftMaster.restoreFactoryDefaults();
+    leftMaster.restoreFactoryDefaults();
     rightMaster.restoreFactoryDefaults();
     leftFollow.restoreFactoryDefaults();
-    rightFollow.restoreFactoryDefaults(); */
+    rightFollow.restoreFactoryDefaults();
 
     //Control de curva de aceleracion
     /* double kRamp = 0.0;//0.15;

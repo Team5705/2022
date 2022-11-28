@@ -15,7 +15,7 @@ import frc.robot.Constants.*;
 public class Intake extends SubsystemBase {
   private final WPI_TalonSRX motor = new WPI_TalonSRX(kIntake.m1);
   //private DoubleSolenoid extensor = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0], kIntake.solenoids[1]);
-  private Solenoid sole = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
+  //private Solenoid sole = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
   /* private Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
   private Solenoid right = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[1]); */
 
@@ -28,10 +28,10 @@ public class Intake extends SubsystemBase {
     //motor.configOpenloopRamp(rampRate);
     
 
-    contractIntake();
+    //contractIntake();
   }
 
- public void extendIntake(){
+  /* public void extendIntake(){
    //extensor.set(Value.kReverse);
    sole.set(true);
   }
@@ -52,7 +52,7 @@ public class Intake extends SubsystemBase {
       return true;
     else
       return false;
-  }
+  } */
 
   public void forward() {
     /* if (getStatusIntake())
@@ -74,12 +74,12 @@ public class Intake extends SubsystemBase {
     motor.set(0);
   }
 
-  public void move(double speed) {
+  /* public void move(double speed) {
     if (getStatusIntake())
       motor.set(-speed);
     else
       motor.set(0);
-  }
+  } */
 
   @Override
   public void periodic() {

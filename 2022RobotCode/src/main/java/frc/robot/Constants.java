@@ -61,10 +61,10 @@ public final class Constants {
         //public static final int m1 = 35;
         //public static final int m2 = 36;
 
-        public static final int mainSensor = 0;
+        public static final int mainSensor = 9;
 
         public static final int channel_mSUPP = 11;
-        public static final int channel_mADC = 4;
+        public static final int channel_mADC = 2;
 
         public static final double kSpeedGlobal = 0.2;
     }
@@ -75,7 +75,7 @@ public final class Constants {
         public static final int mShooterB = 39; //Motor B | Derecho
 
         public static final int channel_m1 = 14;
-        public static final int channel_m2 = 0;
+        public static final int channel_m2 = 12;
 
         public static final int servoLeft = 8;
         public static final int servoRight = 9;
@@ -91,20 +91,20 @@ public final class Constants {
     public static final class pathWeaver {
         public static final double xInitialPosition = 0; // x IMPORTANT | Meters
         public static final double yInitialPosition = 0; // y IMPORTANT | Meters
-        public static final double initialHeading = 0; //degrees
+        public static final double initialDegree = 0; //degrees
 
-        public static final double ksVolts = 0.16512;
-        public static final double kvVoltSecondsPerMeter = 2.5;//784;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.46835;
+        public static final double ksVolts = -0.48426;
+        public static final double kvVoltSecondsPerMeter = 2.9364;
+        public static final double kaVoltSecondsSquaredPerMeter = 3.363;
 
-        public static final double kPDriveVel = 3.7335;
+        public static final double kPDriveVel = 3.4861;
 
-        public static final double kTrackwidthMeters = Units.inchesToMeters(22.8995); // Distancia horizontal entre las ruedas en metros
+        public static final double kTrackwidthMeters = Units.inchesToMeters(28); // Distancia horizontal entre las ruedas en metros
                                                                                  
         public static final DifferentialDriveKinematics kDriveKinematics = 
             new DifferentialDriveKinematics(kTrackwidthMeters);
 
-        //Only for custom path, wpi.json not
+        //*** Only for custom path, wpi.json not ***//
         public static final double kMaxSpeedMetersPerSecond = 2; // Velocidad maxima del robot en metros por segundo
         public static final double kMaxAccelerationMetersPerSecondSquared = 0.5; // Aceleracion maxima del robot en metros por segundo
 

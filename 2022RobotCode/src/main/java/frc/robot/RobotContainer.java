@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
@@ -82,6 +83,8 @@ public class RobotContainer {
   String trajectoryJSON2 = "paths/output/io.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
+  String testTrajectory = "Test_planner.wpilib.json";
+  Trajectory trajectory3 = new Trajectory();
 
   SendableChooser<String> autonomous = new SendableChooser<String>();
 
@@ -101,8 +104,9 @@ public class RobotContainer {
     conveyor.setDefaultCommand(getBalls);
 
     autonomous.addOption("mid", "mid");
-    autonomous.addOption("onlyBack", "onlyback");
+    autonomous.addOption("onlyBack", "onlyBack");
     autonomous.addOption("oneball", "oneball");
+    autonomous.addOption("null", "null");
     //autonomous.addOption("Emergency", "emergency");
     //autonomous.addOption("Test", "test");
     SmartDashboard.putData("autoMode", autonomous);
@@ -110,17 +114,19 @@ public class RobotContainer {
   }
 
   public void readPaths(){
+    //tryReadPath(trajectoryJSON1, trajectory1);
+    //tryReadPath(trajectoryJSON2, trajectory2);
+    //tryReadPath(testTrajectory, trajectory3);
     try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON1);
-      trajectory1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      System.out.println(trajectoryJSON1 + " successfully read :D");
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(("paths/output/" + testTrajectory));
+      trajectory3 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      System.out.println("------------------------ " + testTrajectory + " successfully read :D");
       
     } catch (IOException ex) {
-      DriverStation.reportError("Unable to open path: " + trajectoryJSON1, ex.getStackTrace());
+      DriverStation.reportError("------------------------ " + "Unable to open path: " + testTrajectory, ex.getStackTrace());
       
     }
-
-    try {
+    /* try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON2);
       trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
       System.out.println(trajectoryJSON2 + " successfully read :D");
@@ -128,6 +134,18 @@ public class RobotContainer {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open path: " + trajectoryJSON2, ex.getStackTrace());
       
+    } */
+  }
+
+  public void tryReadPath(String name, Trajectory trajectory){
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON" + name);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+      System.out.println(name + " successfully read :D");
+      
+    } catch (IOException ex) {
+      DriverStation.reportError("Unable to open path: " + name, ex.getStackTrace());
+      System.out.println(name + " no read D:");
     }
   }
   
@@ -142,8 +160,8 @@ public class RobotContainer {
     /* DRIVER 1 */
     //BUTTONS
     //new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
-    //new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
     new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
+    new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
     //new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     
     new JoystickButton(driverController, 5).whileHeld(new Conveyor_input(conveyor));
@@ -166,8 +184,9 @@ public class RobotContainer {
     
     //new JoystickButton(driverController, 4).whenPressed(new AdjustHoodLoop(hood, 58.0));
     //new JoystickButton(driverController, 2).whenPressed(new AdjustHoodLoop(hood, 70.0));
-    new JoystickButton(secondController, 4).whileHeld(new RunCommand(() -> hood.moveHood(secondController.getRawAxis(1)), hood))
-      .whenReleased(new InstantCommand(hood::neutralHood, hood));
+    //new JoystickButton(secondController, 4).whileHeld(new RunCommand(() -> hood.moveHood(secondController.getRawAxis(1)), hood))
+    //  .whenReleased(new InstantCommand(hood::neutralHood, hood));
+
   }
   
   public void updateAutonomous(){
@@ -180,8 +199,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-      return new SequentialCommandGroup(
-        /* new ParallelCommandGroup(
+    //return null;
+    /* return new SequentialCommandGroup(
+        new ParallelCommandGroup(
           runPath(trajectory1)//, 
           //new IntakeToggle(intake).withTimeout(5)
         ),
@@ -197,15 +217,16 @@ public class RobotContainer {
         ),
         new SequentialCommandGroup(
           runPath(trajectory2)
-        ) */
+        ),
 
-        new ParallelCommandGroup(
+       new ParallelCommandGroup(
           runPath(trajectory1)//, 
           //new IntakeToggle(intake).withTimeout(2)
         ),
         new AutoShooting(powertrain, vision, shooter, conveyor),
         runPath(trajectory2)
-      );
+      ); */
+      return runPath(trajectory3);
   }
 
 
@@ -233,8 +254,10 @@ public class RobotContainer {
     /*powertrain.resetOdometry(myTrajectory.getInitialPose());*/
     
     // Run path following command, then stop at the end.
-    return new SequentialCommandGroup(new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain), 
-                                      ramseteCommand.andThen(() -> powertrain.setVolts(0, 0)));
+    return new SequentialCommandGroup(//new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain), 
+                                      ramseteCommand.andThen(() -> powertrain.setVolts(0, 0))//,
+                                      //new InstantCommand(() -> powertrain.resetOdometry(myTrajectory.getInitialPose()), powertrain)
+                                      );
     //return ramseteCommand;
   }
 }

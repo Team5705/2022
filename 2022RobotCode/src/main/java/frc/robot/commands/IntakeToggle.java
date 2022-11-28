@@ -18,7 +18,7 @@ public class IntakeToggle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.extendIntake();
+    //intake.extendIntake();
     Timer.delay(0.25);
   }
 
@@ -31,7 +31,7 @@ public class IntakeToggle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.contractIntake();
+    //intake.contractIntake();
     intake.neutral();
   }
 
