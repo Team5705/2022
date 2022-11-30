@@ -12,7 +12,7 @@ import frc.robot.subsystems.Shooter;
 public class AdjustShotVelocity extends CommandBase {
   private final Shooter shooter;
 
-  private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
+  private static PID pidShoot;
 
   private double velocity;
 
@@ -27,6 +27,8 @@ public class AdjustShotVelocity extends CommandBase {
     this.shooter = shooter;
     this.velocity = velocity;
     addRequirements(shooter);
+
+    pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
   }
 
   /**

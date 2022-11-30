@@ -12,7 +12,7 @@ import frc.robot.subsystems.Hood;
 public class AdjustHoodLoop extends CommandBase {
   private final Hood hood;
 
-  private static PID pidHood = new PID(0.04, 0, 0, 0.0, -0.06, false);
+  private static PID pidHood;
 
   private double angle;
   
@@ -21,6 +21,8 @@ public class AdjustHoodLoop extends CommandBase {
     this.hood = hood;
     this.angle = angle;
     addRequirements(hood);
+
+    pidHood = new PID(0.04, 0, 0, 0.0, -0.06, false);
   }
 
   // Called when the command is initially scheduled.

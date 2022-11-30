@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Leds extends SubsystemBase {
   
-  private I2C nano1 = new I2C(Port.kOnboard, 0xF5);  
-  private I2C nano2 = new I2C(Port.kOnboard, 0xF4);
+  private I2C nano1;  
+  private I2C nano2;
 
   public Leds() {
-    
+    nano1 = new I2C(Port.kOnboard, 0xF5);  
+    nano2 = new I2C(Port.kOnboard, 0xF4);  
     //connection();
 
   }

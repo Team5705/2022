@@ -20,7 +20,7 @@ import frc.robot.subsystems.Vision;
 public class SimpleTrackingOnlyX extends CommandBase {
   private final Vision vision;
   private final Powertrain powertrain;
-  private static PID pidX = new PID(0.02, 0, 6, 0, 0.15, false);
+  private static PID pidX;
   private boolean finished = false;
   private final double range = 0.1;
 
@@ -42,6 +42,8 @@ public class SimpleTrackingOnlyX extends CommandBase {
     this.powertrain = powertrain;
     this.vision = vision;
     addRequirements(powertrain);
+
+    pidX = new PID(0.02, 0, 6, 0, 0.15, false);
   }
 
   /**
@@ -59,6 +61,8 @@ public class SimpleTrackingOnlyX extends CommandBase {
     this.finished = finished;
 
     addRequirements(powertrain);
+
+    pidX = new PID(0.02, 0, 6, 0, 0.15, false);
   }
 
   @Override

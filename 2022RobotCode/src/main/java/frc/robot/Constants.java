@@ -93,11 +93,11 @@ public final class Constants {
         public static final double yInitialPosition = 0; // y IMPORTANT | Meters
         public static final double initialDegree = 0; //degrees
 
-        public static final double ksVolts = -0.48426;
-        public static final double kvVoltSecondsPerMeter = 2.9364;
-        public static final double kaVoltSecondsSquaredPerMeter = 3.363;
+        public static final double ksVolts = 0.17594;
+        public static final double kvVoltSecondsPerMeter = 2.921;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.45199;
 
-        public static final double kPDriveVel = 3.4861;
+        public static final double kPDriveVel = 3.8672;
 
         public static final double kTrackwidthMeters = Units.inchesToMeters(28); // Distancia horizontal entre las ruedas en metros
                                                                                  

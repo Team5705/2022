@@ -13,13 +13,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kShooter;
 
 public class Hood extends SubsystemBase {
-  private final Servo leftServo = new Servo(kShooter.servoLeft);
-  private final Servo rightServo = new Servo(kShooter.servoRight);
+  private final Servo leftServo, rightServo;
 
-  private final WPI_CANCoder encoder = new WPI_CANCoder(52);
-  private CANCoderConfiguration encoderConfigs = new CANCoderConfiguration();
+  private final WPI_CANCoder encoder;
+  private CANCoderConfiguration encoderConfigs;
 
   public Hood() {
+    leftServo = new Servo(kShooter.servoLeft);
+    rightServo = new Servo(kShooter.servoRight);
+
+    encoder = new WPI_CANCoder(52);
+    encoderConfigs = new CANCoderConfiguration();
+
     //Ajustamos los valores respecto a los datos del Smart Robot Servo
     leftServo.setBounds(2.5, 0, 1.5, 0, 0.5);
     rightServo.setBounds(2.5, 0, 1.5, 0, 0.5);

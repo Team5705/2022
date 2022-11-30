@@ -6,44 +6,39 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.kGlobal;
 import frc.robot.Constants.kShooter;
 
 public class Shooter extends SubsystemBase {
-  private final CANSparkMax m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
-  private final CANSparkMax m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
+  private final CANSparkMax m1, m2;
   private SparkMaxPIDController m1_pidController, m2_pidController;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   //private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
 
-  private final double wheelDiameter = 6.00; //6 pulgadas
+  private final double wheelDiameter = Units.inchesToMeters(6.00); //6 pulgadas
 
-  private final double rampRate = 0;//0.0001;
-
-
-
-  private final double speedTransfer = 0.35; // 35%
+  //private final double rampRate = 0;//0.0001;
+  //private final double speedTransfer = 0.35; // 35%
 
   public Shooter() {
-    m1.restoreFactoryDefaults();
-    //m1.setOpenLoopRampRate(rampRate); //Declarar en constants
-
+    m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
+    m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
+    //m1.restoreFactoryDefaults();
     m2.restoreFactoryDefaults();
+    
+    //m1.setOpenLoopRampRate(rampRate); //Declarar en constants
     //m2.setOpenLoopRampRate(rampRate);
+    
     m2.setInverted(true);
 
     //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
-    //m1.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
-    //m2.getEncoder().setVelocityConversionFactor((1/60) * Units.inchesToMeters(wheelDiameter) * Math.PI );
+    //m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    m2.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
     kP = 0.0001;//170e-5;  //170e-5
@@ -54,15 +49,15 @@ public class Shooter extends SubsystemBase {
     kMaxOutput = 1;
     kMinOutput = -1;
 
-    m1_pidController = m1.getPIDController();
+    //m1_pidController = m1.getPIDController();
     m2_pidController = m2.getPIDController();
     
-    m1_pidController.setP(kP);
+    /* m1_pidController.setP(kP);
     m1_pidController.setI(kI);
     m1_pidController.setD(kD);
     m1_pidController.setIZone(kIz);
     m1_pidController.setFF(kFF);
-    m1_pidController.setOutputRange(kMinOutput, kMaxOutput);
+    m1_pidController.setOutputRange(kMinOutput, kMaxOutput); */
 
     m2_pidController.setP(kP);
     m2_pidController.setI(kI);
@@ -83,13 +78,19 @@ public class Shooter extends SubsystemBase {
   
   /**
    * Ajusta la velocidad dada por medio del PIDF integrado de cada controlador.
-   * @param mps [m/s] Metros por segundo / Meters per Second
+   * @param rpm Revoluciones por minuto
    */
   public void adjustRPM(double rpm){
     //double rpm = (mps*60) / Units.inchesToMeters(wheelDiameter*Math.PI); 
-    m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    //m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
     m2.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
 
+  }
+
+  public void adjustMeterPerSecond(double mps){
+    double rpm = mps*( 60 / (Math.PI*wheelDiameter) );
+    //m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    m2.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
   }
 
   /**
@@ -99,7 +100,7 @@ public class Shooter extends SubsystemBase {
   public void shootMove(double speed){
     /* m1.setVoltage(12 * speed);
     m2.setVoltage(12 * speed); */
-    m1.set(speed);
+    //m1.set(speed);
     m2.set(speed);
     //compressor.disable();
   }
@@ -108,7 +109,7 @@ public class Shooter extends SubsystemBase {
    * Modo neutral para el disparador
    */
   public void neutral(){
-    m1.set(0);
+    //m1.set(0);
     m2.set(0);
     //compressor.enableDigital();
   }
@@ -118,7 +119,8 @@ public class Shooter extends SubsystemBase {
    * @return Velocidad en RPM
    */
   public double getShootVelocity(){
-    return m2.getEncoder().getVelocity();
+    //return (m1.getEncoder().getVelocity() + m2.getEncoder().getVelocity()) / 2; //Promedio
+    return  m2.getEncoder().getVelocity();
   }
 
   /**
@@ -126,8 +128,8 @@ public class Shooter extends SubsystemBase {
    * @return Velocidad en m/s
    */
   public double getShootVelocityMeterPerSeconds(){
-    double rps = getShootVelocity() / 60;
-    return (Units.inchesToMeters(wheelDiameter) * Math.PI) * rps;
+    //return (m1.getEncoder().getVelocityConversionFactor() + m2.getEncoder().getVelocityConversionFactor())/2; //Promedio
+    return  m2.getEncoder().getVelocityConversionFactor();
   }
 
   public boolean getPressureSwitch(){
@@ -138,10 +140,11 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter_Velocity", getShootVelocity());
     SmartDashboard.putNumber("Shooter_Velocity2", getShootVelocity());
-    //SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
+    SmartDashboard.putNumber("Shooter_VelocityRPM", getShootVelocity()/m2.getEncoder().getVelocityConversionFactor());
+    SmartDashboard.putNumber("Shooter_M-S", getShootVelocityMeterPerSeconds());
     //SmartDashboard.putNumber("Projectile_M-S", getShootVelocityMeterPerSeconds() * speedTransfer);
-    SmartDashboard.putNumber("shooterSpeed", m1.get());
-    SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
+    SmartDashboard.putNumber("shooterSpeed", m2.get());
+    //SmartDashboard.putNumber("powerShooter1Voltage", m1.getBusVoltage());
     SmartDashboard.putNumber("powerShooter2Voltage", m2.getBusVoltage());
     SmartDashboard.putBoolean("PressureSwitch", getPressureSwitch());
 
@@ -155,13 +158,24 @@ public class Shooter extends SubsystemBase {
     double min = SmartDashboard.getNumber("Min Output", 0);
 
     // if PID coefficients on SmartDashboard have changed, write new values to controller
-    if((p != kP)) { m1_pidController.setP(p); m2_pidController.setP(p); kP = p; }
+    /* if((p != kP)) { m1_pidController.setP(p); m2_pidController.setP(p); kP = p; }
     if((i != kI)) { m1_pidController.setI(i); m2_pidController.setI(i); kI = i; }
     if((d != kD)) { m1_pidController.setD(d); m2_pidController.setD(d); kD = d; }
     if((iz != kIz)) { m1_pidController.setIZone(iz); m2_pidController.setIZone(iz); kIz = iz; }
     if((ff != kFF)) { m1_pidController.setFF(ff); m2_pidController.setFF(ff); kFF = ff; }
     if((max != kMaxOutput) || (min != kMinOutput)) { 
       m1_pidController.setOutputRange(min, max);
+      m2_pidController.setOutputRange(min, max); 
+      kMinOutput = min; kMaxOutput = max; 
+    } */
+
+    // if PID coefficients on SmartDashboard have changed, write new values to controller
+    if((p != kP)) { m2_pidController.setP(p); kP = p; }
+    if((i != kI)) { m2_pidController.setI(i); kI = i; }
+    if((d != kD)) { m2_pidController.setD(d); kD = d; }
+    if((iz != kIz)) { m2_pidController.setIZone(iz); kIz = iz; }
+    if((ff != kFF)) { m2_pidController.setFF(ff); kFF = ff; }
+    if((max != kMaxOutput) || (min != kMinOutput)) { 
       m2_pidController.setOutputRange(min, max); 
       kMinOutput = min; kMaxOutput = max; 
     }

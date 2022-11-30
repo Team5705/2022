@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
 public class Intake extends SubsystemBase {
-  private final WPI_TalonSRX motor = new WPI_TalonSRX(kIntake.m1);
+  private final WPI_TalonSRX motor;
   //private DoubleSolenoid extensor = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0], kIntake.solenoids[1]);
   //private Solenoid sole = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
   /* private Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kIntake.solenoids[0]);
@@ -23,9 +23,10 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
+    motor = new WPI_TalonSRX(kIntake.m1);
     motor.configFactoryDefault();
     motor.setInverted(true);
-    //motor.configOpenloopRamp(rampRate);
+    motor.configOpenloopRamp(rampRate);
     
 
     //contractIntake();

@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
-import frc.robot.commands.AutoShooting;
 import frc.robot.commands.ConveyorReverse;
 import frc.robot.commands.Conveyor_input;
 import frc.robot.commands.Drive;
@@ -38,6 +37,7 @@ import frc.robot.commands.GetBalls;
 import frc.robot.commands.IntakeToggle;
 import frc.robot.commands.ShootON;
 import frc.robot.commands.SimpleTracking;
+import frc.robot.commands.RoutinesCommands.AutoShooting;
 import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.commands.ShooterCommands.AdjustShotLoop;
 import frc.robot.subsystems.Climber;
@@ -169,8 +169,10 @@ public class RobotContainer {
     
     new JoystickButton(driverController, 7).whenPressed(new InstantCommand(powertrain::neutralModeBrake, powertrain)); //Chasis Brake mode
     new JoystickButton(driverController, 8).whenPressed(new InstantCommand(powertrain::neutralModeCoast, powertrain)); //Chasis Coast mode
-    
+
     new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
+    
+    new JoystickButton(driverController, 10).whenPressed(new InstantCommand(powertrain::resetAHRS, powertrain)); //Reset Gyro
 
     /**POV**/
     //new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));
@@ -237,15 +239,15 @@ public class RobotContainer {
     new RamseteCommand(
         myTrajectory,
         powertrain::getPose,
-        new RamseteController(pathWeaver.kRamseteB, pathWeaver.kRamseteZeta),
+        new RamseteController(),
         new SimpleMotorFeedforward(
           pathWeaver.ksVolts,
           pathWeaver.kvVoltSecondsPerMeter,
           pathWeaver.kaVoltSecondsSquaredPerMeter),
           pathWeaver.kDriveKinematics,
           powertrain::getWheelSpeeds,
-          new PIDController(pathWeaver.kPDriveVel, 0, 0),
-          new PIDController(pathWeaver.kPDriveVel, 0, 0),
+          new PIDController(0, 0, 0),
+          new PIDController(0, 0, 0),
           // RamseteCommand passes volts to the callback
           powertrain::setVolts,
       powertrain);

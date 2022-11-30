@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,6 +18,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,21 +33,16 @@ public class Powertrain extends SubsystemBase {
   private final WPI_VictorSPX leftFollow = new WPI_VictorSPX(DriveConstant.portsMotors[1]),
                               rightFollow = new WPI_VictorSPX(DriveConstant.portsMotors[3]); */
 
-  private final CANSparkMax leftMaster = new CANSparkMax(kDrive.portsMotors[0], MotorType.kBrushless),
-                            leftFollow = new CANSparkMax(kDrive.portsMotors[1], MotorType.kBrushless),
-                            rightMaster = new CANSparkMax(kDrive.portsMotors[2], MotorType.kBrushless),
-                            rightFollow = new CANSparkMax(kDrive.portsMotors[3], MotorType.kBrushless);
-  
-  private final WPI_CANCoder leftEncoder = new WPI_CANCoder(kDrive.leftEncoder),
-                             rightEncoder = new WPI_CANCoder(kDrive.rightEncoder);
-  private CANCoderConfiguration leftEncoderConfigs = new CANCoderConfiguration(),
-                                rightEncoderConfigs = new CANCoderConfiguration();
+  private final CANSparkMax leftMaster, leftFollow, rightMaster, rightFollow;
 
-  private final DifferentialDrive drive = new DifferentialDrive(leftMaster, rightMaster);
-  
-  private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
+  private final WPI_CANCoder leftEncoder, rightEncoder;
+  private CANCoderConfiguration leftEncoderConfigs, rightEncoderConfigs;
 
-  private final AHRS ahrs = new AHRS(Port.kMXP);
+  private final DifferentialDrive drive;
+  
+  private final DifferentialDriveKinematics kinematics;
+
+  private final AHRS ahrs;
 
   private Pose2d initialPosition = new Pose2d(pathWeaver.xInitialPosition, // x
                                               pathWeaver.yInitialPosition, // y
@@ -58,20 +55,36 @@ public class Powertrain extends SubsystemBase {
   private double last_world_linear_accel_y;
   final static double kCollisionThreshold_DeltaG = 0.5f;
 
+  private final double wheelDiameter = Units.inchesToMeters(6.00); //6 pulgadas
+
   public Powertrain() {
+    leftMaster = new CANSparkMax(kDrive.portsMotors[0], MotorType.kBrushless);
+    leftFollow = new CANSparkMax(kDrive.portsMotors[1], MotorType.kBrushless);
+    rightMaster = new CANSparkMax(kDrive.portsMotors[2], MotorType.kBrushless);
+    rightFollow = new CANSparkMax(kDrive.portsMotors[3], MotorType.kBrushless);
+
+    drive = new DifferentialDrive(leftMaster, rightMaster);
+    kinematics = new DifferentialDriveKinematics(pathWeaver.kTrackwidthMeters);
+
+    ahrs = new AHRS(Port.kMXP);
+
+    leftEncoder = new WPI_CANCoder(kDrive.leftEncoder);
+    rightEncoder = new WPI_CANCoder(kDrive.rightEncoder);
+
+    leftEncoderConfigs = new CANCoderConfiguration();
+    rightEncoderConfigs = new CANCoderConfiguration();
 
     configControllers();
     configEncoders();
 
     resetEncoders();
-    zeroHeading();
-    ahrs.calibrate();
+    //zeroHeading();
+    //ahrs.calibrate();
     //ahrs.reset();
-    //ahrs.setAngleAdjustment(pathWeaver.initialDegree);
+    ahrs.setAngleAdjustment(pathWeaver.initialDegree);
 
-    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(navAngle()), initialPosition);
+    odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(pathWeaver.initialDegree), initialPosition);
     SmartDashboard.putData("Field", field);
-
 
     new PrintCommand("Powertrain iniciado");
   }
@@ -87,15 +100,33 @@ public class Powertrain extends SubsystemBase {
     drive.arcadeDrive(xSp, turn);
   }
 
-  public double [] arcadeDriveMetersPerSeconds(double linear, double angular){
-    var wheelSpeeds = new DifferentialDriveWheelSpeeds(3.5*linear, 3.5*angular);
+  public double [] arcadeDriveMetersPerSeconds(double vx, double vz){
+    /* var wheelSpeeds = new DifferentialDriveWheelSpeeds(3.5*linear, 3.5*angular);
 
     ChassisSpeeds chassisSpeeds = kinematics.toChassisSpeeds(wheelSpeeds);
-
     double linearVelocity = chassisSpeeds.vxMetersPerSecond;
     double angularVelocity = chassisSpeeds.omegaRadiansPerSecond;
 
-    return new double [] {linearVelocity, angularVelocity};
+    return new double [] {linearVelocity, angularVelocity}; */
+    var chassisSpeeds = new ChassisSpeeds(vx, 0, vz);
+    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(chassisSpeeds);
+
+    double leftVel = wheelSpeeds.leftMetersPerSecond;
+    double rightVel = wheelSpeeds.rightMetersPerSecond;
+    
+
+    return new double [] {leftVel, rightVel};
+  }
+
+  public void setMeterPerSeconds(double left, double right){
+    double leftRPM = left*( 60 / (Math.PI*wheelDiameter) );
+    double rightRPM = right*( 60 / (Math.PI*wheelDiameter) );
+    leftMaster.getPIDController().setReference(leftRPM, ControlType.kVelocity);
+    rightMaster.getPIDController().setReference(rightRPM, ControlType.kVelocity);
+  }
+
+  public void resetAHRS(){
+    ahrs.reset();
   }
 
   /**
@@ -296,6 +327,9 @@ public class Powertrain extends SubsystemBase {
     leftFollow.setClosedLoopRampRate(kRamp);
     rightMaster.setClosedLoopRampRate(kRamp);
     rightFollow.setClosedLoopRampRate(kRamp); */
+
+    leftMaster.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    rightMaster.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
 
     leftFollow.follow(leftMaster);
     rightFollow.follow(rightMaster);

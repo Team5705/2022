@@ -13,10 +13,11 @@ import frc.robot.Constants.kGlobal;
 
 public class Climber extends SubsystemBase {
   //private final Solenoid left = new Solenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid);
-  private DoubleSolenoid sol = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid, kClimber.rightSolenoid);
+  private DoubleSolenoid sol;
 
   /** Creates a new Climber. */
   public Climber() { 
+    sol = new DoubleSolenoid(kGlobal.portPCM, PneumaticsModuleType.CTREPCM, kClimber.leftSolenoid, kClimber.rightSolenoid);
   }
 
   public void extend(){
@@ -31,7 +32,5 @@ public class Climber extends SubsystemBase {
     sol.set(Value.kOff);
   }
 
-  public void periodic() {
-    //
-  }
+  public void periodic() {}
 }

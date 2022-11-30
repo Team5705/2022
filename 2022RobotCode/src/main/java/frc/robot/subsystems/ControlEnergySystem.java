@@ -14,7 +14,7 @@ import frc.robot.Constants.*;
 
 public class ControlEnergySystem extends SubsystemBase {
   //private final PneumaticsControlModule pcm = new PneumaticsControlModule(kGlobal.portPCM);
-  private final PowerDistribution pdp = new PowerDistribution(kGlobal.portPDP, ModuleType.kCTRE);
+  private final PowerDistribution pdp;
 
   /**
     powerFrontLeft: 12,
@@ -37,7 +37,9 @@ public class ControlEnergySystem extends SubsystemBase {
     rioCpu: 60,
     rioRam: 75,
    */
-  public ControlEnergySystem() {}
+  public ControlEnergySystem() {
+    pdp = new PowerDistribution(kGlobal.portPDP, ModuleType.kCTRE);
+  }
 
   @Override
   public void periodic() {

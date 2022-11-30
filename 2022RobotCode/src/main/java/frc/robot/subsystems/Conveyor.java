@@ -14,21 +14,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.kConveyor;
 
 public class Conveyor extends SubsystemBase {
-  private final CANSparkMax motorSUPP = new CANSparkMax(kConveyor.mSUPP , MotorType.kBrushless);
-  private final CANSparkMax motorADC = new CANSparkMax(kConveyor.mADC, MotorType.kBrushless);
+  private final CANSparkMax motorSUPP, motorADC;
 
-  private final DigitalInput s1 = new DigitalInput(kConveyor.mainSensor);
-                             //s2 = new DigitalInput(1),
-                             //s3 = new DigitalInput(2);
+  private final DigitalInput s1;
 
   private boolean mainSensor = false;
-                  //space_1 = false,
-                  //space_2 = false;
 
   int count = 0;
 
   /** Creates a new Conveyor. */
   public Conveyor() {
+    motorSUPP = new CANSparkMax(kConveyor.mSUPP , MotorType.kBrushless);
+    motorADC = new CANSparkMax(kConveyor.mADC, MotorType.kBrushless);
+
+    s1 = new DigitalInput(kConveyor.mainSensor);
+
     //motorSUPP.restoreFactoryDefaults();
     motorSUPP.setInverted(true);
     //motorADC.restoreFactoryDefaults();

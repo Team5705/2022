@@ -17,8 +17,8 @@ public class AdjustShotLoop extends CommandBase {
   private final Shooter shooter;
   private final Vision vision;
 
-  private static ParableShot parableShot = new ParableShot();
-  private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
+  private static ParableShot parableShot;
+  private static PID pidShoot;
 
   private double velocity;
   
@@ -27,6 +27,9 @@ public class AdjustShotLoop extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
     addRequirements(shooter);
+
+    parableShot = new ParableShot();
+    pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
   }
 
   // Called when the command is initially scheduled.

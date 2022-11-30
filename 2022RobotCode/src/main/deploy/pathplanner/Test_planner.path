@@ -24,12 +24,12 @@
     },
     {
       "anchorPoint": {
-        "x": 2.0,
+        "x": 2.85,
         "y": 2.0
       },
       "prevControl": {
-        "x": 2.0,
-        "y": 0.6024620422491631
+        "x": 1.9374850321129216,
+        "y": 1.0433978010813163
       },
       "nextControl": null,
       "holonomicAngle": 0.0,
@@ -45,14 +45,15 @@
       }
     }
   ],
-  "maxVelocity": 1.5,
-  "maxAcceleration": 2.0,
+  "maxVelocity": 0.5,
+  "maxAcceleration": 0.5,
   "isReversed": false,
   "markers": [
     {
-      "position": 0.30000000000000127,
+      "position": 0.3,
       "names": [
-        "GetBall"
+        "getBall",
+        "mark1"
       ]
     }
   ]

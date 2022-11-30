@@ -8,7 +8,7 @@ package frc.robot;
  * Clase para calcular parábolas diseñada por el equipo de programación | FRC 5705
  */
 public class ParableShot {
-    //private final double kSpeedTransfer = 0.2055; // %
+    //private final double kSpeedTransfer = 0.2055; // 35%
     private final double g = -9.80665; // m/s^2
     private final double initialHeight = 0.82804; // m
     private final int range = 10;

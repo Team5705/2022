@@ -15,9 +15,8 @@ public class AdjustShot extends CommandBase {
   private final Shooter shooter;
   private final Vision vision;
 
-  private static ParableShot parableShot = new ParableShot();
-  private static PID pidHood = new PID(0, 0, 0, false); //AJUSTAR!
-  private static PID pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
+  private static ParableShot parableShot;
+  private static PID pidHood, pidShoot;
 
   private double angle, 
                  velocity;
@@ -27,6 +26,10 @@ public class AdjustShot extends CommandBase {
     this.shooter = shooter;
     this.vision = vision;
     addRequirements(shooter);
+
+    parableShot = new ParableShot();
+    pidHood = new PID(0, 0, 0, false); //AJUSTAR!
+    pidShoot = new PID(0, 0, 0, false); //AJUSTAR!
   }
 
   // Called when the command is initially scheduled.
