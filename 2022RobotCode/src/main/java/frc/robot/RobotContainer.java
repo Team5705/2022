@@ -57,23 +57,23 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer {
   //Subsystems
-  private final Powertrain powertrain = new Powertrain();
-  private final Shooter shooter = new Shooter();
-  private final Conveyor conveyor = new Conveyor();
-  private final Intake intake = new Intake();
+  private final Powertrain powertrain;
+  private final Shooter shooter;
+  private final Conveyor conveyor;
+  private final Intake intake;
   //public final Climber climber = new Climber();
-  private final Hood hood = new Hood();
+  private final Hood hood;
 
-  public final Vision vision = new Vision();
-  public final ControlEnergySystem controlEnergySystem = new ControlEnergySystem();
+  public final Vision vision;
+  public final ControlEnergySystem controlEnergySystem;
   //public static Leds leds = new Leds();
 
   //Commands
-  private final Drive drive = new Drive(powertrain);
-  private final GetBalls getBalls = new GetBalls(conveyor);
+  private final Drive drive;
+  private final GetBalls getBalls;
 
-  public static XboxController driverController = new XboxController(kOI.controllerPort);
-  public static XboxController secondController = new XboxController(kOI.controllerPort2);
+  public static XboxController driverController;
+  public static XboxController secondController;
 
   //Trajectory [] trajectories = new Trajectory[] {trajectory1};
 
@@ -83,7 +83,7 @@ public class RobotContainer {
   String trajectoryJSON2 = "paths/output/io.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
-  String testTrajectory = "Test_planner.wpilib.json";
+  String testTrajectory = "Test_path.wpilib.json";
   Trajectory trajectory3 = new Trajectory();
 
   SendableChooser<String> autonomous = new SendableChooser<String>();
@@ -94,6 +94,24 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    powertrain = new Powertrain();
+    shooter = new Shooter();
+    conveyor = new Conveyor();
+    intake = new Intake();
+    //climber = new Climber();
+    hood = new Hood();
+
+    vision = new Vision();
+    controlEnergySystem = new ControlEnergySystem();
+    //leds = new Leds();
+
+    //Commands
+    drive = new Drive(powertrain);
+    getBalls = new GetBalls(conveyor);
+
+    driverController = new XboxController(kOI.controllerPort);
+    secondController = new XboxController(kOI.controllerPort2);
+
     vision.ledsOn();
     readPaths();
     
@@ -118,9 +136,9 @@ public class RobotContainer {
     //tryReadPath(trajectoryJSON2, trajectory2);
     //tryReadPath(testTrajectory, trajectory3);
     try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(("paths/output/" + testTrajectory));
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(("pathplanner/generatedJSON/" + testTrajectory));
       trajectory3 = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      System.out.println("------------------------ " + testTrajectory + " successfully read :D");
+      System.out.println("------------------------ pathplanner/generatedJSON/" + testTrajectory + " successfully read :D");
       
     } catch (IOException ex) {
       DriverStation.reportError("------------------------ " + "Unable to open path: " + testTrajectory, ex.getStackTrace());
@@ -137,7 +155,7 @@ public class RobotContainer {
     } */
   }
 
-  public void tryReadPath(String name, Trajectory trajectory){
+  /* public void tryReadPath(String name, Trajectory trajectory){
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON" + name);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -147,7 +165,7 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open path: " + name, ex.getStackTrace());
       System.out.println(name + " no read D:");
     }
-  }
+  } */
   
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -172,7 +190,7 @@ public class RobotContainer {
 
     new JoystickButton(driverController, 9).whileHeld(new ConveyorReverse(conveyor, shooter));
     
-    new JoystickButton(driverController, 10).whenPressed(new InstantCommand(powertrain::resetAHRS, powertrain)); //Reset Gyro
+    new JoystickButton(driverController, 10).whenPressed(new InstantCommand(powertrain::resetAll, powertrain)); //Reset  All
 
     /**POV**/
     //new POVButton(driverController, 90).whenPressed(new InstantCommand(vision::ledsOff, vision));

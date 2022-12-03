@@ -227,6 +227,17 @@ public class Powertrain extends SubsystemBase {
     odometry.resetPosition(pose, ahrs.getRotation2d());
   }
 
+  public void resetOdometry2(){
+    resetEncoders();
+    odometry.resetPosition(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), ahrs.getRotation2d());
+  }
+
+  public void resetAll(){
+    resetAHRS();
+    resetEncoders();
+    resetOdometry2();
+  }
+
   /**
    * Zeroes the heading of the robot.
    */

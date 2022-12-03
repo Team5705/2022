@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -17,6 +18,7 @@ public class Shooter extends SubsystemBase {
   private final CANSparkMax m1, m2;
   private SparkMaxPIDController m1_pidController, m2_pidController;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
+  private RelativeEncoder encoder;
 
   //private final Compressor compressor = new Compressor(kGlobal.portPCM, PneumaticsModuleType.CTREPCM);
 
@@ -36,9 +38,11 @@ public class Shooter extends SubsystemBase {
     
     m2.setInverted(true);
 
+    encoder = m2.getEncoder();
+
     //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
     //m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
-    m2.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    encoder.setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
     kP = 0.0001;//170e-5;  //170e-5
@@ -120,7 +124,7 @@ public class Shooter extends SubsystemBase {
    */
   public double getShootVelocity(){
     //return (m1.getEncoder().getVelocity() + m2.getEncoder().getVelocity()) / 2; //Promedio
-    return  m2.getEncoder().getVelocity();
+    return  encoder.getVelocity();
   }
 
   /**
@@ -129,7 +133,7 @@ public class Shooter extends SubsystemBase {
    */
   public double getShootVelocityMeterPerSeconds(){
     //return (m1.getEncoder().getVelocityConversionFactor() + m2.getEncoder().getVelocityConversionFactor())/2; //Promedio
-    return  m2.getEncoder().getVelocityConversionFactor();
+    return  encoder.getVelocityConversionFactor();
   }
 
   public boolean getPressureSwitch(){
