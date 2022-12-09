@@ -21,13 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.kOI;
 import frc.robot.Constants.pathWeaver;
 import frc.robot.commands.ConveyorReverse;
@@ -36,14 +32,9 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.GetBalls;
 import frc.robot.commands.IntakeToggle;
 import frc.robot.commands.ShootON;
-import frc.robot.commands.SimpleTracking;
-import frc.robot.commands.RoutinesCommands.AutoShooting;
-import frc.robot.commands.ShooterCommands.AdjustHoodLoop;
 import frc.robot.commands.ShooterCommands.AdjustShotLoop;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ControlEnergySystem;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Powertrain;
 import frc.robot.subsystems.Shooter;
@@ -62,7 +53,7 @@ public class RobotContainer {
   private final Conveyor conveyor;
   private final Intake intake;
   //public final Climber climber = new Climber();
-  private final Hood hood;
+  //private final Hood hood;
 
   public final Vision vision;
   public final ControlEnergySystem controlEnergySystem;
@@ -83,7 +74,7 @@ public class RobotContainer {
   String trajectoryJSON2 = "paths/output/io.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
-  String testTrajectory = "Test_path.wpilib.json";
+  String testTrajectory = "Test_path.wpilib.json";  
   Trajectory trajectory3 = new Trajectory();
 
   SendableChooser<String> autonomous = new SendableChooser<String>();
@@ -99,7 +90,7 @@ public class RobotContainer {
     conveyor = new Conveyor();
     intake = new Intake();
     //climber = new Climber();
-    hood = new Hood();
+    //hood = new Hood();
 
     vision = new Vision();
     controlEnergySystem = new ControlEnergySystem();
@@ -155,7 +146,7 @@ public class RobotContainer {
     } */
   }
 
-  /* public void tryReadPath(String name, Trajectory trajectory){
+  public void tryReadPath(String name, Trajectory trajectory){
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/generatedJSON" + name);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
@@ -165,7 +156,7 @@ public class RobotContainer {
       DriverStation.reportError("Unable to open path: " + name, ex.getStackTrace());
       System.out.println(name + " no read D:");
     }
-  } */
+  }
   
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -178,7 +169,7 @@ public class RobotContainer {
     /* DRIVER 1 */
     //BUTTONS
     //new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
-    new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
+    //new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
     new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
     //new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     

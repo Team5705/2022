@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     m1 = new CANSparkMax(kShooter.mShooterA, MotorType.kBrushless);
     m2 = new CANSparkMax(kShooter.mShooterB, MotorType.kBrushless);
-    //m1.restoreFactoryDefaults();
+    m1.restoreFactoryDefaults();
     m2.restoreFactoryDefaults();
     
     //m1.setOpenLoopRampRate(rampRate); //Declarar en constants
@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     encoder = m2.getEncoder();
 
     //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
-    //m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
     encoder.setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
@@ -53,15 +53,15 @@ public class Shooter extends SubsystemBase {
     kMaxOutput = 1;
     kMinOutput = -1;
 
-    //m1_pidController = m1.getPIDController();
+    m1_pidController = m1.getPIDController();
     m2_pidController = m2.getPIDController();
     
-    /* m1_pidController.setP(kP);
+    m1_pidController.setP(kP);
     m1_pidController.setI(kI);
     m1_pidController.setD(kD);
     m1_pidController.setIZone(kIz);
     m1_pidController.setFF(kFF);
-    m1_pidController.setOutputRange(kMinOutput, kMaxOutput); */
+    m1_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
     m2_pidController.setP(kP);
     m2_pidController.setI(kI);
@@ -86,14 +86,14 @@ public class Shooter extends SubsystemBase {
    */
   public void adjustRPM(double rpm){
     //double rpm = (mps*60) / Units.inchesToMeters(wheelDiameter*Math.PI); 
-    //m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
     m2.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
 
   }
 
   public void adjustMeterPerSecond(double mps){
     double rpm = mps*( 60 / (Math.PI*wheelDiameter) );
-    //m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
+    m1.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
     m2.getPIDController().setReference(rpm, CANSparkMax.ControlType.kVelocity);
   }
 
@@ -104,7 +104,7 @@ public class Shooter extends SubsystemBase {
   public void shootMove(double speed){
     /* m1.setVoltage(12 * speed);
     m2.setVoltage(12 * speed); */
-    //m1.set(speed);
+    m1.set(speed);
     m2.set(speed);
     //compressor.disable();
   }
@@ -113,7 +113,7 @@ public class Shooter extends SubsystemBase {
    * Modo neutral para el disparador
    */
   public void neutral(){
-    //m1.set(0);
+    m1.set(0);
     m2.set(0);
     //compressor.enableDigital();
   }
@@ -185,3 +185,4 @@ public class Shooter extends SubsystemBase {
     }
   }
 }
+

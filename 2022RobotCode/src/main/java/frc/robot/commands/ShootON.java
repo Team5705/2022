@@ -22,7 +22,7 @@ public class ShootON extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootMove(0.8);
+    shooter.shootMove(0.6);
   }
 
   // Called once the command ends or is interrupted.

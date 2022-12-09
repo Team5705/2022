@@ -70,7 +70,8 @@ public class AdjustShotLoop extends CommandBase {
 
     SmartDashboard.putNumber("PIDShooter", speedShooter); */
 
-    shooter.adjustRPM(2400);
+    //shooter.adjustRPM(3100);
+    shooter.adjustRPM(24);
     //shooter.adjustRPM(RobotContainer.driverController.getRawAxis(4) * 4000);
   }
 
