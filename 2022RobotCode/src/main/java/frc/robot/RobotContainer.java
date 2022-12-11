@@ -74,7 +74,7 @@ public class RobotContainer {
   String trajectoryJSON2 = "paths/output/io.wpilib.json";
   Trajectory trajectory2 = new Trajectory();
 
-  String testTrajectory = "Test_path.wpilib.json";  
+  String testTrajectory = "park.wpilib.json";  
   Trajectory trajectory3 = new Trajectory();
 
   SendableChooser<String> autonomous = new SendableChooser<String>();
@@ -169,7 +169,7 @@ public class RobotContainer {
     /* DRIVER 1 */
     //BUTTONS
     //new JoystickButton(driverController, 1).whileHeld(new SimpleTracking(powertrain, vision));
-    //new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
+    new JoystickButton(driverController, 2).whileHeld(new AdjustShotLoop(shooter, vision));
     new JoystickButton(driverController, 3).whileHeld(new ShootON(shooter));
     //new JoystickButton(driverController, 4).whenPressed(new AutoShooting(powertrain, vision, shooter, conveyor));
     

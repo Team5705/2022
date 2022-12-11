@@ -89,9 +89,9 @@ public final class Constants {
     }
         
     public static final class pathWeaver {
-        public static final double xInitialPosition = 0; // x IMPORTANT | Meters
-        public static final double yInitialPosition = 0; // y IMPORTANT | Meters
-        public static final double initialDegree = 0; //degrees
+        public static final double xInitialPosition = 5; // x IMPORTANT | Meters
+        public static final double yInitialPosition = 3; // y IMPORTANT | Meters
+        public static final double initialDegree = 180; //degrees
 
         public static final double ksVolts = 0.12903;
         public static final double kvVoltSecondsPerMeter = 2.8981;

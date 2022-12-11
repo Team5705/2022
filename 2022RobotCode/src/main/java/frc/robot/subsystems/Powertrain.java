@@ -229,7 +229,7 @@ public class Powertrain extends SubsystemBase {
 
   public void resetOdometry2(){
     resetEncoders();
-    odometry.resetPosition(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), ahrs.getRotation2d());
+    odometry.resetPosition(initialPosition, ahrs.getRotation2d());
   }
 
   public void resetAll(){

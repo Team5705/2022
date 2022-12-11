@@ -41,8 +41,8 @@ public class Shooter extends SubsystemBase {
     encoder = m2.getEncoder();
 
     //Añadimos el Factor de conversión a la que queremos usar nuestra velocidad, [m/s] metros por segundo
-    m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
-    encoder.setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    //m1.getEncoder().setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
+    //encoder.setVelocityConversionFactor( (wheelDiameter*Math.PI)/60 );
 
     //Establecemos los valores de PIDF de cada SparMAX, convenientemente es igual para ambos
     kP = 0.0001;//170e-5;  //170e-5
